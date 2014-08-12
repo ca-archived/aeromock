@@ -1,0 +1,17 @@
+propString: strinvalue
+propInt: 1
+propBoolean: true
+propLong: 999999999999999999
+propDouble: 11111.9
+map:
+  propSimple: propSimpleValue
+  propList:
+    - 11111
+    - 22222
+    - 33333
+  propMap:
+    childSimple: childSimpleValue
+    childList:
+      - child11111
+      - child22222
+      - child33333

@@ -1,0 +1,75 @@
+<html>
+<head></head>
+<body>
+
+<h4>Map（通常参照）</h4>
+<ul>
+	<li>proxy.propSimple = propSimpleValue</li>
+	<li>proxy.propList[0] = 11111</li>
+	<li>proxy.propList[1] = 22222</li>
+	<li>proxy.propList[2] = 33333</li>
+	<li>proxy.propMap.childSimple = childSimpleValue</li>
+	<li>proxy.propMap.childList[0] = child11111</li>
+	<li>proxy.propMap.childList[1] = child22222</li>
+	<li>proxy.propMap.childList[2] = child33333</li>
+	<li>proxy.execute() = execute1value</li>
+	<li>proxy.executeHash().id = hashid</li>
+	<li>proxy.executeHash().value = hashvalue</li>
+	<li>proxy.executeHash().map.key1 = mapvalue1</li>
+	<li>proxy.executeHash().map.key2 = mapvalue2</li>
+	<li>proxy.executeProxy().key1 = mapvalue1</li>
+	<li>proxy.executeProxy().executeChild() = childvalue</li>
+	<li>proxy.executeProxy().executeChildHash().key1 = mapvalue1</li>
+	<li>proxy.executeProxy().executeChildHash().key2 = mapvalue2</li>
+	<li>proxy.executeProxy().executeChildProxy().key1 = mapvalue1</li>
+	<li>proxy.executeProxy().executeChildProxy().executeChildChild() = childchildValue</li>
+</ul>
+
+<h4>Map（Hash参照）</h4>
+<ul>
+	<li>proxy["propSimple"] = propSimpleValue</li>
+	<li>proxy["propList"][0] = 11111</li>
+	<li>proxy["propList"][1] = 22222</li>
+	<li>proxy["propList"][2] = 33333</li>
+	<li>proxy["propMap"]["childSimple"] = childSimpleValue</li>
+	<li>proxy["propMap"]["childList"][0] = child11111</li>
+	<li>proxy["propMap"]["childList"][1] = child22222</li>
+	<li>proxy["propMap"]["childList"][2] = child33333</li>
+	<li>proxy.execute() = execute1value</li>
+	<li>proxy.executeHash()["id"] = hashid</li>
+	<li>proxy.executeHash()["value"] = hashvalue</li>
+	<li>proxy.executeHash()["map"]["key1"] = mapvalue1</li>
+	<li>proxy.executeHash()["map"]["key2"] = mapvalue2</li>
+	<li>proxy.executeProxy()["key1"] = mapvalue1</li>
+	<li>proxy.executeProxy().executeChild() = childvalue</li>
+	<li>proxy.executeProxy().executeChildHash()["key1"] = mapvalue1</li>
+	<li>proxy.executeProxy().executeChildHash()["key2"] = mapvalue2</li>
+	<li>proxy.executeProxy().executeChildProxy()["key1"] = mapvalue1</li>
+	<li>proxy.executeProxy().executeChildProxy().executeChildChild() = childchildValue</li>
+</ul>
+
+<h4>Map（get参照）</h4>
+<ul>
+	<li>proxy.get("propSimple") = propSimpleValue</li>
+	<li>proxy.get("propList")[0] = 11111</li>
+	<li>proxy.get("propList")[1] = 22222</li>
+	<li>proxy.get("propList")[2] = 33333</li>
+	<li>proxy.get("propMap").get("childSimple") = childSimpleValue</li>
+	<li>proxy.get("propMap").get("childList")[0] = child11111</li>
+	<li>proxy.get("propMap").get("childList")[1] = child22222</li>
+	<li>proxy.get("propMap").get("childList")[2] = child33333</li>
+	<li>proxy.execute() = execute1value</li>
+	<li>proxy.executeHash().get("id") = hashid</li>
+	<li>proxy.executeHash().get("value") = hashvalue</li>
+	<li>proxy.executeHash().get("map").get("key1") = mapvalue1</li>
+	<li>proxy.executeHash().get("map").get("key2") = mapvalue2</li>
+	
+	<li>proxy.executeProxy().get("key1") = mapvalue1</li>
+	<li>proxy.executeProxy().executeChild() = childvalue</li>
+	<li>proxy.executeProxy().executeChildHash().get("key1") = mapvalue1</li>
+	<li>proxy.executeProxy().executeChildHash().get("key2") = mapvalue2</li>
+	<li>proxy.executeProxy().executeChildProxy().get("key1") = mapvalue1</li>
+	<li>proxy.executeProxy().executeChildProxy().executeChildChild() = childchildValue</li>
+</ul>
+</body>
+</html>

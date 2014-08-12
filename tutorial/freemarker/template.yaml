@@ -1,0 +1,30 @@
+freemarker:
+  # aeromock additional setting
+  autoEscape: false
+
+  # freemarker settings
+  autoFlush: false
+  objectWrapper: BEANS_WRAPPER
+  autoIncludes: []
+  booleanFormat: "true,false"
+  classicCompatible: false
+  #dateFormat:
+  dateTimeFormat: "yyyy-MM-dd HH:mm:ss"
+  defaultEncoding: "UTF-8"
+  localizedLookup: true
+  numberFormat: "###"
+  outputEncoding: "UTF-8"
+  strictBeanModels: false
+  strictSyntaxMode: true
+  tagSyntax: 0
+  # AUTO_DETECT_TAG_SYNTAX = 0
+  # ANGLE_BRACKET_TAG_SYNTAX = 1
+  # SQUARE_BRACKET_TAG_SYNTAX = 2
+  #templateUpdateDelay: 5000
+  # timeFormat: "HH:mm:ss"
+  urlEscapingCharset: "UTF-8"
+  whitespaceStripping: true
+  # BIGDECIMAL_ENGINE(default)|CONSERVATIVE_ENGINE
+  arithmeticEngine:
+  autoImports:
+    spring: common/spring.ftl

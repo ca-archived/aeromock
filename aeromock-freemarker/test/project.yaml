@@ -1,0 +1,30 @@
+# テンプレート関連
+template:
+  root: ./template
+  serviceClass: ameba.aeromock.template.freemarker.FreemarkerTemplateService
+  contexts: []
+
+# データファイル関連
+data:
+  root: ./data
+
+# 静的ファイル関連
+static:
+  root: ./static
+
+# Ajaxデータファイル関連
+ajax:
+  root: ./ajax
+
+# カスタムタグ関連
+tag:
+  root: ./tag
+
+# ファンクションのルートディレクトリ
+function:
+  root: ./function
+
+# ネーミング関連
+#naming:
+#  dataPrefix: __
+#  dataidQuery: id

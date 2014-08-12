@@ -1,0 +1,4 @@
+httpServletRequest:
+  __methods:
+    - name: getRequestURI
+      value: "/path1/path2/path3"

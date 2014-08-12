@@ -1,0 +1,11 @@
+machine:
+  timezone: Asia/Tokyo
+
+dependencies:
+  cache_directories:
+    - ~/.gradle
+    - ~/.sbt
+    - ~/.ivy2
+    - ~/.m2
+  pre:
+    - ./aeromock-dsl/gradlew -p aeromock-dsl install

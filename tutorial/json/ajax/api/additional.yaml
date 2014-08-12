@@ -1,0 +1,4 @@
+title: additional.yaml
+commonHash:
+  __additional: true
+  prop2: prop2Value

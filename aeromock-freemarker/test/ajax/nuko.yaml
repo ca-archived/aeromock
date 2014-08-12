@@ -1,0 +1,33 @@
+message: "ぬこ"
+countries:
+ - "Japan"
+ - "USA"
+ - "Canada"
+ - "China"
+ - "India"
+nuko:
+ id: 3
+ name: "ccccc"
+ type:
+  color: "white"
+  array:
+   - "ccccc"
+   - "ddddd"
+array:
+ - type: "neko"
+   name: "neko1"
+   array:
+    - 1
+    - 2
+    - 3
+ - type: "neko"
+   name: "neko2"
+   array:
+    - 4
+    - 5
+    - 6
+__response:
+  code: 405
+  headers:
+    X-Aeromock-Test1: test1
+    X-Aeromock-Test2: test2

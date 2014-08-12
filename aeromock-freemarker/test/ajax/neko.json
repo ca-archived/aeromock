@@ -1,0 +1,29 @@
+{
+  "message": "ねこねこ1",
+  "countries": [
+    "Japan",
+    "USA"
+  ],
+  "nuko": {
+    "id" : 1
+    "name" : "aaaaa",
+    "type": {
+      "color": "black"
+      "array": ["aaaa", "bbb"]
+    }
+    "roles": ["neko1", "neko2"]
+  },
+  "array": [
+    {
+      "type": "neko",
+      "name": "neko1",
+      "array": [1,2,3]
+    },
+    {
+      "type": "neko",
+      "name": "neko2",
+      "array": [4,5,6]
+    }
+  ],
+  "uri": "${REQUEST_URI}"
+}

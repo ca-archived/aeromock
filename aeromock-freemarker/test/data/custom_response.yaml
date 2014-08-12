@@ -1,0 +1,5 @@
+key: hoge
+__response:
+  code: 400
+  headers:
+    Server: Nekotan Server

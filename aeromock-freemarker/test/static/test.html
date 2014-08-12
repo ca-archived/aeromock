@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>Aeromock Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="aeromock/components/flatui/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="aeromock/components/flatui/css/flat-ui.css" rel="stylesheet">
+
+    <style type="text/css">
+    .test-element {
+      padding: 5px;
+    }
+    .test-default {
+      color: #0E18DD;
+      background-color: #FFFFCC;
+    }
+    .test-ok {
+      color: #339933;
+      background-color: #33ff99;
+    }
+    .test-ng {
+      color: #330066;
+      background-color: #333399;
+    }
+    .test-error {
+      color: #CC0033;
+      background-color: #CC9966;
+    }
+    </style>
+
+    <script id="test_list" type="x-handlebars-template">
+      <div class="test-item">
+      {{#each tests}}
+        <dl class="test-element test-default" style="text-transform: none;" data-endpoint="{{endpoint}}">
+          <dt>{{endpoint}} <a href="#" class="exec-test">TEST</a></dt>
+        </dl>
+      {{/each}}
+      </div>
+    </script>
+
+    <script type="text/javascript" src="aeromock/components/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="aeromock/components/handlebars/handlebars.min.js"></script>
+    <script type="text/javascript" src="js/test.js"></script>
+
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="header">
+        <img src="aeromock/img/aeromock.png" height="75" width="250"/>
+      </div>
+
+      <h4>Test Suite</h4>
+      <a class="exec-test-all" href="#">ALL</a>
+      <div id="test_area"></div>
+
+    </div>
+  </body>
+</html>

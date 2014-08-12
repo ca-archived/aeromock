@@ -1,0 +1,60 @@
+requestUri: ${REQUEST_URI}
+queryString: ${QUERY_STRING}
+host: ${HOST}
+remoteHost: ${REMOTE_HOST}
+nest:
+  level1: ${REQUEST_URI}_level1
+  property1: hoge1
+  child:
+    level2: ${REQUEST_URI}_level2
+    property2: hoge2
+simpleList:
+  - "${REQUEST_URI}"
+  - element2
+  - "${HOST}"
+  - element4
+  - 5
+nestList:
+  - "${REQUEST_URI}"
+  - level1: ${REQUEST_URI}_level1_1
+    property1: hoge2_1
+    child:
+      level2: ${REQUEST_URI}_level2_1
+      property2: hoge2_1
+  - level1: ${REQUEST_URI}_level1_2
+    property1: hoge2_2
+    child:
+      level2: ${REQUEST_URI}_level2_2
+      property2: hoge2_2
+nestWithMethod:
+  level1: ${REQUEST_URI}_level1
+  property1: hoge1
+  __methods:
+    - name: execute1
+      value: execute1_result
+    - name: execute2
+      value:
+        id: execute2_result
+        value: ${REQUEST_URI}_execute2
+    - name: execute3
+      value:
+        property1: hoge3_1
+        __list:
+          - ${REQUEST_URI}
+          - element3_2
+        __methods:
+          - name: execute
+            value:
+              childProperty: ${REQUEST_URI}_child_3
+    - name: execute4
+      value:
+        property1: hoge4_1
+        __list:
+          - level1: ${REQUEST_URI}_1
+            __methods:
+              - name: execute
+                value: execute_${REQUEST_URI}_1
+          - level1: ${REQUEST_URI}_2
+            __methods:
+              - name: execute
+                value: execute_${REQUEST_URI}_2

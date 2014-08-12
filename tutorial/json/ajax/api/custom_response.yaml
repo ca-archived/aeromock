@@ -1,0 +1,6 @@
+title: custom_response.yaml
+__response:
+  code: 400
+  headers:
+    X-Aeromock-Header1: aeromock-header1
+    X-Aeromock-Header2: aeromock-header2

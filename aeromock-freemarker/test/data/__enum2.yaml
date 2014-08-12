@@ -1,0 +1,9 @@
+enums:
+  __additional: true
+  ameba.aeromock.test.enums.TestType2:
+    NUKO1:
+      key: neko1
+      value: ぬこ1
+    NUKO2:
+      key: neko2
+      value: ぬこ2

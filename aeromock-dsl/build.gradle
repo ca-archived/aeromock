@@ -1,0 +1,115 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+['java', 'groovy', 'eclipse', 'idea', 'maven', 'maven-publish', 'signing'].each {
+    apply plugin: it
+}
+
+group = 'ameba.aeromock'
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.2.0'
+    compile 'org.slf4j:slf4j-api:1.7.2'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+}
+
+task wrapper(type: Wrapper) { gradleVersion = "1.10" }
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier = 'javadoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives groovydocJar
+}
+
+sourceSets {
+    main {
+        groovy { srcDirs = ['src/main/groovy'] }
+    }
+
+    test {
+        groovy { srcDirs = ['src/test/groovy'] }
+    }
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
+                authentication(userName: repoUsername, password: repoPassword)
+            }
+        }
+        mavenDeployer {
+            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+                authentication(userName: repoUsername, password: repoPassword)
+            }
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment {
+                deployment -> signing.signPom(deployment)
+            }
+            pom.whenConfigured { pom ->
+                pom.project {
+                    artifactId 'aeromock-dsl'
+                    description 'Domain specific language for operationg Aeromock.'
+                    name "aeromock-dsl"
+                    url 'https://github.com/CyberAgent/aeromock'
+                    licenses {
+                        license {
+                            name 'The MIT License'
+                            url 'http://www.opensource.org/licenses/mit-license.php'
+                            distribution 'repo'
+                        }
+                    }
+                    scm {
+                        connection 'scm:git:git@github.com:CyberAgent/aeromock.git'
+                        developerConnection 'scm:git:git@github.com:CyberAgent/aeromock.git'
+                        url 'git@github.com:CyberAgent/aeromock.git'
+                    }
+                    developers {
+                        developer {
+                            id 'stormcat24'
+                            name 'Akinori Yamada'
+                            url 'https://github.com/stormcat24'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+def getRepoUsername() {
+    return hasProperty('nexusUsername') ? nexusUsername : ''
+}
+
+def getRepoPassword() {
+    return hasProperty('nexusPassword') ? nexusPassword : ''
+}

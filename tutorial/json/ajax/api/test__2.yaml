@@ -1,0 +1,12 @@
+title: test__2.yaml
+hash:
+  hashArray:
+    -
+      id: 1
+      name: name1
+    -
+      id: 2
+      name: name2
+intArray:
+  - 1
+  - 2

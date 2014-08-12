@@ -1,0 +1,57 @@
+<html>
+<body>
+
+<h4>use Aeromock builtin variables</h4>
+<ul>
+    <li>REQUEST_URI = ${requestUri}</li>
+    <li>QUERY_STRING = ${queryString}</li>
+    <li>HOST = {{host}}</li>
+    <li>REMOTE_HOST = ${remoteHost}</li>
+</ul>
+
+<h4>simple nest</h4>
+<ul>
+    <li>nest.level1 = ${nest.level1}</li>
+    <li>nest.property1 = ${nest.property1}</li>
+    <li>nest.child.level2 = ${nest.child.level2}</li>
+    <li>nest.child.property2 = ${nest.child.property2}</li>
+</ul>
+
+<h4>simple list</h4>
+<ul>
+<% for (value in simpleList) { %>
+	<li>$value</li>
+<% }%>
+</ul>
+
+<h4>nest list</h4>
+<ul>
+<% for (value in nestList) { %>
+    <li>$value</li>
+<% }%>
+</ul>
+
+<h4>nest with method</h4>
+<ul>
+	<li>nestWithMethod.level1 = ${nestWithMethod.level1}</li>
+	<li>nestWithMethod.property1 = ${nestWithMethod.property1}</li>
+	<li>nestWithMethod.execute1() = ${nestWithMethod.execute1()}</li>
+	<% def execute2Result = nestWithMethod.execute2() %>
+	<li>nestWithMethod.execute2().id = ${execute2Result.id}</li>
+	<li>nestWithMethod.execute2().value = ${execute2Result.value}</li>
+	<% def execute3Result = nestWithMethod.execute3() %>
+	<li>nestWithMethod.execute3().property1 = ${execute3Result.property1}</li>
+	<% execute3Result.eachWithIndex { element, index -> %>
+		<li>nestWithMethod.execute3()[${index}] = ${element}</li>
+	<% } %>
+
+</ul>
+
+<h4>common data</h4>
+<ul>
+	<li>commonProp = ${commonProp}</li>
+	<li>commonHash.prop1 = ${commonHash.prop1}</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+common_name: "xxx"
+object:
+  __additional: true
+  property2: ${HOST}
+neko:
+  property1: neko
+  __methods:
+    - name: execute
+      value: nekotan

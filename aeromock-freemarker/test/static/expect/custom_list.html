@@ -1,0 +1,55 @@
+<html>
+<head></head>
+<body>
+	<h4>__list（中身は数値型）自身をループ</h4>
+	<ul>
+		<li>11111</li>
+		<li>22222</li>
+		<li>33333</li>
+	</ul>
+
+	<h4>java.util.Collectionのメソッド呼び出し</h4>
+	<ul>
+		<li>list.size() = 3</li>		
+	</ul>
+	
+	<h4>__methods追加メソッド呼び出し</h4>
+	<ul>
+		<li>list.execute() = nekotan</li>
+	</ul>
+	
+	<h4>プロパティ呼び出し</h4>
+	<ul>
+		<li>list.getProperty1() = value1</li>
+		<li>list.property1 = value1</li>
+		<li>list["property1"] = value1</li>
+		<li>list.booleanType = true</li>
+	</ul>
+	
+	<h4>__list（中身はオブジェクト）自身をループ</h4>
+	<ul>
+		<li>objectList.neko = nukonuko</li>
+		<li>property1 = value1-1, property2 = value1-2</li>
+		<li>getNeko() = neko1</li>
+		<li>property1 = value2-1, property2 = value2-2</li>
+		<li>getNeko() = neko2</li>
+		<li>property1 = value3-1, property2 = value3-2</li>
+		<li>getNeko() = neko3</li>
+	</ul>
+	
+      10, 1, 111<br/>
+      10, 1, 222<br/>
+    
+    <h4>proxyが返す__list</h4>
+    <ul>
+    	<li>proxy.pager().getCurrentPage() = 2</li>
+    	<li>proxy.pager().getSimpleDataList()[0] = data1</li>
+    	<li>proxy.pager().getSimpleDataList()[1] = data2</li>
+    	<li>proxy.pager().getObjectList().name = neko1</li>
+    	<li>proxy.pager().getObjectList()[0].id = 100</li>
+    	<li>proxy.pager().getObjectList()[0].value = 10000</li>
+    	<li>proxy.pager().getObjectList()[1].id = 200</li>
+    	<li>proxy.pager().getObjectList()[1].value = 20000</li>
+    </ul>
+</body>
+</html>

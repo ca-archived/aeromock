@@ -1,0 +1,4 @@
+hostname: "${HOST}"
+common_name: "__common"
+object:
+  property1: value1

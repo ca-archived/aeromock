@@ -1,0 +1,11 @@
+thymeleaf:
+  suffix: .html
+  characterEncoding: UTF-8
+  templateAliases:
+    footer: /common/footer
+  templateMode: HTML5
+  legacyHtml5TemplateModePatterns: []
+  validXhtmlTemplateModePatterns: []
+  validXmlTemplateModePatterns: []
+  xhtmlTemplateModePatterns: []
+  xmlTemplateModePatterns: []

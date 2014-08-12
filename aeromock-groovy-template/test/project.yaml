@@ -1,0 +1,29 @@
+# テンプレート関連
+template:
+  root: ./template
+  serviceClass: ameba.aeromock.template.groovytemplate.GroovyTemplateService
+
+# データファイル関連
+data:
+  root: ./data
+
+# 静的ファイル関連
+static:
+  root: ./static
+
+# Ajaxデータファイル関連
+ajax:
+  root: ./ajax
+
+# ファンクションのルートディレクトリ
+function:
+  root: ./function
+
+# ネーミング関連
+#naming:
+#  dataPrefix: __
+#  dataidQuery: id
+
+# テスト関連
+test:
+  reportRoot: ./aeromock_report

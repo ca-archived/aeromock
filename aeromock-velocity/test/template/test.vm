@@ -1,0 +1,62 @@
+<html>
+#parse("common/header.vm")
+<body>
+
+#include("common/include.vm")
+
+<h4>ビルトイン項目確認</h4>
+<ul>
+    <li>REQUEST_URI = ${requestUri}</li>
+    <li>QUERY_STRING = ${queryString}</li>
+    <li>HOST = ${host}</li>
+    <li>REMOTE_HOST = ${remoteHost}</li>
+</ul>
+
+<h4>シンプルネスト</h4>
+<ul>
+    <li>nest.level1 = ${nest.level1}</li>
+    <li>nest.property1 = ${nest.property1}</li>
+    <li>nest.child.level2 = ${nest.child.level2}</li>
+    <li>nest.child.property2 = ${nest.child.property2}</li>
+</ul>
+
+<h4>シンプルリスト</h4>
+<ul>
+    #foreach($value in $simpleList)
+        <li>${value}</li>
+    #end
+</ul>
+
+<h4>ネストリスト</h4>
+<ul>
+    #foreach($value in $nestList)
+        <li>${value}</li>
+	#end
+</ul>
+
+<h4>メソッド付きネスト</h4>
+<ul>
+	<li>nestWithMethod.level1 = ${nestWithMethod.level1}</li>
+	<li>nestWithMethod.property1 = ${nestWithMethod.property1}</li>
+	<li>nestWithMethod.execute1() = ${nestWithMethod.execute1()}</li>
+	#set($execute2Result = $nestWithMethod.execute2())
+	<li>nestWithMethod.execute2().id = ${execute2Result.id}</li>
+	<li>nestWithMethod.execute2().value = ${execute2Result.value}</li>
+	#set($execute3Result = $nestWithMethod.execute3())
+	<li>nestWithMethod.execute3().property1 = ${execute3Result.property1}</li>
+	#foreach($element in $execute3Result)
+	<li>nestWithMethod.execute3()[${velocityCount}] = ${element}</li>
+	#end
+	<li>nestWithMethod.execute3().execute().childProperty = ${execute3Result.execute().childProperty}</li>
+	#set($execute4Result = $nestWithMethod.execute4())
+	<li>execute4Result.property1 = ${nestWithMethod.execute4().property1}</li>
+	#foreach($element in $execute4Result)
+	<li>nestWithMethod.execute4()[${velocityCount}].level1 = ${element.level1}</li>
+	<li>nestWithMethod.execute4()[${velocityCount}].execute() = ${element.execute()}</li>
+	#end
+</ul>
+
+#testMacro($simpleList)
+
+</body>
+</html>

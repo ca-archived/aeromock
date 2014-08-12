@@ -1,0 +1,12 @@
+{
+  "message": "ねこねこ1",
+  "countries": [
+    "Japan",
+    "USA"
+  ],
+  "nuko": {
+    "id" : 1
+    "name" : "aaaaa"
+    "roles": ["neko1", "neko2"]
+  }
+}

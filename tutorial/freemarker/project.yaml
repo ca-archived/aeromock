@@ -1,0 +1,19 @@
+template:
+  root: ./template
+  serviceClass: ameba.aeromock.template.freemarker.FreemarkerTemplateService
+
+data:
+  root: ../data
+
+static:
+  root: ../static
+
+ajax:
+  root: ../json/ajax
+
+tag:
+  root: ./tag
+
+function:
+  root: ./function
+

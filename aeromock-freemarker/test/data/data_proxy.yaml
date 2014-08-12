@@ -1,0 +1,40 @@
+proxy:
+  propSimple: propSimpleValue
+  propList:
+    - 11111
+    - 22222
+    - 33333
+  propMap:
+    childSimple: childSimpleValue
+    childList:
+      - child11111
+      - child22222
+      - child33333
+  __methods:
+    - name: execute
+      value: execute1value
+    - name: executeHash
+      value:
+        id: hashid
+        value: hashvalue
+        map:
+          key1: mapvalue1
+          key2: mapvalue2
+    - name: executeProxy
+      value:
+        key1: mapvalue1
+        __methods:
+          - name: executeChild
+            value: childvalue
+          - name: executeChildHash
+            value:
+              key1: mapvalue1
+              key2: mapvalue2
+          - name: executeChildProxy
+            value:
+              key1: mapvalue1
+              __methods:
+                - name: executeChildChild
+                  value: childchildValue
+              
+        

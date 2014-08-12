@@ -1,0 +1,53 @@
+<html>
+{{>common/header}}
+<body>
+
+{{> common/base}}
+
+{{#block "content"}}
+{{/block}}
+
+<h4>ビルトイン項目確認</h4>
+<ul>
+    <li>REQUEST_URI = {{requestUri}}</li>
+    <li>QUERY_STRING = {{queryString}}</li>
+    <li>HOST = {{host}}</li>
+    <li>REMOTE_HOST = {{remoteHost}}</li>
+</ul>
+
+<h4>シンプルネスト</h4>
+<ul>
+    <li>nest.level1 = {{nest.level1}}</li>
+    <li>nest.property1 = {{nest.property1}}</li>
+    <li>nest.child.level2 = {{nest.child.level2}}</li>
+    <li>nest.child.property2 = {{nest.child.property2}}</li>
+</ul>
+
+<h4>シンプルリスト</h4>
+<ul>
+    {{#simpleList}}
+        <li>{{this}}</li>
+    {{/simpleList}}
+</ul>
+
+<h4>ネストリスト</h4>
+<ul>
+    {{#nestList}}
+        <li>{{this}}</li>
+    {{/nestList}}
+</ul>
+
+<h4>プリコンパイルパーツの埋め込み</h4>
+{{>common/testparts}}
+
+<h4>ヘルパー</h4>
+<ul>
+    <li>lower = {{lower "AAAAA"}}</li>
+    <li>upper = {{upper "aaaaa"}}</li>
+    <li>staticUrl(original) = <img src="{{staticUrl "/img/sample.jpg"}}"/></li>
+</ul>
+
+{{>common/footer}}
+
+</body>
+</html>

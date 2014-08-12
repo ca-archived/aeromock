@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head th:include="/common/header :: common_header">
+</head>
+<body>
+
+<h4>Aeromock Builtin Variables</h4>
+<ul>
+	<li>REQUEST_URI = <span th:text="${requestUri}">dummy</span></li>
+	<li>QUERY_STRING = <span th:text="${queryString}">dummy</span></li>
+	<li>HOST = <span th:text="${host}">dummy</span></li>
+	<li>REMOTE_HOST = <span th:text="${common_header}">dummy</span></li>
+</ul>
+
+<h4>Simple Nest</h4>
+<ul>
+	<li>nest.level1 = <span th:text="${nest.level1}">dummy</span></li>
+	<li>nest.property1 = <span th:text="${nest.property1}">dummy</span></li>
+	<li>nest.child.level2 = <span th:text="${nest.child.level2}">dummy</span></li>
+	<li>nest.child.property2 = <span th:text="${nest.child.property2}">dummy</span></li>
+</ul>
+
+<h4>Mock Functions</h4>
+<ul>
+	<li><span th:text="${#helper.hello('neko')}">hoge</span></li>
+	<li><span th:text="${#helper.round(1.1)}">hoge</span></li>
+</ul>
+
+<h4>Simple List</h4>
+<ul>
+	<li th:each="value : ${simpleList}"><span th:text="${value}"></span></li>
+</ul>
+
+<h4>Nest List</h4>
+<ul>
+	<li th:each="obj : ${nestList}"><span th:text="${obj}">dummy</span></li>
+</ul>
+
+</body>
+</html>

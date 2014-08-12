@@ -1,0 +1,30 @@
+!!! 5
+html
+  head
+    include common/header
+  body
+    h4 ビルトイン項目確認
+    ul
+      li REQUEST_URI = #{requestUri}
+      li QUERY_STRING = #{queryString}
+      li HOST = #{host}
+      li REMOTE_HOST = #{remoteHost}
+
+    h4 シンプルネスト
+    ul
+      li nest.level1 = #{nest.level1}
+      li nest.property1 = #{nest.property1}
+      li nest.child.level2 = #{nest.child.level2}
+      li nest.child.property2 = #{nest.child.property2}
+
+    h4 シンプルリスト
+    ul
+      for value in simpleList
+        li #{value}
+
+    h4 ネストリスト
+    ul
+      for value in nestList
+        li #{value}
+
+    p= math.round(1.44)

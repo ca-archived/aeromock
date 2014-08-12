@@ -1,0 +1,12 @@
+template:
+  root: ./template
+  serviceClass: ameba.aeromock.template.groovytemplate.GroovyTemplateService
+
+data:
+  root: ../data
+
+static:
+  root: ../static
+
+ajax:
+  root: ../json/ajax

@@ -1,0 +1,28 @@
+instance:
+  neko: "nukonuko"
+#  nest:
+#    nukonuko: "aaaa"
+  __methods:
+    - name: getHoge
+      value: "222"
+    - name: getChild
+      value:
+        id: 1500
+        name: "dongdeng"
+        __methods:
+          - name: execute
+            value: 5000
+          - name: tehepero
+            value: "てへぺろ"
+nekotan:
+  __methods:
+    - name: getColors
+      value:
+        - "red"
+        - "brown"
+        - "silver"
+raidwarBean:
+  iRaidwarUser:
+    alert: 1000
+        
+        

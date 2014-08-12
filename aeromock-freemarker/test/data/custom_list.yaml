@@ -1,0 +1,62 @@
+list:
+  property1: value1
+  booleanType: true
+  __list:
+    - 11111
+    - 22222
+    - 33333
+  __methods:
+    - name: execute
+      value: nekotan
+objectList:
+  neko: nukonuko
+  __list:
+    - property1: value1-1
+      property2: value1-2
+      __methods:
+        - name: getNeko
+          value: neko1
+    - property1: value2-1
+      property2: value2-2
+      __methods:
+        - name: getNeko
+          value: neko2
+    - property1: value3-1
+      property2: value3-2
+      __methods:
+        - name: getNeko
+          value: neko3
+gettingPrizes:
+  __methods:
+    - name: exclude
+      value:
+        - point: 10
+          stampCount: 1
+          neko:
+            id: 111
+            name: nuko
+        - point: 10
+          stampCount: 1
+          neko:
+            id: 222
+            name: nuko
+proxy:
+  __methods:
+    - name: pager
+      value:
+        __methods:
+          - name: getCurrentPage
+            value: 2
+          - name: getSimpleDataList
+            value:
+              __list:
+                - data1
+                - data2
+          - name: getObjectList
+            value:
+              name: neko1
+              __list:
+                - id: 100
+                  value: 10000
+                - id: 200
+                  value: 20000

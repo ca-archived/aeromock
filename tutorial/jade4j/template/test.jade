@@ -1,0 +1,36 @@
+!!! 5
+html
+  head
+    include common/header
+  body
+    h4 use Aeromock builtin variables
+    ul
+      li REQUEST_URI = #{requestUri}
+      li QUERY_STRING = #{queryString}
+      li HOST = #{host}
+      li REMOTE_HOST = #{remoteHost}
+
+    h4 simple nest
+    ul
+      li nest.level1 = #{nest.level1}
+      li nest.property1 = #{nest.property1}
+      li nest.child.level2 = #{nest.child.level2}
+      li nest.child.property2 = #{nest.child.property2}
+
+    h4 simple list
+    ul
+      for value in simpleList
+        li #{value}
+
+    h4 nest list
+    ul
+      for value in nestList
+        li #{value}
+
+    h4 common data
+    ul
+      li commonProp = #{commonProp}
+      li commonHash.prop1 = #{commonHash.prop1}
+
+    h4 helper
+    p math.round(1.44) = #{math.round(1.44)}

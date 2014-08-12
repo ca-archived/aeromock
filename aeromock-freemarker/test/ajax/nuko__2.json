@@ -1,0 +1,14 @@
+{
+  "message": "ねこねこ2",
+  "countries": [
+    "Japan",
+    "USA",
+    "Canada"
+  ],
+  "nuko": {
+    "id" : 1
+    "name" : "aaaaa"
+    "roles": ["neko1", "neko2", "neko3", "neko4", "neko5"]
+  },
+  "uri": "${REQUEST_URI}"
+}

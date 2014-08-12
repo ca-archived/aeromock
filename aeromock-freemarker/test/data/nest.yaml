@@ -1,0 +1,7 @@
+hoge:
+  __methods:
+    - name: execute
+      value: "nekosan"
+  neko: "nuko"
+  fuga:
+    piyo: 123

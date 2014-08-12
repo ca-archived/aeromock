@@ -1,0 +1,15 @@
+template:
+  root: ./template
+  serviceClass: ameba.aeromock.template.handlebars.HandlebarsTemplateService
+
+data:
+  root: ../data
+
+static:
+  root: ../static
+
+ajax:
+  root: ../json/ajax
+
+function:
+  root: ./function

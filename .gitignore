@@ -1,0 +1,23 @@
+# SBT
+target/
+.cache
+
+# eclipse
+.project
+.classpath
+.settings/
+
+# IDEA
+.idea/
+.settings/
+*.iml
+
+# JS
+bower_components/
+
+# Others
+.DS_Store
+*.pyc
+
+# test report
+aeromock_report/

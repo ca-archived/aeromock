@@ -1,0 +1,8 @@
+handlebars:
+  suffix: .hbs
+  prettyPrint: true
+  stringParams: false
+  infiniteLoops: false
+  deletePartialAfterMerge: false
+  startDelimiter: {{
+  endDelimiter: }}

@@ -1,0 +1,32 @@
+title: headertitle!
+requestUri: ${REQUEST_URI}
+queryString: ${QUERY_STRING}
+host: ${HOST}
+remoteHost: ${REMOTE_HOST}
+nest:
+  level1: ${REQUEST_URI}_level1
+  property1: hoge1
+  child:
+    level2: ${REQUEST_URI}_level2
+    property2: hoge2
+simpleList:
+  - "${REQUEST_URI}"
+  - element2
+  - "${HOST}"
+  - element4
+  - 5
+nestList:
+  - "${REQUEST_URI}"
+  - level1: ${REQUEST_URI}_level1_1
+    property1: hoge2_1
+    child:
+      level2: ${REQUEST_URI}_level2_1
+      property2: hoge2_1
+  - level1: ${REQUEST_URI}_level1_2
+    property1: hoge2_2
+    child:
+      level2: ${REQUEST_URI}_level2_2
+      property2: hoge2_2
+parts:
+  property1: value1
+  property2: value2

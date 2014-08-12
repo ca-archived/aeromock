@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss}\t%-5level\t%logger{36}#%method\t%message%n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="ACCESS" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss}\taccess\t%message%n</pattern>
+        </encoder>
+    </appender>
+    
+    <logger name="access" additivity="false">
+    	<appender-ref ref="ACCESS" />
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>

@@ -1,0 +1,13 @@
+list:
+  __methods:
+  - name: size
+    value: dummy
+  - name: execute
+    value: dummy
+  property1: dummy
+objectList:
+- property1: dummy
+  property2: dummy
+  __methods:
+  - name: getNeko
+    value: dummy

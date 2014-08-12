@@ -1,0 +1,4 @@
+routing {
+    server "localhost", {
+    }
+}

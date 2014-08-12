@@ -1,0 +1,29 @@
+[
+    {
+        "key": "neko1",
+        "value": {
+            "name": "neko1",
+            "age": 10,
+            "color": "brown",
+            "builtin": "${REQUEST_URI}"
+        }
+    },
+    {
+        "key": "neko2",
+        "value": {
+            "name": "neko2",
+            "age": 12,
+            "color": "black",
+            "builtin": "${REQUEST_URI}"
+        }
+    },
+    {
+        "key": "neko3",
+        "value": {
+            "name": "neko3",
+            "age": 5,
+            "color": "silver",
+            "builtin": "${REQUEST_URI}"
+        }
+    }
+]

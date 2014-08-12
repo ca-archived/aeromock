@@ -1,0 +1,7 @@
+#macro(testMacro $values)
+<ul>
+#foreach($value in $values)
+	<li>value = $value</li>
+#end
+</ul>
+#end

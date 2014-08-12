@@ -1,0 +1,3 @@
+groovyTemplate:
+  extension: .html
+  mode: gstring

@@ -1,0 +1,4 @@
+jade4j:
+  extension: .jade
+  mode: HTML
+  prettyPrint: true
