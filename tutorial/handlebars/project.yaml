@@ -1,6 +1,6 @@
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.handlebars.HandlebarsTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.handlebars.HandlebarsTemplateService
 
 data:
   root: ../data

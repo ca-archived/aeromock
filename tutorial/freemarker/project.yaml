@@ -1,6 +1,6 @@
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.freemarker.FreemarkerTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.freemarker.FreemarkerTemplateService
 
 data:
   root: ../data

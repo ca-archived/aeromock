@@ -1,6 +1,6 @@
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.groovytemplate.GroovyTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.groovytemplate.GroovyTemplateService
 
 data:
   root: ../data

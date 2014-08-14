@@ -1,7 +1,7 @@
 # テンプレート関連
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.handlebars.HandlebarsTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.handlebars.HandlebarsTemplateService
 
 # データファイル関連
 data:

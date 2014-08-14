@@ -1,7 +1,7 @@
 # テンプレート関連
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.thymeleaf.ThymeleafTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.thymeleaf.ThymeleafTemplateService
 
 # データファイル関連
 data:

@@ -11,7 +11,7 @@ object AeromockBuild extends Build {
 
   lazy val baseSettings = super.settings ++ Seq(
     scalaVersion := "2.11.1",
-    organization := "ameba.aeromock",
+    organization := "jp.co.cyberagent.aeromock",
     version := Version.aeromock,
     publishMavenStyle := true,
     publishArtifact in Test := false,
@@ -32,9 +32,10 @@ object AeromockBuild extends Build {
         </scm>
         <developers>
           <developer>
-            <id>stormcat24</id>
             <name>Akinori Yamada</name>
-            <url>https://github.com/stormcat24</url>
+            <email>yamada_akinori@cyberagent.co.jp</email>
+            <organization>CyberAgent,Inc</organization>
+            <organizationUrl>http://www.cyberagent.co.jp/en/</organizationUrl>
           </developer>
         </developers>
       ),
@@ -64,7 +65,7 @@ object AeromockBuild extends Build {
       "org.scala-lang" % "scala-reflect" % "2.11.1",
       "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
       "ch.qos.logback" % "logback-classic" % "1.1.2",
-      "ameba.aeromock" % "aeromock-dsl" % Version.aeromock,
+      "jp.co.cyberagent.aeromock" % "aeromock-dsl" % Version.aeromock,
       "org.specs2" %% "specs2" % "2.3.12" % "test"
     ),
 

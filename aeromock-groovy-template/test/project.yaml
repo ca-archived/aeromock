@@ -1,7 +1,7 @@
 # テンプレート関連
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.groovytemplate.GroovyTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.groovytemplate.GroovyTemplateService
 
 # データファイル関連
 data:

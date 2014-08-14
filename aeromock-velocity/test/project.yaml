@@ -1,7 +1,7 @@
 # テンプレート関連
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.velocity.VelocityTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.velocity.VelocityTemplateService
 
 # データファイル関連
 data:

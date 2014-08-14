@@ -1,6 +1,6 @@
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.thymeleaf.ThymeleafTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.thymeleaf.ThymeleafTemplateService
 
 data:
   root: ../data

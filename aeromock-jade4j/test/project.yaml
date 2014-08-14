@@ -1,7 +1,7 @@
 # テンプレート関連
 template:
   root: ./template
-  serviceClass: ameba.aeromock.template.jade4j.Jade4jTemplateService
+  serviceClass: jp.co.cyberagent.aeromock.template.jade4j.Jade4jTemplateService
 
 # データファイル関連
 data:

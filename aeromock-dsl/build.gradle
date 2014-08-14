@@ -8,7 +8,7 @@ buildscript {
     apply plugin: it
 }
 
-group = 'ameba.aeromock'
+group = 'jp.co.cyberagent.aeromock'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
@@ -95,9 +95,10 @@ uploadArchives {
                     }
                     developers {
                         developer {
-                            id 'stormcat24'
                             name 'Akinori Yamada'
-                            url 'https://github.com/stormcat24'
+                            email 'yamada_akinori@cyberagent.co.jp'
+                            organization 'CyberAgent,Inc'
+                            organizationUrl 'http://www.cyberagent.co.jp/en/'
                         }
                     }
                 }
