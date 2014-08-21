@@ -3,35 +3,32 @@ Aeromock
 
 ![logo](https://github.com/CyberAgent/aeromock/raw/master/aeromock-view/img/aeromock.png)
 
-What's Aeromock?
+Aeromockとは？
 ===
-一言で言うと、Aeromockとは**Lightweight mock web application server**です。サーバサイドのモジュールや、付随するミドルウェア依存しない高速なフロントエンド開発を可能にすることが最大のミッションです。
+AeromockはテンプレートファイルとデータファイルだけでHTMLを描画することができるアプリケーションサーバです。サーバサイドのモジュールやミドルウェア無しでフロントエンド開発を可能にします。
+軽量に動作するため、**Lightweight mock web application server** を謳っています。
 
-Features
+機能
 ===
-* Aeromockの起動は数秒で、基本的に一度Aeromockを起動したら再度起動する必要はありません。
-* 必要なメモリはおおよそ200から300MBであり、少ないシステムリソースで稼働します。
-* テンプレートファイルと、それに紐づくデータファイルを用意するだけでHTMLを返します。
-* テンプレートに対応させるデータファイルはJSONとYAML形式をサポートしていますが、YAML形式を強く推奨しています。JSON形式に比べて、データ構造や意図を共有しやすいからです。
-* Dynamic Enhanced ProxyによってJavaのインスタンスを生成することができるため、テンプレート上でのJavaメソッド実行も問題ありません。
-* カスタムルーティングスクリプトを記述することで、URL Rewriteを制御できます。
-* 横断的に適用できる共通データファイルをサポートしています。適用ルールはスクリプトによって自由に制御できます。
-* 1つのテンプレートファイルに1つのデータファイルではなく、複数のデータファイルを対応させることができます。これにより、様々なパターンのデータファイルを試すことが出来ます。
+* 一度起動したら再起動する必要はありません。
+* テンプレートファイルと、それに紐づくデータファイル（JSONまたはYAML）を用意するだけでHTMLを返します。
+* メソッド呼び出しや、カスタムタグ・ファンクションを利用しているテンプレートもサポートします。
+* 1つのテンプレートに対して、複数パターンの描画をすることができます。
+* スクリプトによってURL Rewriteを制御できます。
 * モックJSON APIサーバとしても機能します。
 * 静的ファイルサーバとしても機能します（js, css, 画像等)。
-* aeromock-unitというコマンドラインツールを使えば描画のユニットテストができ、JUnit形式のXMLファイルにテストレポートを出力することが出来ます。そのため、Jenkins上でテンプレートとモックデータファイルをCIすることが可能です。
 
-Getting started
+利用するには
 ===
 @See [Wiki](https://github.com/CyberAgent/aeromock/wiki)
 
-Requirements
+前提条件
 ===
 * Java >= 1.7
 * Git
 * Vagrant >= 1.5 (Vagrant Shareを利用する場合)
 
-Support template engine (Currently)
+サポートしているテンプレートエンジン
 ===
 
 * Freemarker
@@ -41,11 +38,11 @@ Support template engine (Currently)
 * Groovy Template Engine
 * Thymeleaf
 
-Contributing
+コミッタ
 ===
 * Akinori Yamada - [@stormcat24](https://twitter.com/stormcat24) [github](https://github.com/stormcat24)
 
-License
+ライセンス
 ===
 See [LICENSE](LICENSE).
 
