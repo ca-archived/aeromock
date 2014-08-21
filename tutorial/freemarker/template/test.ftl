@@ -67,7 +67,7 @@
 
 <h4>use function</h4>
 <div>
-	<img src=${staticUrl("/img/sample.jpg")}
+	<img src=${staticUrl("/img/sample.jpg")} />
 </div>
 
 <h4>Freemarker builtin '.now'</h4>
