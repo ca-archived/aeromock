@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.server.http
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.{FullHttpRequest, HttpResponse, HttpResponseStatus}
 import jp.co.cyberagent.aeromock.config.entity.Project
-import jp.co.cyberagent.aeromock.core.builtin.BuiltinVariableHelper
+import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.RequestManager
 import jp.co.cyberagent.aeromock.data.{DataFileReaderFactory, DataPathResolver}
 import jp.co.cyberagent.aeromock.helper._
@@ -30,7 +30,7 @@ object JsonApiHttpRequestProcessor extends HttpRequestProcessor with HttpRespons
       case Some(reader) => reader.readFile(dataFile)
     }
 
-    val variableHelper = new BuiltinVariableHelper(RequestManager.getRequestMap)
+    val variableHelper = new VariableHelper(RequestManager.getRequestMap)
     val responseWriter = JsonApiResponseWriterFactory.create(project, variableHelper, dataMap)
 
     val response = responseWriter.write

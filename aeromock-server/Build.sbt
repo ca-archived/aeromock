@@ -10,5 +10,6 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.6",
   "org.javassist" % "javassist" % "3.18.2-GA",
   "org.apache.commons" % "commons-lang3" % "3.1",
-  "args4j" % "args4j" % "2.0.28"
+  "args4j" % "args4j" % "2.0.28",
+  "org.glassfish" % "javax.el" % "3.0.0"
 )

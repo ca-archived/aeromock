@@ -54,5 +54,23 @@ object DeepTraversal {
       case e => arround(e).asInstanceOf[V]
     }
   }
+
+  def asJavaMap[K, V](input: Map[K, V])(arround: (Any => Any)): JMap[K, V] = {
+    val map = new java.util.LinkedHashMap[K, V]
+    input.map {
+      case (key, value: Map[_, _]) => map.put(key, asJavaMap(value)(arround).asInstanceOf[V])
+      case (key, value: Seq[_]) => map.put(key, asJavaCollection(value)(arround).asInstanceOf[V])
+      case (key, value) => map.put(key, arround(value).asInstanceOf[V])
+    }
+    map
+  }
+
+  def asJavaCollection[V](input: Seq[V])(arround: (Any => Any)): JCollection[V] = {
+    input.map {
+      case entry: Map[_, _] => asJavaMap(entry)(arround).asInstanceOf[V]
+      case entry: Seq[_] => asJavaCollection(entry)(arround).asInstanceOf[V]
+      case entry => arround(entry).asInstanceOf[V]
+    }.asJava
+  }
 }
 

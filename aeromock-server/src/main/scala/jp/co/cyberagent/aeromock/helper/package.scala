@@ -20,6 +20,7 @@ import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
 import scalaz.Validation
 import scalaz.Validation._
+import scala.language.reflectiveCalls
 
 /**
  * Package object for various helper.
