@@ -207,6 +207,8 @@ package object helper {
       while ({len = is.read(buf, 0, buf.length); len >= 0}) md.update(buf, 0, len)
       md.digest().map("%02x" format _).mkString
     }
+
+    def getExtension(): Option[String] = helper.getExtension(path.getFileName.toString)
   }
 
   implicit class FullHttpRequestHelper(original: HttpRequest) {

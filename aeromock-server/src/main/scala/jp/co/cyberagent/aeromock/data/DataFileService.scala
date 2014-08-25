@@ -8,7 +8,8 @@ import java.nio.file.Path
 
 class DataFileService(project: Project) {
 
-  val DATAFILE_PATTERN = Pattern.compile("""^.+__([0-9A-Za-z_-]+)\..+$""")
+  val EXTENSION_PATTERN = ("""^.+\.""" + AllowedDataType.extensions.mkString("(", "|", ")") + "$").r
+  val DATAFILE_PATTERN = Pattern.compile("""^.+__(\w+)$""")
 
   def getRelatedDataFiles(endpoint: Endpoint): List[DataFile] = {
     require(endpoint != null)
@@ -17,19 +18,27 @@ class DataFileService(project: Project) {
     val pathParts = endpoint.value.split("/")
 
     val ownerDirectory = (dataRootPath / endpoint.value).getParent()
-    val dataFiles = ownerDirectory.getChildren
+
+    ownerDirectory
+      .getChildren
       .filter(!_.isDirectory())
+      .filter(f => EXTENSION_PATTERN.findAllMatchIn(f.getFileName().toString).nonEmpty)
       .collect {
         case path if path.getFileName().toString().startsWith(pathParts.last + ".") => path
         case path if path.getFileName().toString().startsWith(pathParts.last + "__") => path
       }
+      .map(file => {
+        val name = file.withoutExtension.toString
+        val matcher = DATAFILE_PATTERN.matcher(name)
 
-    dataFiles.map(file => {
-      val matcher = DATAFILE_PATTERN.matcher(file.getFileName().toString())
-      matcher.matches() match {
-        case false => DataFile(None, file)
-        case true => DataFile(Some(matcher.group(1)), file)
-      }
+        // TODO ^.+__(get|post|put|delete)__(\w+)$
+        // TODO ^.+__(\w+)$
+        // TODO NONE
+
+        matcher.matches() match {
+          case false => DataFile(None, file)
+          case true => DataFile(Some(matcher.group(1)), file)
+        }
     })
   }
 
