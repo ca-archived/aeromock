@@ -6,7 +6,7 @@ import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpHeaders.Names
 import jp.co.cyberagent.aeromock.config.entity.Project
 import jp.co.cyberagent.aeromock.config.{ConfigHolder, ServerOptionRepository}
-import jp.co.cyberagent.aeromock.core.builtin.BuiltinVariableHelper
+import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, RequestManager}
 import jp.co.cyberagent.aeromock.data._
 import jp.co.cyberagent.aeromock.helper._
@@ -106,7 +106,7 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
     val reducedMap = mergedMap - project._naming.response
 
     // 関数合成することでasJavaMapの抽象度を保ちつつ、走査のついでに変数置換を行う
-    val variableHelper = new BuiltinVariableHelper(RequestManager.getRequestMap)
+    val variableHelper = new VariableHelper(RequestManager.getRequestMap)
 
     new InstanceProjectionFactory(variableHelper.variableConversion, project._naming).create(reducedMap) match {
       case Failure(errors) => throw new AeromockLoadDataException(errors.map(_.getMessage))

@@ -1,8 +1,8 @@
 package jp.co.cyberagent.aeromock.server.http
 
 import jp.co.cyberagent.aeromock.config.entity.Project
-import jp.co.cyberagent.aeromock.core.builtin.BuiltinVariableHelper
 import jp.co.cyberagent.aeromock.AeromockLoadDataException
+import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.data.CommonDataHelper
 import jp.co.cyberagent.aeromock.helper.DeepTraversal._
 
@@ -25,10 +25,10 @@ trait JsonApiResponseWriter {
 /**
  * [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]] for root element of array object.
  * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
- * @param variableHelper [[jp.co.cyberagent.aeromock.core.builtin.BuiltinVariableHelper]]
+ * @param variableHelper [[VariableHelper]]
  * @param data sequential data
  */
-class JsonApiArrayResponseWriter(project: Project, variableHelper: BuiltinVariableHelper, data: Seq[Any]) extends JsonApiResponseWriter {
+class JsonApiArrayResponseWriter(project: Project, variableHelper: VariableHelper, data: Seq[Any]) extends JsonApiResponseWriter {
 
   // Don't merge common data files, because structur of root element is array.
   /**
@@ -40,10 +40,10 @@ class JsonApiArrayResponseWriter(project: Project, variableHelper: BuiltinVariab
 /**
  * [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]] for root element of map object.
  * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
- * @param variableHelper [[jp.co.cyberagent.aeromock.core.builtin.BuiltinVariableHelper]]
+ * @param variableHelper [[VariableHelper]]
  * @param data map data
  */
-class JsonApiMapResponseWriter(project: Project, variableHelper: BuiltinVariableHelper, data: Map[Any, Any])
+class JsonApiMapResponseWriter(project: Project, variableHelper: VariableHelper, data: Map[Any, Any])
   extends JsonApiResponseWriter with ResponseStatusSupport{
 
   /**
@@ -77,11 +77,11 @@ object JsonApiResponseWriterFactory {
   /**
    * Create [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]].
    * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
-   * @param variableHelper [[jp.co.cyberagent.aeromock.core.builtin.BuiltinVariableHelper]]
+   * @param variableHelper [[VariableHelper]]
    * @param data Iterable object
    * @return [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]]
    */
-  def create(project: Project, variableHelper: BuiltinVariableHelper, data: Iterable[_]): JsonApiResponseWriter = {
+  def create(project: Project, variableHelper: VariableHelper, data: Iterable[_]): JsonApiResponseWriter = {
     data match {
       case m: Map[Any, Any] @unchecked => new JsonApiMapResponseWriter(project, variableHelper, m)
       case l: Seq[Any] @unchecked => new JsonApiArrayResponseWriter(project, variableHelper, l)

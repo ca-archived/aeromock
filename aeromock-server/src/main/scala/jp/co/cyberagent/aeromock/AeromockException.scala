@@ -100,6 +100,10 @@ class AeromockTemplateParseException(path: String, cause: Throwable)
   def this(path: String) = this(path, null)
 }
 
+class AeromockELException(expression: String, cause: Throwable)
+  extends AeromockBadImplementation(classOf[AeromockELException], cause, expression) {
+}
+
 class AeromockLoadDataException(errors: NonEmptyList[String]) extends AeromockBadImplementation(errors.list.mkString(",")) {
 }
 
