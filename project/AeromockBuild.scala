@@ -54,7 +54,9 @@ object AeromockBuild extends Build {
       System.getenv("M2_REPO_PASSWORD")),
 
     resolvers ++= Seq(
-      Resolver.mavenLocal
+      Resolver.mavenLocal,
+      Resolver.sonatypeRepo("releases"),
+      Resolver.sonatypeRepo("snapshots")
     ),
 
     libraryDependencies ++= Seq(
