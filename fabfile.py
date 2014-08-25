@@ -17,7 +17,7 @@ def release(next_version):
     release_version = get_release_version()
 
     # build aeromock-dsl
-    local('./aeromock-dsl/gradlew -p aeromock-dsl uploadArchives')
+    local('./aeromock-dsl/gradlew -p aeromock-dsl install uploadArchives')
 
     # build aeromock
     local('sbt publishSigned')
