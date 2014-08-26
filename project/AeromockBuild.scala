@@ -61,9 +61,6 @@ object AeromockBuild extends Build {
 
     libraryDependencies ++= Seq(
       "org.scalaz" %% "scalaz-core" % scalazVersion,
-      "org.scalaz" %% "scalaz-effect" % scalazVersion,
-      "org.scalaz" %% "scalaz-typelevel" % scalazVersion,
-      "org.scalaz" %% "scalaz-scalacheck-binding" % scalazVersion % "test",
       "org.scala-lang" % "scala-reflect" % "2.11.1",
       "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
       "ch.qos.logback" % "logback-classic" % "1.1.2",
