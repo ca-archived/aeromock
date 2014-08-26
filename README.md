@@ -5,21 +5,18 @@ Aeromock
 
 What's Aeromock?
 ===
-In a word, Aeromock is **Lightweight mock web application server**. Enable frontend development without modules of server side, any middleware, and quickly is the biggest mission.
+Aeromock is application server that respond HTML by making template file and data file. Enable frontend development without modules of server side.
+Aeromock runs lightly, so is called **Lightweight mock web application server**.
 
 Features
 ===
-* Takes few seconds to boot Aeromock. Basically, if you started to Aeromock once, no need to reboot it.
-* Necessary amount of memory is about between 200 to 300 MB, so runs fewer system resources.
-* Only template file and data file related to template, respond HTML.
-* Data file apply template, supports JSON and YAML format, but we strongly recommend using YAML format. Because, can share data structure and intention easily compared with JSON format.
-* Create imitated Java instance by dymamic enhanced proxy, no problem to invoke java method on template.
+* If you started to Aeromock once, no need to reboot it.
+* Only template file and data file(JSON or YAML), respond HTML.
+* Support template with invoking method, using custom tag, function.
+* Render various pattern per one template file.
 * By writing routing script, control to URL Rewrite.
-* Support common data file transversally. Control to applying rule by applying data script freely.
-* Not one data file per one template file but Some data file per one template file, so you can try to do various pattern.
 * Work as mock JSON API server.
 * Work as static contents server (js, css, various images).
-* Rendering unit test by command line tools (aeromock-unit), and output test report XML of JUnit report format. So, enable CI (Continuous Integration) of template and mock data files on Jenkins.
 
 Getting started
 ===
