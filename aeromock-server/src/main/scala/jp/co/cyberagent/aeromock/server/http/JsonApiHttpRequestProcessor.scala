@@ -19,8 +19,9 @@ object JsonApiHttpRequestProcessor extends HttpRequestProcessor with HttpRespons
     (implicit context: ChannelHandlerContext): HttpResponse = {
 
     val ajaxRoot = project._ajax.root
+    val naming = project._naming
 
-    val dataFile = DataPathResolver.resolve(ajaxRoot, request.parsedRequest) match {
+    val dataFile = DataPathResolver.resolve(ajaxRoot, request.parsedRequest, naming) match {
       case None => throw new AeromockApiNotFoundException(request.parsedRequest.url)
       case Some(file) => file
     }

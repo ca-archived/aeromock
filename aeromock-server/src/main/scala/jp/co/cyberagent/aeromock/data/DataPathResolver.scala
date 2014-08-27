@@ -1,47 +1,53 @@
 package jp.co.cyberagent.aeromock.data
 
-import java.nio.file.{Path, Paths}
-import java.util.regex.Pattern
+import java.nio.file.Path
 
+import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.AeromockBadUsingException
-import jp.co.cyberagent.aeromock.config.ConfigHolder
+import jp.co.cyberagent.aeromock.config.entity.Naming
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import jp.co.cyberagent.aeromock.helper._
 
 object DataPathResolver {
 
-  val pattern = Pattern.compile("""^(\/.+)\..+""")
+  val PATTERN = """^(\/.+)\..+""".r
 
-  val allowedFormats = List(AllowedDataType.JSON, AllowedDataType.YAML)
-
-  def resolve(rootDir: Path, parsedRequest: ParsedRequest): Option[Path] = {
+  def resolve(rootDir: Path, parsedRequest: ParsedRequest, naming: Naming): Option[Path] = {
     require(rootDir != null)
     require(parsedRequest != null)
 
-    val files = getCandidates(rootDir, parsedRequest).map(Paths.get(_)).filter(_.exists)
+    val files = getCandidates(rootDir, parsedRequest, naming)
     files.size match {
-      case 0 => None
+      case 0 => {
+        // GET以外の場合、GETで代替する
+        if (parsedRequest.method == HttpMethod.GET) {
+          None
+        } else {
+          resolve(rootDir, ParsedRequest(parsedRequest.url, parsedRequest.queryParameters, parsedRequest.formData, HttpMethod.GET), naming)
+        }
+      }
       case 1 => Some(files.last)
       case size if size > 1 => throw new AeromockBadUsingException("badusing.data.duplicated", null, parsedRequest.url)
     }
   }
 
-  private def getCandidates(rootDir: Path, parsedRequest: ParsedRequest): List[String] = {
-    val naming = ConfigHolder.getProject._naming
+  private def getCandidates(rootDir: Path, parsedRequest: ParsedRequest, naming: Naming): Seq[Path] = {
     val url = parsedRequest.url
     val dataId = parsedRequest.queryParameters.get(naming.dataidQuery)
 
-    val basePath = pattern.matcher(url) match {
-      case m if m.find() => m.group(1)
+    val basePath = url match {
+      case PATTERN(value) => value
       case _ => url
     }
 
-    val extensions = allowedFormats.flatMap(_.extensions)
+    val methodCandidates = if (parsedRequest.method == HttpMethod.GET) Seq("__get", "") else Seq(s"__${parsedRequest.method.name.toLowerCase}")
+    val basePaths = methodCandidates.map(rootDir + basePath + _)
+
+    val extensions = AllowedDataType.extensions.toList
     (dataId match {
-      case None => extensions.map(rootDir + basePath + "." + _)
-      case Some(id: String) if id.isEmpty() => extensions.map(rootDir + basePath + "." + _)
-      case Some(id) => extensions.map(rootDir + basePath + s"__$id." + _)
-    }).map(_.toString)
+      case Some(id) => basePaths.flatMap(p => extensions.map(p + s"__$id." + _))
+      case _ => basePaths.flatMap(p => extensions.map(p + "." + _))
+    }).filter(_.exists)
   }
 
 }

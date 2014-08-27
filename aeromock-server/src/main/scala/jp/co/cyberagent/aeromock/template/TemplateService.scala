@@ -40,10 +40,9 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
       val dumperOptions = new DumperOptions
       dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW)
 
-      val yaml = new Yaml(dumperOptions)
       val response = createResponseData(project, request.parsedRequest)
       val proxyMap = response._1.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
-      RenderResult(yaml.dumpAsMap(proxyMap), response._2, true)
+      RenderResult(new Yaml(dumperOptions).dumpAsMap(proxyMap), response._2, true)
     } else {
       renderProcess(request.parsedRequest) match {
         case Left(e) => throw new AeromockRenderException(request.parsedRequest.url, e.getCause)
@@ -77,7 +76,8 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
   protected def createResponseData(project: Project, request: ParsedRequest): (InstanceProjection, Option[CustomResponse]) = {
 
     val dataRootDir = project._data.root
-    val dataFile = DataPathResolver.resolve(dataRootDir, request) match {
+    val naming = project._naming
+    val dataFile = DataPathResolver.resolve(dataRootDir, request, naming) match {
       case None => throw new AeromockNoneRelatedDataException(request.url)
       case Some(file) => file
     }
@@ -131,8 +131,8 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
           trye {
 
             val imitatedRequest = dataFile match {
-              case DataFile(None, _) => ParsedRequest(endpoint.value, Map.empty, Map.empty)
-              case DataFile(Some(id), _) => ParsedRequest(endpoint.value, Map("_dataid" -> id), Map.empty)
+              case DataFile(None, _, method) => ParsedRequest(endpoint.value, Map.empty, Map.empty, method)
+              case DataFile(Some(id), _, method) => ParsedRequest(endpoint.value, Map("_dataid" -> id), Map.empty, method)
             }
 
             val namesClass = classOf[Names]

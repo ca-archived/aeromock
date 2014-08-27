@@ -10,3 +10,4 @@ hash:
 intArray:
   - 1
   - 2
+method: GET

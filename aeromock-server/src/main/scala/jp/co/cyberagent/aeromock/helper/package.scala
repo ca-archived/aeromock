@@ -233,7 +233,7 @@ package object helper {
         (decoded, Map.empty[String, String])
       }
 
-      val formData = if (Array(POST, PUT, DELETE, PATCH).contains(original.getMethod())) {
+      val formData = if (Array(POST, PUT, PATCH).contains(original.getMethod())) {
         val postDecoder = new HttpPostRequestDecoder(original)
         (postDecoder.getBodyHttpDatas().asScala.collect {
           case a: MixedAttribute => (a.getName() -> a.getValue())
@@ -242,7 +242,7 @@ package object helper {
         Map.empty[String, String]
       }
 
-      ParsedRequest(urlTuple._1, urlTuple._2, formData)
+      ParsedRequest(urlTuple._1, urlTuple._2, formData, original.getMethod())
     }
 
     lazy val extension = getExtension(parsedRequest.url)

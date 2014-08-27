@@ -1,15 +1,18 @@
 package jp.co.cyberagent.aeromock.data
 
-import java.util.regex.Pattern
-import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.core.http.Endpoint
-import jp.co.cyberagent.aeromock.config.entity.Project
 import java.nio.file.Path
+
+import io.netty.handler.codec.http.HttpMethod
+import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.core.http.Endpoint
+import jp.co.cyberagent.aeromock.helper._
 
 class DataFileService(project: Project) {
 
   val EXTENSION_PATTERN = ("""^.+\.""" + AllowedDataType.extensions.mkString("(", "|", ")") + "$").r
-  val DATAFILE_PATTERN = Pattern.compile("""^.+__(\w+)$""")
+  val METHOD_NUMBER_PATTERN = """^.+__(options|get|head|post|put|patch|delete|trace|connect)__(\w+)$""".r
+  val METHOD_ONLY_PATTERN = """^.+__(options|get|head|post|put|patch|delete|trace|connect)$""".r
+  val NUMBER_PATTERN = """^.+__(\w+)$""".r
 
   def getRelatedDataFiles(endpoint: Endpoint): List[DataFile] = {
     require(endpoint != null)
@@ -29,19 +32,15 @@ class DataFileService(project: Project) {
       }
       .map(file => {
         val name = file.withoutExtension.toString
-        val matcher = DATAFILE_PATTERN.matcher(name)
-
-        // TODO ^.+__(get|post|put|delete)__(\w+)$
-        // TODO ^.+__(\w+)$
-        // TODO NONE
-
-        matcher.matches() match {
-          case false => DataFile(None, file)
-          case true => DataFile(Some(matcher.group(1)), file)
+        name match {
+          case METHOD_NUMBER_PATTERN(method, id) => DataFile(Some(id), file, HttpMethod.valueOf(method.toUpperCase))
+          case METHOD_ONLY_PATTERN(method) => DataFile(None, file, HttpMethod.valueOf(method.toUpperCase))
+          case NUMBER_PATTERN(id) => DataFile(Some(id), file)
+          case _ => DataFile(None, file)
         }
     })
   }
 
 }
 
-case class DataFile(id: Option[String], path: Path)
+case class DataFile(id: Option[String], path: Path, method: HttpMethod = HttpMethod.GET)

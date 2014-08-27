@@ -1,4 +1,4 @@
-title: test.yaml
+title: test__post.yaml
 hash:
   hashArray:
     -
@@ -10,4 +10,4 @@ hash:
 intArray:
   - 1
   - 2
-method: GET
+method: POST

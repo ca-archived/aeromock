@@ -1,5 +1,6 @@
 package jp.co.cyberagent.aeromock.core.http
 
+import io.netty.handler.codec.http.HttpMethod
 import org.apache.commons.lang3.StringUtils
 
 case class Endpoint(raw: String) {
@@ -14,12 +15,14 @@ case class Endpoint(raw: String) {
 class ParsedRequest(
   val url: String,
   val queryParameters: Map[String, String],
-  val formData: Map[String, String]
+  val formData: Map[String, String],
+  val method: HttpMethod = HttpMethod.GET
 )
 
 object ParsedRequest {
 
-  def apply(url: String, queryParameters: Map[String, String], formData: Map[String, String]): ParsedRequest = {
+  def apply(url: String, queryParameters: Map[String, String],
+        formData: Map[String, String], method: HttpMethod = HttpMethod.GET): ParsedRequest = {
     require(url != null)
 
     val s = url.trim
@@ -31,6 +34,6 @@ object ParsedRequest {
       s
     }
 
-    new ParsedRequest(formatted, queryParameters, formData)
+    new ParsedRequest(formatted, queryParameters, formData, method)
   }
 }
