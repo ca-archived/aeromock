@@ -89,6 +89,7 @@ case class Project(
   def dataScript: Path = root / "data.groovy"
   def ajaxScript: Path = root / "ajax.groovy"
   def routingScript: Path = root / "routing.groovy"
+  def variableScript: Path = root / "variable.groovy"
 }
 
 case class Template(

@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.template.freemarker.directive
 
-import jp.co.cyberagent.aeromock.core.http.RequestManager
+import jp.co.cyberagent.aeromock.core.http.VariableManager
 import jp.co.cyberagent.aeromock.core.script.GroovyDirectiveScriptRunner
 import freemarker.core.Environment
 import freemarker.template.{TemplateDirectiveBody, TemplateDirectiveModel, TemplateModel}
@@ -20,8 +20,8 @@ class AeromockScriptDirective(
     binding.setVariable("_body", body)
     binding.setVariable("_writer", env.getOut())
 
-    RequestManager.getRequestMap().foreach(entry => binding.setVariable(entry._1, entry._2))
-    binding.setVariable("_data", RequestManager.getDataMap())
+    VariableManager.getRequestMap().foreach(entry => binding.setVariable(entry._1, entry._2))
+    binding.setVariable("_data", VariableManager.getDataMap())
 
     runner.run[Unit](getDirevtiveName() + ".groovy", binding)
   }

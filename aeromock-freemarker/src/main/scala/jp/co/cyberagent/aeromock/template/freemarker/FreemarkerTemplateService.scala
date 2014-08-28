@@ -4,7 +4,7 @@ import java.io.{FileNotFoundException, StringWriter, Writer}
 
 import _root_.freemarker.core.ParseException
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
-import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, RequestManager}
+import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template._
@@ -35,7 +35,7 @@ class FreemarkerTemplateService(config: FreemarkerConfig) extends TemplateServic
     }
 
     val proxyMap = projection.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
-    RequestManager.initializeDataMap(proxyMap)
+    VariableManager.initializeDataMap(proxyMap)
 
     val out = new StringWriter
     template.process(proxyMap, out)

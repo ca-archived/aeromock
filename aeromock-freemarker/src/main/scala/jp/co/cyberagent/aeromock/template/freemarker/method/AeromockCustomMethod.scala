@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.template.freemarker.method
 
-import jp.co.cyberagent.aeromock.core.http.RequestManager
+import jp.co.cyberagent.aeromock.core.http.VariableManager
 import jp.co.cyberagent.aeromock.core.script.GroovyDirectiveScriptRunner
 import freemarker.template.TemplateMethodModelEx
 import groovy.lang.Binding
@@ -18,8 +18,8 @@ class AeromockCustomMethod(runner: GroovyDirectiveScriptRunner, scriptName: Stri
   override def exec(arguments: java.util.List[_]): AnyRef = {
     val binding = new Binding
     binding.setVariable("arguments", arguments)
-    RequestManager.getRequestMap().foreach(entry => binding.setVariable(entry._1, entry._2))
-    binding.setVariable("_data", RequestManager.getDataMap())
+    VariableManager.getRequestMap().foreach(entry => binding.setVariable(entry._1, entry._2))
+    binding.setVariable("_data", VariableManager.getDataMap())
 
     runner.run[AnyRef](scriptName, binding)
   }

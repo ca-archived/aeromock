@@ -2,10 +2,9 @@ package jp.co.cyberagent.aeromock.data
 
 import java.nio.file.{Files, Path}
 
-import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.config.entity.Naming
 import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, RequestManager}
+import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
 import groovy.lang.Binding
 
@@ -22,7 +21,8 @@ class CommonDataHelper(naming: Naming) {
 
     val dataPaths = if (Files.exists(script)) {
       val binding = new Binding
-      RequestManager.getRequestMap.foreach(pair => binding.setVariable(pair._1, pair._2))
+      VariableManager.getRequestMap.foreach(pair => binding.setVariable(pair._1, pair._2))
+      VariableManager.getOriginalVariableMap.asScala.foreach(pair => binding.setVariable(pair._1, pair._2))
 
       val scriptRunner = new GroovyScriptRunner[java.util.List[String]](script)
       val result = scriptRunner.run(binding)

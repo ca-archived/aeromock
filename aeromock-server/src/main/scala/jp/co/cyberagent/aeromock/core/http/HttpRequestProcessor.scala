@@ -50,7 +50,18 @@ object HttpRequestProcessor {
       )
 
       val requestMap = original.toVariableMap ++ remoteAddress.toVariableMap ++ builtinMap
-      RequestManager.initializeRequestMap(requestMap)
+      VariableManager.initializeRequestMap(requestMap)
+
+      // variable.groovy
+      val originalVariables = if (project.variableScript.exists()) {
+        val scriptRunner = new GroovyScriptRunner[java.util.Map[String, AnyRef]](project.variableScript)
+        val binding = new Binding
+        requestMap.foreach(pair => binding.setVariable(pair._1, pair._2))
+        scriptRunner.run(binding)
+      } else {
+        new java.util.HashMap[String, AnyRef]
+      }
+      VariableManager.initializeOriginalVariableMap(originalVariables)
 
       if (!project.routingScript.exists) {
         HttpRequestContainer(original, None)
@@ -58,6 +69,7 @@ object HttpRequestProcessor {
         val binding = new Binding
         binding.setVariable("routing", new RoutingDsl)
         requestMap.foreach(pair => binding.setVariable(pair._1, pair._2))
+        originalVariables.asScala.foreach(pair => binding.setVariable(pair._1, pair._2))
         val runner = new GroovyScriptRunner[String](project.routingScript)
         val routingResult = runner.run(binding)
 

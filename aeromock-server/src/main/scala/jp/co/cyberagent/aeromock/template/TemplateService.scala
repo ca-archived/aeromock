@@ -7,7 +7,7 @@ import io.netty.handler.codec.http.HttpHeaders.Names
 import jp.co.cyberagent.aeromock.config.entity.Project
 import jp.co.cyberagent.aeromock.config.{ConfigHolder, ServerOptionRepository}
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
-import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, RequestManager}
+import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data._
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.server.http.{CustomResponse, RenderResult, ResponseStatusSupport}
@@ -17,6 +17,8 @@ import org.joda.time.DateTime
 import org.yaml.snakeyaml.{DumperOptions, Yaml}
 
 import scalaz._
+
+import scala.collection.JavaConverters._
 
 
 /**
@@ -106,7 +108,7 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
     val reducedMap = mergedMap - project._naming.response
 
     // 関数合成することでasJavaMapの抽象度を保ちつつ、走査のついでに変数置換を行う
-    val variableHelper = new VariableHelper(RequestManager.getRequestMap)
+    val variableHelper = new VariableHelper(VariableManager.getRequestMap ++ VariableManager.getOriginalVariableMap().asScala.toMap)
 
     new InstanceProjectionFactory(variableHelper.variableConversion, project._naming).create(reducedMap) match {
       case Failure(errors) => throw new AeromockLoadDataException(errors.map(_.getMessage))
@@ -152,11 +154,11 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
               "REMOTE_ADDR" -> "REMOTE_ADDR",
               "REMOTE_HOST" -> "REMOTE_HOST"
             )
-            RequestManager.initializeRequestMap(imitatedOriginalMap ++ imitatedRequestMap)
+            VariableManager.initializeRequestMap(imitatedOriginalMap ++ imitatedRequestMap)
 
             val response = createResponseData(project, imitatedRequest)
             val proxyMap = response._1.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
-            RequestManager.initializeDataMap(proxyMap)
+            VariableManager.initializeDataMap(proxyMap)
 
             trye(templateProcess(proxyMap, DummyWriter)) match {
               case Right(_) => DataAssertSuccess(relativeDataPath, getDifferenceSecondsFromNow(startTimemills))

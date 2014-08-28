@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.template.jade4j
 import java.io.{FileNotFoundException, StringWriter, Writer}
 
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
-import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, RequestManager}
+import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
@@ -42,7 +42,7 @@ class Jade4jTemplateService(config: Jade4jConfig) extends TemplateService {
     val proxyMap = projection.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
 
     val out = new StringWriter
-    RequestManager.initializeDataMap(proxyMap)
+    VariableManager.initializeDataMap(proxyMap)
     configuration.renderTemplate(template, proxyMap.asInstanceOf[java.util.Map[String, AnyRef]], out)
     out.toString
   }

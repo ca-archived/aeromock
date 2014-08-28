@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.core.http
 
-object RequestManager {
+object VariableManager {
 
   // TODO 微妙なのでもうちょっと考える
 
@@ -24,6 +24,16 @@ object RequestManager {
     override def remove(): Unit = super.remove
   }
 
+  val originalVariableLocal = new ThreadLocal[java.util.Map[String, AnyRef]] {
+    override def initialValue(): java.util.Map[String, AnyRef] = null
+
+    override def get(): java.util.Map[String, AnyRef] = super.get
+
+    override def set(map: java.util.Map[String, AnyRef]): Unit = super.set(map)
+
+    override def remove(): Unit = super.remove
+  }
+
   def initializeRequestMap(map: Map[String, Any]): Unit = {
     requestMapLocal.remove()
     requestMapLocal.set(map)
@@ -34,8 +44,15 @@ object RequestManager {
     dataMapLocal.set(map)
   }
 
+  def initializeOriginalVariableMap(map: java.util.Map[String, AnyRef]): Unit = {
+    originalVariableLocal.remove()
+    originalVariableLocal.set(map)
+  }
+
   def getRequestMap() = requestMapLocal.get()
 
   def getDataMap() = dataMapLocal.get()
+
+  def getOriginalVariableMap() = originalVariableLocal.get()
 
 }

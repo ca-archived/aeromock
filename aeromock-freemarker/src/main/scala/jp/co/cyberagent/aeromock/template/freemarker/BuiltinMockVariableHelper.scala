@@ -2,7 +2,7 @@ package jp.co.cyberagent.aeromock.template.freemarker
 
 import java.util.Date
 
-import jp.co.cyberagent.aeromock.core.http.RequestManager
+import jp.co.cyberagent.aeromock.core.http.VariableManager
 
 /**
  *
@@ -15,7 +15,7 @@ object BuiltinMockVariableHelper {
   def getMockCurrentTime(realTime: Date): Date = {
     require(realTime != null)
 
-    RequestManager.getDataMap.get("__now") match {
+    VariableManager.getDataMap.get("__now") match {
       case now: Date => now
       case _ => realTime
     }
