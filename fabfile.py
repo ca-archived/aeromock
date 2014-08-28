@@ -4,10 +4,19 @@ import sys
 import os
 import shutil
 
-scala_version_file = 'project/Version.scala'
-gradle_version_file = 'aeromock-dsl/gradle.properties'
-gradle_tmp_file = 'tmp_gradle_version'
-scala_tmp_file = 'tmp_scala_version'
+scala_version_path = 'project/Version.scala'
+gradle_version_path = 'aeromock-dsl/gradle.properties'
+gradle_tmp_path = 'tmp_gradle_version'
+scala_tmp_path = 'tmp_scala_version'
+versions_path = 'versions.txt'
+versions_tmp_path = 'tmp_versions.txt'
+
+def snapshot_release():
+    # build aeromock-dsl
+    local('./aeromock-dsl/gradlew -p aeromock-dsl install uploadArchives')
+
+    # build aeromock
+    local('sbt publishSigned')
 
 def release(next_version):
     # remove SNAPSHOT scala
@@ -21,6 +30,9 @@ def release(next_version):
 
     # build aeromock
     local('sbt publishSigned')
+
+    # update versions.txt
+    update_versions_file(release_version)
 
     # commit & tag release version
     commit('pre tag commit \'%s\'.' % release_version)
@@ -43,8 +55,8 @@ def to_release_version_scala():
     p = re.compile('"\s*([0-9A-Z\-\.]*)-SNAPSHOT\s*"')
 
     try:
-        version_file = open(scala_version_file, 'r')
-        write_file = open(scala_tmp_file, 'w')
+        version_file = open(scala_version_path, 'r')
+        write_file = open(scala_tmp_path, 'w')
         for line in version_file:
             result = p.search(line)
             if result:
@@ -55,16 +67,16 @@ def to_release_version_scala():
         version_file.close()
         write_file.close()
 
-    os.remove(scala_version_file)
-    shutil.move(scala_tmp_file, scala_version_file)
+    os.remove(scala_version_path)
+    shutil.move(scala_tmp_path, scala_version_path)
 
 def to_release_version_gradle():
 
     p = re.compile('\s*version\s*=\s*([0-9A-Z\-\.]*)-SNAPSHOT\s*')
 
     try:
-        version_file = open(gradle_version_file, 'r')
-        write_file = open(gradle_tmp_file, 'w')
+        version_file = open(gradle_version_path, 'r')
+        write_file = open(gradle_tmp_path, 'w')
         for line in version_file:
             result = p.search(line)
             if result:
@@ -75,15 +87,15 @@ def to_release_version_gradle():
         version_file.close()
         write_file.close()
 
-    os.remove(gradle_version_file)
-    shutil.move(gradle_tmp_file, gradle_version_file)
+    os.remove(gradle_version_path)
+    shutil.move(gradle_tmp_path, gradle_version_path)
 
 def to_snapshot_version_scala(next_version):
     p = re.compile('"\s*[0-9A-Z\-\.]*\s*"')
 
     try:
-        version_file = open(scala_version_file, 'r')
-        write_file = open(scala_tmp_file, 'w')
+        version_file = open(scala_version_path, 'r')
+        write_file = open(scala_tmp_path, 'w')
         for line in version_file:
             result = p.search(line)
             if result:
@@ -94,16 +106,16 @@ def to_snapshot_version_scala(next_version):
         version_file.close()
         write_file.close()
 
-    os.remove(scala_version_file)
-    shutil.move(scala_tmp_file, scala_version_file)
+    os.remove(scala_version_path)
+    shutil.move(scala_tmp_path, scala_version_path)
 
 def to_snapshot_version_gradle(next_version):
 
     p = re.compile('\s*version\s*=\s*[0-9A-Z\-\.]+\s*')
 
     try:
-        version_file = open(gradle_version_file, 'r')
-        write_file = open(gradle_tmp_file, 'w')
+        version_file = open(gradle_version_path, 'r')
+        write_file = open(gradle_tmp_path, 'w')
         for line in version_file:
             result = p.search(line)
             if result:
@@ -114,8 +126,8 @@ def to_snapshot_version_gradle(next_version):
         version_file.close()
         write_file.close()
 
-    os.remove(gradle_version_file)
-    shutil.move(gradle_tmp_file, gradle_version_file)
+    os.remove(gradle_version_path)
+    shutil.move(gradle_tmp_path, gradle_version_path)
 
 
 def get_release_version():
@@ -123,7 +135,7 @@ def get_release_version():
     p = re.compile('\s*version\s*=\s*([0-9A-Z\-\.]*)\s*')
 
     try:
-        version_file = open('aeromock-dsl/gradle.properties', 'r')
+        version_file = open(gradle_version_path, 'r')
         version = version_file.read()
         result = p.search(version)
         if result:
@@ -132,6 +144,22 @@ def get_release_version():
             raise SystemError('cannot get release version!')
     finally:
         version_file.close()
+
+def update_versions_file(release_version):
+
+    try:
+        versions_file = open(versions_path, 'r')
+        write_file = open(versions_tmp_path, 'w')
+        write_file.write(release_version + '\n')
+        for line in versions_file:
+            write_file.write(line)
+
+    finally:
+        versions_file.close()
+        write_file.close()
+
+    os.remove(versions_path)
+    shutil.move(versions_tmp_path, versions_path)
 
 def finish_release(release_version, next_version):
     # add files
