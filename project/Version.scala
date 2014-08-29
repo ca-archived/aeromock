@@ -1,3 +1,3 @@
 object Version {
-  val aeromock = "0.1.1"
+  val aeromock = "0.1.2-SNAPSHOT"
 }
