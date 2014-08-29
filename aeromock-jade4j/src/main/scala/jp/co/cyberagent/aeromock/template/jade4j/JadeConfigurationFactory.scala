@@ -1,7 +1,7 @@
 package jp.co.cyberagent.aeromock.template.jade4j
 
 import jp.co.cyberagent.aeromock.AeromockConfigurationException
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
 import de.neuland.jade4j.JadeConfiguration
 import de.neuland.jade4j.template.FileTemplateLoader

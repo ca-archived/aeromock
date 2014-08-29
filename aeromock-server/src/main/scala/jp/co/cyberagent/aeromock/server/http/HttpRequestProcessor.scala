@@ -2,8 +2,7 @@ package jp.co.cyberagent.aeromock.server.http
 
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.{HttpResponse, FullHttpRequest}
-import jp.co.cyberagent.aeromock.config.entity.Project
-import jp.co.cyberagent.aeromock.config.ConfigHolder
+import jp.co.cyberagent.aeromock.config.{Project, ConfigHolder}
 
 /**
  * Base class of request processing.
@@ -23,7 +22,7 @@ abstract class HttpRequestProcessor {
 
   /**
    *
-   * @param setting [[jp.co.cyberagent.aeromock.config.entity.Project]]
+   * @param setting [[Project]]
    * @param request [[io.netty.handler.codec.http.FullHttpRequest]]
    * @param context [[io.netty.channel.ChannelHandlerContext]]
    * @return [[io.netty.handler.codec.http.HttpResponse]]

@@ -2,9 +2,9 @@ package jp.co.cyberagent.aeromock.config.definition
 
 import java.nio.file.Path
 
-import jp.co.cyberagent.aeromock.config.entity._
-import jp.co.cyberagent.aeromock.config.{ServerOptionRepository, TemplateConfig}
-import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.config
+import jp.co.cyberagent.aeromock.config.Tag
+import jp.co.cyberagent.aeromock.config._
 import jp.co.cyberagent.aeromock.template.TemplateService
 import org.apache.commons.lang3.StringUtils
 
@@ -302,22 +302,20 @@ class TagDef {
   // tag -> root
   @BeanProperty var root: String = null
 
-  type ETag = jp.co.cyberagent.aeromock.config.entity.Tag
-
-  def toValue(projectRoot: Path): ValidationNel[String, Option[ETag]] = {
+  def toValue(projectRoot: Path): ValidationNel[String, Option[Tag]] = {
 
     root match {
-      case null => message"validation.need.element${"root"}${"tag"}".failureNel[Option[ETag]]
-      case s if StringUtils.isBlank(s) => message"validation.not.blank${"tag.root"}".failureNel[Option[ETag]]
+      case null => message"validation.need.element${"root"}${"tag"}".failureNel[Option[Tag]]
+      case s if StringUtils.isBlank(s) => message"validation.not.blank${"tag.root"}".failureNel[Option[Tag]]
       case _ => {
 
         val rootPath = projectRoot / root
         if (!rootPath.exists) {
-          message"validation.not.exists.path${rootPath}${"tag.root"}".failureNel[Option[ETag]]
+          message"validation.not.exists.path${rootPath}${"tag.root"}".failureNel[Option[Tag]]
         } else if (!rootPath.isDirectory) {
-          message"validation.not.directory${rootPath}${"tag.root"}".failureNel[Option[ETag]]
+          message"validation.not.directory${rootPath}${"tag.root"}".failureNel[Option[Tag]]
         } else {
-          jp.co.cyberagent.aeromock.config.entity.Tag(rootPath).some.successNel
+          config.Tag(rootPath).some.successNel
         }
       }
     }

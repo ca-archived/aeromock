@@ -2,8 +2,7 @@ package jp.co.cyberagent.aeromock.template.velocity
 
 import java.io.FileInputStream
 import java.nio.file.Files
-
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.util.ResourceUtil
 import jp.co.cyberagent.aeromock.helper._
 import org.apache.commons.collections.ExtendedProperties
@@ -17,7 +16,7 @@ object VelocityConfigurationInitializer {
 
   /**
    * do initialization
-   * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
+   * @param project [[Project]]
    */
   def initialize(project: Project) {
 

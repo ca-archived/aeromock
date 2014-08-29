@@ -1,7 +1,7 @@
 package jp.co.cyberagent.aeromock.config
 
 import jp.co.cyberagent.aeromock.config.definition.ProjectDef
-import jp.co.cyberagent.aeromock.config.entity.{Project, UserConfig, UserConfigDef}
+import jp.co.cyberagent.aeromock.config.definition.UserConfigDef
 import jp.co.cyberagent.aeromock.AeromockConfigurationException
 import jp.co.cyberagent.aeromock.core.{CacheKey, ObjectCache}
 import jp.co.cyberagent.aeromock.data.YamlDataFileReader
@@ -42,7 +42,7 @@ class ConfigContainer {
     ObjectCache.get(CacheKey[Project]("project", checkSum)) match {
       case None => {
         val value = yamlReader.deserialize(userConfig.projectConfigPath, classOf[ProjectDef])
-          .toValue(userConfig.projectConfigPath, userConfig.getProjectDirectory)
+          .toValue(userConfig.projectConfigPath, userConfig.projectDirectory)
         ObjectCache.store(CacheKey[Project]("project", checkSum), value)
         value
       }

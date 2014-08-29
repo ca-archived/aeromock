@@ -1,7 +1,7 @@
 package jp.co.cyberagent.aeromock.cli
 
 import jp.co.cyberagent.aeromock.cli.option.JobOperation
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.template.TemplateService
 
 /**

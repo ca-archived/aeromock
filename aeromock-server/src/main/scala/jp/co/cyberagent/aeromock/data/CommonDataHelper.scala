@@ -1,8 +1,7 @@
 package jp.co.cyberagent.aeromock.data
 
 import java.nio.file.{Files, Path}
-
-import jp.co.cyberagent.aeromock.config.entity.Naming
+import jp.co.cyberagent.aeromock.config.Naming
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
@@ -12,7 +11,7 @@ import scala.collection.JavaConverters._
 
 /**
  * Common data helper.
- * @param naming [[jp.co.cyberagent.aeromock.config.entity.Naming]]
+ * @param naming [[Naming]]
  * @author stormcat24
  */
 class CommonDataHelper(naming: Naming) {

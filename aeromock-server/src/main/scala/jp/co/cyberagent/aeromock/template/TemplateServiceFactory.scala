@@ -36,7 +36,7 @@ object TemplateServiceFactory {
           constructor.newInstance().some
 
         } else {
-          val templateConfigPath = userConfig.getProjectDirectory / "template.yaml"
+          val templateConfigPath = userConfig.projectDirectory / "template.yaml"
 
           if (!templateConfigPath.exists) {
             throw new AeromockResourceNotFoundException(templateConfigPath.toString())

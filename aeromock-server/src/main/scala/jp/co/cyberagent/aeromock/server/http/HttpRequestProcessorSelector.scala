@@ -2,8 +2,7 @@ package jp.co.cyberagent.aeromock.server.http
 
 import io.netty.handler.codec.http.HttpRequest
 import jp.co.cyberagent.aeromock.AeromockConfigurationException
-import jp.co.cyberagent.aeromock.config.ConfigHolder
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.{Project, ConfigHolder}
 import jp.co.cyberagent.aeromock.helper._
 
 import scalaz._

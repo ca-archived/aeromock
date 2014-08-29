@@ -1,7 +1,7 @@
 package jp.co.cyberagent.aeromock.template.handlebars
 
 import jp.co.cyberagent.aeromock.AeromockConfigurationException
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
 import jp.co.cyberagent.aeromock.helper._
 import com.github.jknack.handlebars.Handlebars

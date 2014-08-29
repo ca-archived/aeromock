@@ -1,10 +1,10 @@
-package jp.co.cyberagent.aeromock.config.entity
+package jp.co.cyberagent.aeromock.config
 
 import java.nio.file.Path
+
 import jp.co.cyberagent.aeromock.AeromockConfigurationException
-import jp.co.cyberagent.aeromock.config.TemplateConfig
-import jp.co.cyberagent.aeromock.template.TemplateService
 import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.template.TemplateService
 
 import scala.language.existentials
 import scalaz._

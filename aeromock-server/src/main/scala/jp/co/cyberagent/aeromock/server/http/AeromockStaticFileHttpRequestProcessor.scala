@@ -10,12 +10,12 @@ import io.netty.handler.codec.http.HttpVersion._
 import io.netty.channel.ChannelFutureListener
 import io.netty.channel.ChannelProgressiveFutureListener
 import io.netty.channel.ChannelProgressiveFuture
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.{AeromockResourceNotFoundException, AeromockMethodNotAllowedException}
 import org.slf4j.LoggerFactory
 import io.netty.handler.stream.ChunkedNioStream
 import java.nio.channels.Channels
 import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.config.entity.Project
 
 object AeromockStaticFileHttpRequestProcessor extends HttpRequestProcessor with HttpResponseWriter {
 

@@ -1,7 +1,7 @@
 package jp.co.cyberagent.aeromock.server.http
 
-import jp.co.cyberagent.aeromock.config.entity.Project
 import jp.co.cyberagent.aeromock.AeromockLoadDataException
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.data.CommonDataHelper
 import jp.co.cyberagent.aeromock.helper.DeepTraversal._
@@ -24,7 +24,7 @@ trait JsonApiResponseWriter {
 
 /**
  * [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]] for root element of array object.
- * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
+ * @param project [[Project]]
  * @param variableHelper [[VariableHelper]]
  * @param data sequential data
  */
@@ -39,7 +39,7 @@ class JsonApiArrayResponseWriter(project: Project, variableHelper: VariableHelpe
 
 /**
  * [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]] for root element of map object.
- * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
+ * @param project [[Project]]
  * @param variableHelper [[VariableHelper]]
  * @param data map data
  */
@@ -76,7 +76,7 @@ object JsonApiResponseWriterFactory {
 
   /**
    * Create [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]].
-   * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
+   * @param project [[Project]]
    * @param variableHelper [[VariableHelper]]
    * @param data Iterable object
    * @return [[jp.co.cyberagent.aeromock.server.http.JsonApiResponseWriter]]

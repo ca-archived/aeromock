@@ -4,7 +4,7 @@ import java.nio.file.Paths
 
 import io.netty.handler.codec.http.HttpMethod._
 import jp.co.cyberagent.aeromock.AeromockBadUsingException
-import jp.co.cyberagent.aeromock.config.entity.Naming
+import jp.co.cyberagent.aeromock.config.Naming
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import org.specs2.mutable.{Specification, Tables}
 

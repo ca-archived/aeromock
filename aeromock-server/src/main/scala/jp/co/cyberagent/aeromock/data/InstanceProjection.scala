@@ -1,5 +1,7 @@
 package jp.co.cyberagent.aeromock.data
 
+import jp.co.cyberagent.aeromock.config.Naming
+
 import scalaz._
 import scalaz.Scalaz._
 import scalaz.Validation._
@@ -7,7 +9,6 @@ import scala.collection.JavaConverters._
 import jp.co.cyberagent.aeromock.proxy.DynamicCollectionProxyBuilder
 import jp.co.cyberagent.aeromock.proxy.DynamicHashProxyJavaBuilder
 import jp.co.cyberagent.aeromock.proxy.ProxyParameter
-import jp.co.cyberagent.aeromock.config.entity.Naming
 import jp.co.cyberagent.aeromock.helper._
 
 trait InstanceDef

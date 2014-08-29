@@ -1,11 +1,12 @@
 package jp.co.cyberagent.aeromock.server.http
 
+import jp.co.cyberagent.aeromock.config.Project
+
 import scala.Array.canBuildFrom
 import jp.co.cyberagent.aeromock.api.AeromockApi
 import jp.co.cyberagent.aeromock.helper._
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.{HttpResponse, FullHttpRequest, HttpResponseStatus}
-import jp.co.cyberagent.aeromock.config.entity.Project
 
 object AeromockApiHttpRequestProcessor extends HttpRequestProcessor with HttpResponseWriter {
 

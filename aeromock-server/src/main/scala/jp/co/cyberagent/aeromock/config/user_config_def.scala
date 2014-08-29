@@ -1,21 +1,16 @@
-package jp.co.cyberagent.aeromock.config.entity
+package jp.co.cyberagent.aeromock.config.definition
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.{Paths, Path}
 import java.util.Locale
 
+import jp.co.cyberagent.aeromock.config.UserConfig
 import jp.co.cyberagent.aeromock.helper._
 import org.apache.commons.lang3.StringUtils
+
 
 import scala.beans.BeanProperty
 import scalaz.Scalaz._
 import scalaz._
-
-case class UserConfig(
-  projectConfigPath: Path,
-  language: Option[Locale]) {
-
-  def getProjectDirectory: Path = projectConfigPath.getParent()
-}
 
 class UserConfigDef {
 
@@ -54,7 +49,6 @@ class UserConfigDef {
         }
       }
     }
-
     (projectConfigPathResult |@| languageResult) apply UserConfig
 
   }

@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.server.http
 
-import jp.co.cyberagent.aeromock.config.entity.Naming
+import jp.co.cyberagent.aeromock.config.Naming
 import jp.co.cyberagent.aeromock.helper._
 
 import scalaz._

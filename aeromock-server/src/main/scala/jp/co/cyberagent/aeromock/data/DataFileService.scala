@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.data
 import java.nio.file.Path
 
 import io.netty.handler.codec.http.HttpMethod
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.http.Endpoint
 import jp.co.cyberagent.aeromock.helper._
 

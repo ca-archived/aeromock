@@ -7,7 +7,7 @@ import jp.co.cyberagent.aeromock.AeromockBadUsingException
 import jp.co.cyberagent.aeromock.cli.option.JobOperation
 import jp.co.cyberagent.aeromock.cli.report.junit.TestsuiteFactory
 import jp.co.cyberagent.aeromock.cli.{CliJob, Job}
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.http.Endpoint
 import jp.co.cyberagent.aeromock.template.{DataAsserts, TemplateContexts, PageValidation, TemplateService}
 import jp.co.cyberagent.aeromock.helper._

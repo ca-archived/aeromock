@@ -1,7 +1,6 @@
 package jp.co.cyberagent.aeromock.server.http
 
-import jp.co.cyberagent.aeromock.config.ConfigHolder
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.{Project, ConfigHolder}
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.{FullHttpRequest, HttpResponse, HttpResponseStatus}
 import jp.co.cyberagent.aeromock.AeromockBadUsingException

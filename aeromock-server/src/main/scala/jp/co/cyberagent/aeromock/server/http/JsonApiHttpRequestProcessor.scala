@@ -2,7 +2,7 @@ package jp.co.cyberagent.aeromock.server.http
 
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.http.{FullHttpRequest, HttpResponse, HttpResponseStatus}
-import jp.co.cyberagent.aeromock.config.entity.Project
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.VariableManager
 import jp.co.cyberagent.aeromock.data.{DataFileReaderFactory, DataPathResolver}

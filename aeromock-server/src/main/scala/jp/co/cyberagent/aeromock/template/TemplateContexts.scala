@@ -1,10 +1,9 @@
 package jp.co.cyberagent.aeromock.template
 
-import jp.co.cyberagent.aeromock.config.ServerOptionRepository
-import jp.co.cyberagent.aeromock.config.entity.{Project, TemplateContext}
+import jp.co.cyberagent.aeromock.config.{Project, ServerOptionRepository, TemplateContext}
 
 /**
- * Management object of [[jp.co.cyberagent.aeromock.config.entity.TemplateContext]].
+ * Management object of [[TemplateContext]].
  * @author stormcat24
  */
 object TemplateContexts {

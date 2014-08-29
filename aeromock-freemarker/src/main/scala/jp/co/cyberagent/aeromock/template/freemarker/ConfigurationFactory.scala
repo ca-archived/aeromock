@@ -2,7 +2,7 @@ package jp.co.cyberagent.aeromock.template.freemarker
 
 import java.nio.file.Path
 
-import jp.co.cyberagent.aeromock.config.entity.{Function, Tag}
+import jp.co.cyberagent.aeromock.config.{Function, Tag}
 import jp.co.cyberagent.aeromock.core.script.{GroovyDirectiveScriptRunner, GroovyScriptRunner}
 import jp.co.cyberagent.aeromock.helper._
 import freemarker.cache.FileTemplateLoader

@@ -2,9 +2,9 @@ package jp.co.cyberagent.aeromock.config.definition
 
 import jp.co.cyberagent.aeromock.config.TemplateConfig
 
-import scalaz.ValidationNel
+import scalaz._
 
-abstract class SpecifiedTemplateDef[T <: TemplateConfig] {
+trait SpecifiedTemplateDef[T <: TemplateConfig] {
 
   def toValue: ValidationNel[String, Option[T]]
 

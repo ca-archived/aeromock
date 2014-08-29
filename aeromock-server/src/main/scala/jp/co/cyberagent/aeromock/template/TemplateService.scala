@@ -4,8 +4,7 @@ import java.io.Writer
 
 import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpHeaders.Names
-import jp.co.cyberagent.aeromock.config.entity.Project
-import jp.co.cyberagent.aeromock.config.{ConfigHolder, ServerOptionRepository}
+import jp.co.cyberagent.aeromock.config.{Project, ConfigHolder, ServerOptionRepository}
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data._
@@ -71,7 +70,7 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
 
   /**
    * Create [[jp.co.cyberagent.aeromock.data.InstanceProjection]]
-   * @param project [[jp.co.cyberagent.aeromock.config.entity.Project]]
+   * @param project [[Project]]
    * @param request [[jp.co.cyberagent.aeromock.core.http.ParsedRequest]]
    * @return [[jp.co.cyberagent.aeromock.data.InstanceProjection]]
    */
