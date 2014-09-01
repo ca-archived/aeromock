@@ -51,7 +51,7 @@ sourceSets {
 }
 
 signing {
-    sign configurations.archives
+        sign configurations.archives
 }
 
 uploadArchives {
@@ -108,9 +108,9 @@ uploadArchives {
 }
 
 def getRepoUsername() {
-    return hasProperty('nexusUsername') ? nexusUsername : ''
+    return hasProperty('nexusUsername') ? nexusUsername : System.getenv('M2_REPO_USER')
 }
 
 def getRepoPassword() {
-    return hasProperty('nexusPassword') ? nexusPassword : ''
+    return hasProperty('nexusPassword') ? nexusPassword : System.getenv('M2_REPO_PASSWORD')
 }

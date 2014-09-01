@@ -1,6 +1,8 @@
 Aeromock
 ===
 
+[![Circle CI](https://circleci.com/gh/CyberAgent/aeromock.png?style=badge&circle-token=3d2a76e5fdfb5c6c6da90f1eb7038ebd8df0e85a)](https://circleci.com/gh/CyberAgent/aeromock)
+
 ![logo](https://github.com/CyberAgent/aeromock/raw/master/aeromock-view/img/aeromock.png)
 
 What's Aeromock?
