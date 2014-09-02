@@ -27,10 +27,10 @@ Requirements
 ===
 * Java >= 1.7
 * Git
-* Vagrant >= 1.5 (If use Vagrant Share)
+* Vagrant >= 1.5 (If using Vagrant Share)
 
 
-Supported template engine (Currently)
+Supported template engines (Currently)
 ===
 
 * Freemarker
@@ -40,7 +40,7 @@ Supported template engine (Currently)
 * Groovy Template Engine
 * Thymeleaf
 
-Contributing
+Contributors
 ===
 * Akinori Yamada - [@stormcat24](https://twitter.com/stormcat24) [github](https://github.com/stormcat24)
 
