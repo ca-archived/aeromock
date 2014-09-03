@@ -5,33 +5,32 @@ Aeromock
 
 ![logo](https://github.com/CyberAgent/aeromock/raw/master/aeromock-view/img/aeromock.png)
 
-What's Aeromock?
+What is Aeromock?
 ===
-Aeromock is application server that respond HTML by making template file and data file. Enable frontend development without modules of server side.
-Aeromock runs lightly, so is called **Lightweight mock web application server**.
+Aeromock is an application server that generates HTML from template files and data files. It enables speedy frontend development without the need for server side modules. Aeromock is referred to as a **lightweight mock web application server**.
 
 Features
 ===
-* If you started to Aeromock once, no need to reboot it.
-* Only template file and data file(JSON or YAML), respond HTML.
-* Support template with invoking method, using custom tag, function.
-* Render various pattern per one template file.
-* By writing routing script, control to URL Rewrite.
-* Work as mock JSON API server.
-* Work as static contents server (js, css, various images).
+* No need to restart the application server once it has been started.
+* HTML pages are generated from template files and their corresponding data files (JSON or YAML). 
+* Supports templates that invoke methods and make use of custom tags and functions.
+* Various patterns can be rendered per template file.
+* URL rewriting can be controlled via a routing script.
+* Capable of functioning as a mock JSON API server.
+* Capable of functioning as a static content server (js, css, images).
 
 Getting started
 ===
-@See [Wiki](https://github.com/CyberAgent/aeromock/wiki)
+Please refer to the [wiki](https://github.com/CyberAgent/aeromock/wiki).
 
 Requirements
 ===
 * Java >= 1.7
 * Git
-* Vagrant >= 1.5 (If use Vagrant Share)
+* Vagrant >= 1.5 (If using Vagrant Share)
 
 
-Support template engine (Currently)
+Supported template engines (Currently)
 ===
 
 * Freemarker
@@ -41,7 +40,7 @@ Support template engine (Currently)
 * Groovy Template Engine
 * Thymeleaf
 
-Contributing
+Contributors
 ===
 * Akinori Yamada - [@stormcat24](https://twitter.com/stormcat24) [github](https://github.com/stormcat24)
 
