@@ -1,6 +1,8 @@
 package jp.co.cyberagent.aeromock.data
 
-object ReturnValueStore {
+import org.apache.commons.lang3.StringUtils
+
+object DynamicMethodValueStore {
 
   type JMap = java.util.Map[String, java.util.Map[String, Any]]
 
@@ -21,25 +23,36 @@ object ReturnValueStore {
   }
 
   def put(fqdn: String, methodName: String, value: Any) {
+    require(StringUtils.isNotBlank(fqdn))
+    require(StringUtils.isNotBlank(methodName))
 
     if (value != null) {
-      val methodMap = threadLocal.get().get(fqdn) match {
-        case null => {
+      val methodMap = Option(threadLocal.get().get(fqdn)) match {
+        case None => {
           val map = new java.util.HashMap[String, Any]()
           threadLocal.get().put(fqdn, map)
           map
         }
-        case map => map
+        case Some(map) => map
       }
-
       methodMap.put(methodName, value)
     }
   }
 
+  /**
+   * Fetch volatile object on thread scope.
+   * @param fqdn FQDN
+   * @param methodName method name
+   * @return volatile object
+   */
   def fetch(fqdn: String, methodName: String): Any = {
-    threadLocal.get().get(fqdn) match {
-      case null => null
-      case methodMap => methodMap.get(methodName)
+    require(StringUtils.isNotBlank(fqdn))
+    require(StringUtils.isNotBlank(methodName))
+
+    // [note] Return type is not Option, because easier to use at Java.
+    Option(threadLocal.get().get(fqdn)) match {
+      case None => null
+      case Some(methodMap) => methodMap.get(methodName)
     }
   }
 }

@@ -4,7 +4,7 @@ import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
 import org.slf4j.LoggerFactory
 import javassist.CtClass
-import jp.co.cyberagent.aeromock.data.ReturnValueStore
+import jp.co.cyberagent.aeromock.data.DynamicMethodValueStore
 import javassist.CtMethod
 
 
@@ -51,12 +51,12 @@ class DynamicCollectionProxyBuilder(projection: InstanceProjection)
       } else {
         s"""
           public Object $methodName() {
-              return ${getObjectFqdn(ReturnValueStore)}.fetch(this.getClass().getName(), "$methodName");
+              return ${getObjectFqdn(DynamicMethodValueStore)}.fetch(this.getClass().getName(), "$methodName");
           }
         """
       }
 
-      ReturnValueStore.put(ctClass.getName(), methodName, value)
+      DynamicMethodValueStore.put(ctClass.getName(), methodName, value)
       CtMethod.make(accessor, ctClass)
     }).foreach(ctClass.addMethod(_))
 

@@ -109,7 +109,7 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
     // 関数合成することでasJavaMapの抽象度を保ちつつ、走査のついでに変数置換を行う
     val variableHelper = new VariableHelper(VariableManager.getRequestMap ++ VariableManager.getOriginalVariableMap().asScala.toMap)
 
-    new InstanceProjectionFactory(variableHelper.variableConversion, project._naming).create(reducedMap) match {
+    new InstanceProjectionFactory(variableHelper, project._naming).create(reducedMap) match {
       case Failure(errors) => throw new AeromockLoadDataException(errors.map(_.getMessage))
       case Success(p) => (p, customResponse)
     }

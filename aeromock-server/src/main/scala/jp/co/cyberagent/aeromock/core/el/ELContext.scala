@@ -52,6 +52,14 @@ class ELContext(values: Map[String, Any] = Map.empty) {
   }
 }
 
+object ELContext {
+
+  import scala.collection.JavaConverters._
+  // for java
+  def create(): ELContext = new ELContext()
+  def create(map: java.util.Map[String, Any]): ELContext = new ELContext(map.asScala.toMap)
+}
+
 trait ELProcessorMixin extends ELProcessor {
 
   override def eval(expression: String): AnyRef = {

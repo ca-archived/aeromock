@@ -4,7 +4,7 @@ package jp.co.cyberagent.aeromock.core.el
  * Helper of variables.
  * @author stormcat24
  */
-class VariableHelper(variableMap: Map[String, Any]) {
+class VariableHelper(val variableMap: Map[String, Any]) {
 
   val context = new ELContext(variableMap)
 

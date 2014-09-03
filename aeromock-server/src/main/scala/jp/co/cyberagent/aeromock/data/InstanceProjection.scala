@@ -1,6 +1,7 @@
 package jp.co.cyberagent.aeromock.data
 
 import jp.co.cyberagent.aeromock.config.Naming
+import jp.co.cyberagent.aeromock.core.el.VariableHelper
 
 import scalaz._
 import scalaz.Scalaz._
@@ -19,6 +20,7 @@ trait InstanceDef
  */
 case class InstanceProjection(
   decoration: (Any => Any),
+  variableMap: Map[String, Any],
   properties: List[PropertyDef],
   methods: List[MethodDef],
   externalList: Option[ListPropertyValue] = None,
@@ -51,6 +53,7 @@ case class InstanceProjection(
 
   def processPropertyJava(any: Any): Any = {
     any match {
+      case LazyEvalPropertyValue(value) => value
       case SimplePropertyValue(value) => value
       case ListPropertyValue(list) => list.map(e => decoration(processPropertyJava(e))).asJava
       case child: InstanceProjection => child.toInstanceJava
@@ -66,12 +69,13 @@ case class PropertyDef(key: PropertyKey, value: InstanceDef)
 case class PropertyKey(key: Any)
 case class SimplePropertyValue(value: Any) extends InstanceDef
 case class ListPropertyValue(value: List[_]) extends InstanceDef
+case class LazyEvalPropertyValue(value: Any) extends InstanceDef
 
 /**
  * Factory to create [[jp.co.cyberagent.aeromock.data.InstanceProjection]].
  * @author stormcat24
  */
-class InstanceProjectionFactory(decoration: (Any => Any), naming: Naming) {
+class InstanceProjectionFactory(variableHelper: VariableHelper, naming: Naming) {
 
   def create(map: Map[Any, Any]): ValidationNel[Throwable, InstanceProjection] = {
 
@@ -82,7 +86,9 @@ class InstanceProjectionFactory(decoration: (Any => Any), naming: Naming) {
       case p if (p._1 != naming.methods && p._1 != naming.list && p._1 != naming.json) => toPropertyDef(p)
     }).toList
 
-    (properties.sequenceU |@| methods |@| list |@| jsonObject) { InstanceProjection(decoration, _, _, _, _)}
+    (properties.sequenceU |@| methods |@| list |@| jsonObject) {
+      InstanceProjection(variableHelper.variableConversion, variableHelper.variableMap, _, _, _, _)
+    }
   }
 
   // create __methods
@@ -141,7 +147,9 @@ class InstanceProjectionFactory(decoration: (Any => Any), naming: Naming) {
         value <- m.get("value").toSuccess(new Throwable("'value' not specfied"))
       } yield (value)) match {
         case Failure(f) => f.failNel[InstanceDef]
-        case Success(s) => toValue(s)
+        case Success(s: Map[_, _]) => toValue(s)
+        case Success(s: List[_]) => toValue(s)
+        case Success(s) => toLazyEvalValue(s) // TODO メソッド呼び出し時の遅延評価とする
       }
       (nameResult.toValidationNel |@| valueResult) apply MethodDef
     }
@@ -183,6 +191,10 @@ class InstanceProjectionFactory(decoration: (Any => Any), naming: Naming) {
 
   private def toPropertyValue(value: Any): ValidationNel[Throwable, InstanceDef] = {
     SimplePropertyValue(value).asInstanceOf[InstanceDef].successNel[Throwable]
+  }
+
+  private def toLazyEvalValue(value: Any): ValidationNel[Throwable, InstanceDef] = {
+    LazyEvalPropertyValue(value).asInstanceOf[InstanceDef].successNel[Throwable]
   }
 
   def parseKey(value: Any): Validation[Throwable, String] = fromTryCatch(value.toString())

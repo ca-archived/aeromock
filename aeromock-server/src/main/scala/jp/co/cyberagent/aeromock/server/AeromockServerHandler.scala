@@ -5,7 +5,7 @@ import java.util.Locale
 
 import jp.co.cyberagent.aeromock.config.ConfigHolder
 import jp.co.cyberagent.aeromock.core.http.HttpRequestProcessor
-import jp.co.cyberagent.aeromock.data.ReturnValueStore
+import jp.co.cyberagent.aeromock.data.DynamicMethodValueStore
 import jp.co.cyberagent.aeromock.server.http.{HttpRequestProcessorSelector, ServerExceptionHandler}
 import io.netty.channel.{ChannelHandlerContext, SimpleChannelInboundHandler}
 import io.netty.handler.codec.http.FullHttpRequest
@@ -24,7 +24,7 @@ class AeromockServerHandler(val useSendFile: Boolean)
       case None =>
     }
 
-    ReturnValueStore.initialize
+    DynamicMethodValueStore.initialize
     val requestContainer = HttpRequestProcessor.execute(request,
       context.channel().remoteAddress().asInstanceOf[InetSocketAddress])
     val finalizedRequest = requestContainer.finalizedRequest

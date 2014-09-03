@@ -1,0 +1,15 @@
+obj1:
+  property1: ${HOST}
+  __methods:
+    - name: execute1
+      value: plainvalue
+    - name: execute2
+      value: ${REQUEST_URI}
+    - name: execute3
+      value: ${REQUEST_URI}_${REQUEST_URI}
+    - name: execute4
+      value: ${"part1:part2:part3".split(":")[0]}
+    - name: execute5
+      value: PARAM1.key1 = ${PARAM1.key1}, PARAM1.key2 = ${PARAM1.key2}
+    - name: execute6
+      value: ${ARGUMENTS[0]}_${ARGUMENTS[1]}_${ARGUMENTS[2]}
