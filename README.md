@@ -1,8 +1,8 @@
 Aeromock
 ===
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/jp.co.cyberagent.aeromock/aeromock-server_2.11/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/jp.co.cyberagent.aeromock/aeromock-server_2.11)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/jp.co.cyberagent.aeromock/aeromock-server_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/jp.co.cyberagent.aeromock/aeromock-server_2.11)
 [![Circle CI](https://circleci.com/gh/CyberAgent/aeromock.png?style=shield&circle-token=3d2a76e5fdfb5c6c6da90f1eb7038ebd8df0e85a)](https://circleci.com/gh/CyberAgent/aeromock)
-[![License: MIT](http://img.shields.io/badge/license-MIT-orange.svg?style=flat)](LICENSE)
+[![License: MIT](http://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 
 ![logo](https://github.com/CyberAgent/aeromock/raw/master/aeromock-view/img/aeromock.png)
 
