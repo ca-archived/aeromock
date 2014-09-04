@@ -13,3 +13,25 @@ obj1:
       value: PARAM1.key1 = ${PARAM1.key1}, PARAM1.key2 = ${PARAM1.key2}
     - name: execute6
       value: ${ARGUMENTS[0]}_${ARGUMENTS[1]}_${ARGUMENTS[2]}
+    - name: execute7
+      value:
+        key: execute7_key
+        value: execute7_value
+    - name: execute8
+      value:
+        key: execute8_key
+        value:
+          property: execute8_value_property
+          __methods:
+            - name: execute81
+              value: plainvalue
+            - name: execute82
+              value: ${REQUEST_URI}
+            - name: execute83
+              value: ${REQUEST_URI}_${REQUEST_URI}
+            - name: execute84
+              value: ${"part1:part2:part3".split(":")[0]}
+            - name: execute85
+              value: PARAM1.key1 = ${PARAM1.key1}, PARAM1.key2 = ${PARAM1.key2}
+            - name: execute86
+              value: ${ARGUMENTS[0]}_${ARGUMENTS[1]}_${ARGUMENTS[2]}
