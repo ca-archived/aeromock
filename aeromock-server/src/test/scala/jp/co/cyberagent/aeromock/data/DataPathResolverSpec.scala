@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.data
 import java.nio.file.Paths
 
 import io.netty.handler.codec.http.HttpMethod._
-import jp.co.cyberagent.aeromock.AeromockBadUsingException
+import jp.co.cyberagent.aeromock.{SpecSupport, AeromockBadUsingException}
 import jp.co.cyberagent.aeromock.config.Naming
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import org.specs2.mutable.{Specification, Tables}
@@ -13,9 +13,9 @@ import org.specs2.mutable.{Specification, Tables}
  *
  * @author stormcat24
  */
-class DataPathResolverSpec extends Specification with Tables {
+class DataPathResolverSpec extends Specification with Tables with SpecSupport {
 
-  val projectRootPath = Paths.get(Thread.currentThread().getContextClassLoader().getResource("data/DataFileService/").getPath)
+  val projectRootPath = getResourcePath("data/DataFileService/")
   val dataRootPath = projectRootPath.resolve("./data")
 
   "resolve" should {

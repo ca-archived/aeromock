@@ -3,6 +3,7 @@ package jp.co.cyberagent.aeromock.data
 import java.nio.file.Paths
 
 import io.netty.handler.codec.http.HttpMethod
+import jp.co.cyberagent.aeromock.SpecSupport
 import jp.co.cyberagent.aeromock.config.definition.{DataDef, ProjectDef}
 import jp.co.cyberagent.aeromock.core.http.Endpoint
 import jp.co.cyberagent.aeromock.data.DataFile
@@ -12,9 +13,9 @@ import org.specs2.mutable.{Tables, Specification}
  *
  * @author stormcat24
  */
-class DataFileServiceSpec extends Specification with Tables {
+class DataFileServiceSpec extends Specification with Tables with SpecSupport {
 
-  val projectRootPath = Paths.get(Thread.currentThread().getContextClassLoader().getResource("data/DataFileService/").getPath)
+  val projectRootPath = getResourcePath("data/DataFileService/")
 
   val projectDef = new ProjectDef
   val dataDef = new DataDef

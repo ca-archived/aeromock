@@ -3,13 +3,14 @@ package jp.co.cyberagent.aeromock.helper
 import java.nio.file.Paths
 import java.util.Locale
 
+import jp.co.cyberagent.aeromock.SpecSupport
 import org.specs2.mutable._
 
 /**
  *
  * @author stormcat24
  */
-class HelperSpec extends Specification with Tables {
+class HelperSpec extends Specification with Tables with SpecSupport {
 
   "Various utitilies" should {
     "millsToSeconds" in {
@@ -68,8 +69,7 @@ class HelperSpec extends Specification with Tables {
 
   "PathHelper" should {
     val dummyDir = Paths.get("test")
-    val testRoot = Thread.currentThread().getContextClassLoader.getResource("pathtest")
-    val testRootPath = Paths.get(testRoot.getPath)
+    val testRootPath = getResourcePath("pathtest")
 
     "exists" in {
       "input"                       | "expect" |
@@ -131,7 +131,8 @@ class HelperSpec extends Specification with Tables {
     }
 
     "toCheckSum" in {
-      val path = Paths.get(Thread.currentThread().getContextClassLoader.getResource("checksum-test.txt").getPath)
+
+      val path = getResourcePath("checksum-test.txt")
       path.toCheckSum must_== "d8e8fca2dc0f896fd7cb4cb0031ba249"
     }
   }

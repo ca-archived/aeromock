@@ -2,10 +2,11 @@ package jp.co.cyberagent.aeromock.core.script
 
 import java.nio.file.Path
 
-import groovy.lang.{Binding, GroovyShell, Script}
+import groovy.lang._
 import jp.co.cyberagent.aeromock.core.{CacheKey, ObjectCache}
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.{AeromockScriptBadReturnTypeException, AeromockScriptExecutionException}
+import org.codehaus.groovy.runtime.InvokerHelper
 
 import scala.io.Source
 import scala.reflect.ClassTag
@@ -30,19 +31,21 @@ class GroovyScriptRunner[ReturnType: ClassTag](script: Path) {
     require(binding != null)
 
     val checkSum = script.toCheckSum
-    val parsedScript = ObjectCache.get(CacheKey[Script](script.toString, checkSum)) match {
+    val scriptClass = ObjectCache.get(CacheKey[Class[_]](script.toString, checkSum)) match {
       case None => {
         val content = Source.fromFile(script.toFile, "UTF-8").mkString
-        val parsedScript = new GroovyShell().parse(content, script.getFileName().toString())
-        ObjectCache.store(CacheKey[Script](script.toString, checkSum), parsedScript)
-        parsedScript
+
+        val loader = GroovyClassLoaderPool.loader
+        val source = new GroovyCodeSource(content, script.getFileName().toString(), script.getParent.toString)
+        val scriptClass = loader.parseClass(source, false)
+        ObjectCache.store(CacheKey[Class[_]](script.toString, checkSum), scriptClass)
+        scriptClass
       }
       case Some(content) => content
     }
 
-    parsedScript.setBinding(binding)
-
-    (trye(parsedScript.run()) {e => throw new AeromockScriptExecutionException(script, e)} match {
+    val executeScript = InvokerHelper.createScript(scriptClass, binding)
+    (trye(executeScript.run()) {e => throw new AeromockScriptExecutionException(script, e)} match {
       case Left(e) => throw e
       case Right(v) => trye(returnClass.cast(v).asInstanceOf[ReturnType]) { e =>
         throw new AeromockScriptBadReturnTypeException(returnClass, script, e)
@@ -50,4 +53,8 @@ class GroovyScriptRunner[ReturnType: ClassTag](script: Path) {
     }).right.get
   }
 
+}
+
+object GroovyClassLoaderPool {
+  lazy val loader = new GroovyClassLoader()
 }
