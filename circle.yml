@@ -9,3 +9,8 @@ dependencies:
     - ~/.m2
   pre:
     - ./aeromock-dsl/gradlew -p aeromock-dsl install -x signArchives
+
+test:
+  override:
+    - sbt coveralls:
+      timeout: 300

@@ -1,5 +1,7 @@
 import sbt._
 import sbt.Keys._
+import scoverage.ScoverageSbtPlugin.instrumentSettings
+import org.scoverage.coveralls.CoverallsPlugin.coverallsSettings
 
 /**
  * Definition of build on Aeromock.
@@ -85,7 +87,7 @@ object AeromockBuild extends Build {
   lazy val aeromock_server = Project(
     id = "aeromock-server",
     base = file("aeromock-server"),
-    settings = baseSettings
+    settings = baseSettings ++ instrumentSettings ++ coverallsSettings
   )
 
   lazy val aeromock_cli = Project(
