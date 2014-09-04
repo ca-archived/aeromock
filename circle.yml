@@ -12,5 +12,4 @@ dependencies:
 
 test:
   override:
-    - sbt coveralls:
-      timeout: 300
+    - sbt coveralls
