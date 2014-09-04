@@ -7,7 +7,7 @@ dependencies:
     - ~/.sbt
     - ~/.ivy2
     - ~/.m2
-  pre:
+  override:
     - ./aeromock-dsl/gradlew -p aeromock-dsl install -x signArchives
 
 test:
