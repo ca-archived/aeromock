@@ -1,13 +1,10 @@
 package jp.co.cyberagent.aeromock.data
 
-import java.nio.file.Paths
-
 import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.SpecSupport
 import jp.co.cyberagent.aeromock.config.definition.{DataDef, ProjectDef}
 import jp.co.cyberagent.aeromock.core.http.Endpoint
-import jp.co.cyberagent.aeromock.data.DataFile
-import org.specs2.mutable.{Tables, Specification}
+import org.specs2.mutable.{Specification, Tables}
 
 /**
  *
