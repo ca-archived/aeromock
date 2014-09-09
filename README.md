@@ -1,5 +1,7 @@
 Aeromock
 ===
+
+[![Gitter chat](https://badges.gitter.im/CyberAgent/aeromock.png)](https://gitter.im/CyberAgent/aeromock)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/jp.co.cyberagent.aeromock/aeromock-server_2.11/badge.svg)](https://maven-badges.herokuapp.com/maven-central/jp.co.cyberagent.aeromock/aeromock-server_2.11)
 [![Circle CI](https://circleci.com/gh/CyberAgent/aeromock.png?style=shield&circle-token=3d2a76e5fdfb5c6c6da90f1eb7038ebd8df0e85a)](https://circleci.com/gh/CyberAgent/aeromock)
 [![License: MIT](http://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
