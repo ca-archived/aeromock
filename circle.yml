@@ -13,3 +13,7 @@ dependencies:
 test:
   override:
     - sbt coveralls
+
+notify:
+  webhooks:
+    - url: https://webhooks.gitter.im/e/73037938e5ad665bdbd5
