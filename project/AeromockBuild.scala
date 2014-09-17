@@ -2,6 +2,8 @@ import sbt._
 import sbt.Keys._
 import scoverage.ScoverageSbtPlugin.instrumentSettings
 import org.scoverage.coveralls.CoverallsPlugin.coverallsSettings
+import com.typesafe.sbt.pgp.PgpSettings._
+import scala.util.Try
 
 /**
  * Definition of build on Aeromock.
@@ -15,6 +17,7 @@ object AeromockBuild extends Build {
     scalaVersion := "2.11.1",
     organization := "jp.co.cyberagent.aeromock",
     version := Version.aeromock,
+    pgpPassphrase := Some(Try(sys.env("PGP_PASSPHRASE")).getOrElse("").toCharArray),
     publishMavenStyle := true,
     publishArtifact in Test := false,
     pomIncludeRepository := { _ => false},

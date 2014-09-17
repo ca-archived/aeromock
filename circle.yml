@@ -1,5 +1,13 @@
 machine:
   timezone: Asia/Tokyo
+  post:
+    - echo -e $PGP_KEY > ~/sec.key
+    - gpg --import --allow-secret-key-import ~/sec.key
+    - rm ~/sec.key
+    - mkdir -p ~/.gradle
+    - echo 'signing.keyId=CC041648
+      signing.secretKeyRingFile=~/.gnupg/secring.gpg
+      ' > ~/.gradle/gradle.properties
 
 dependencies:
   cache_directories:
