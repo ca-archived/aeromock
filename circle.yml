@@ -5,9 +5,7 @@ machine:
     - gpg --import --allow-secret-key-import ~/sec.key
     - rm ~/sec.key
     - mkdir -p ~/.gradle
-    - echo 'signing.keyId=CC041648
-      signing.secretKeyRingFile=~/.gnupg/secring.gpg
-      ' > ~/.gradle/gradle.properties
+    - echo 'signing.keyId=CC041648' > ~/.gradle/gradle.properties
 
 dependencies:
   cache_directories:
@@ -25,3 +23,11 @@ test:
 notify:
   webhooks:
     - url: https://webhooks.gitter.im/e/73037938e5ad665bdbd5
+
+deployment:
+  snapshot:
+    branch: /.+-snapshot$/
+    owner: CyberAgent
+    commands:
+      - ./aeromock-dsl/gradlew -p aeromock-dsl uploadArchives
+      - sbt publishSigned

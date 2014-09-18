@@ -12,7 +12,8 @@ group = 'jp.co.cyberagent.aeromock'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-allprojects { ext."signing.password" = pgpPassphrase }
+allprojects { ext.'signing.secretKeyRingFile' = "${System.properties['user.home']}/.gnupg/secring.gpg" }
+allprojects { ext.'signing.password' = pgpPassphrase }
 
 repositories {
     mavenCentral()
