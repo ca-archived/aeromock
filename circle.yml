@@ -1,5 +1,8 @@
 machine:
   timezone: Asia/Tokyo
+  pre:
+    - git config --global user.name "CircleCI"
+    - git config --global user.email "circleci@example.com"
   post:
     - echo -e $PGP_KEY > ~/sec.key
     - gpg --import --allow-secret-key-import ~/sec.key
