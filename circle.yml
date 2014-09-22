@@ -22,8 +22,7 @@ dependencies:
     - ~/.m2
     - ~/nvm
   override:
-    - node -v
-    - npm install -y grunt-cli bower
+    - npm install -g grunt-cli bower
     - ./gradlew install -x signArchives:
         pwd: aeromock-dsl
     - npm install:
