@@ -1,5 +1,9 @@
 machine:
   timezone: Asia/Tokyo
+  java:
+    version: oraclejdk7
+  node:
+    version: 0.10.32
   pre:
     - git config --global user.name "CircleCI"
     - git config --global user.email "circleci@example.com"
@@ -16,8 +20,17 @@ dependencies:
     - ~/.sbt
     - ~/.ivy2
     - ~/.m2
+    - ~/nvm
   override:
-    - ./aeromock-dsl/gradlew -p aeromock-dsl install -x signArchives
+    - node -v
+    - npm install -y grunt-cli bower
+    - ./gradlew install -x signArchives:
+        pwd: aeromock-dsl
+    - npm install:
+        pwd: aeromock-view
+    - grunt build:
+        pwd: aeromock-view
+
 
 test:
   override:
