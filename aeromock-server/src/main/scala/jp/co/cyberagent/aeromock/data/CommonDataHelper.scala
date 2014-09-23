@@ -20,12 +20,13 @@ class CommonDataHelper(naming: Naming) {
 
     val dataPaths = if (Files.exists(script)) {
       val binding = new Binding
+      // TODO must not depend VariableManagermergeAdditional
       VariableManager.getRequestMap.foreach(pair => binding.setVariable(pair._1, pair._2))
       VariableManager.getOriginalVariableMap.asScala.foreach(pair => binding.setVariable(pair._1, pair._2))
 
-      val scriptRunner = new GroovyScriptRunner[java.util.List[String]](script)
+      val scriptRunner = new GroovyScriptRunner[java.util.List[CharSequence]](script)
       val result = scriptRunner.run(binding)
-      if (result.isEmpty) List.empty[String] else result.asScala.toList
+      if (result.isEmpty) List.empty[CharSequence] else result.asScala.toList
     } else {
       List.empty
     }
