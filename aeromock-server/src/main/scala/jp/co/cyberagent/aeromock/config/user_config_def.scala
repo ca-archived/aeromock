@@ -19,13 +19,18 @@ class UserConfigDef {
   @BeanProperty var locale: String = null
   @BeanProperty var country: String = null
 
-  def toValue(): ValidationNel[String, UserConfig] = {
+  def toValue(userConfigPath: Path): ValidationNel[String, UserConfig] = {
 
     val projectConfigPathResult = project_config_path match {
       case null => "'project_config_path' at config.yaml not specfied.".failureNel[Path]
       case s if StringUtils.isBlank(s) => "'project_config_path' at config.yaml must be not blank".failureNel[Path]
       case _ => {
-        val configPath = Paths.get(project_config_path).withHomeDirectory
+        val projectConfigPath = Paths.get(project_config_path).withHomeDirectory
+        val configPath = if (projectConfigPath.isAbsolute) {
+          projectConfigPath
+        } else {
+          userConfigPath.toAbsolutePath.getParent / project_config_path
+        }
         if (!configPath.exists) {
           s"Illegal Value at 'project_config_path'. ${configPath} not exists.".failureNel[Path]
         } else if (configPath.isDirectory) {

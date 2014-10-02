@@ -25,7 +25,7 @@ class ConfigContainer {
     ObjectCache.get(CacheKey[UserConfig]("userConfig", checkSum)) match {
       case None => {
         yamlReader.deserialize(configFile, classOf[UserConfigDef])
-          .toValue() match {
+          .toValue(configFile) match {
           case Failure(value) => throw new AeromockConfigurationException(configFile, value)
           case Success(value) => {
             ObjectCache.store(CacheKey[UserConfig]("userConfig", checkSum), value)
