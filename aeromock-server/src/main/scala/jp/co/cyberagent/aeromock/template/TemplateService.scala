@@ -2,11 +2,13 @@ package jp.co.cyberagent.aeromock.template
 
 import java.io.Writer
 
+import groovy.lang.Binding
 import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpHeaders.Names
 import jp.co.cyberagent.aeromock.config.{Project, ConfigHolder, ServerOptionRepository}
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, VariableManager}
+import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
 import jp.co.cyberagent.aeromock.data._
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.server.http.{CustomResponse, RenderResult, ResponseStatusSupport}
@@ -26,7 +28,7 @@ import scala.collection.JavaConverters._
  */
 abstract class TemplateService extends AnyRef with ResponseStatusSupport {
 
-  val project = ConfigHolder.getProject
+  lazy val project = ConfigHolder.getProject
   lazy val dataFileService = new DataFileService(project)
 
   /**
@@ -143,7 +145,7 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
                 Map("HOST" -> s"${domain}:${ServerOptionRepository.listenPort}")
 
             // TODO [Technical debt]
-            val imitatedRequestMap = Map(
+            val requestMap = imitatedOriginalMap ++ Map(
               "REQUEST_METHOD" -> "GET",
               "REQUEST_URI" -> endpoint.value,
               "QUERY_STRING" -> "",
@@ -153,7 +155,18 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
               "REMOTE_ADDR" -> "REMOTE_ADDR",
               "REMOTE_HOST" -> "REMOTE_HOST"
             )
-            VariableManager.initializeRequestMap(imitatedOriginalMap ++ imitatedRequestMap)
+            VariableManager.initializeRequestMap(requestMap)
+
+            // TODO [Technical debt] not DRY
+            val originalVariables = if (project.variableScript.exists()) {
+              val scriptRunner = new GroovyScriptRunner[java.util.Map[String, AnyRef]](project.variableScript)
+              val binding = new Binding
+              requestMap.foreach(pair => binding.setVariable(pair._1, pair._2))
+              scriptRunner.run(binding)
+            } else {
+              new java.util.HashMap[String, AnyRef]
+            }
+            VariableManager.initializeOriginalVariableMap(originalVariables)
 
             val response = createResponseData(project, imitatedRequest)
             val proxyMap = response._1.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
