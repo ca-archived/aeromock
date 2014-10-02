@@ -24,8 +24,8 @@ sealed abstract class ErrorPageTemplate[T <: Throwable](throwable: T) {
       |    <title>Aeromock(${responseStatus.toString()})</title>
       |    <meta name="viewport" content="width=device-width, initial-scale=1.0">
       |
-      |    <link href="/aeromock/components/flat-ui-official/bootstrap/css/bootstrap.css" rel="stylesheet">
-      |    <link href="/aeromock/components/flat-ui-official/css/flat-ui.css" rel="stylesheet">
+      |    <link href="/aeromock/components/flat-ui/bootstrap/css/bootstrap.css" rel="stylesheet">
+      |    <link href="/aeromock/components/flat-ui/css/flat-ui.css" rel="stylesheet">
       |
       |    <style type="text/css">
       |      .trace {
