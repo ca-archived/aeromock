@@ -1,6 +1,6 @@
 import sbt._
 import sbt.Keys._
-import scoverage.ScoverageSbtPlugin.instrumentSettings
+import scoverage.ScoverageSbtPlugin._
 import org.scoverage.coveralls.CoverallsPlugin.coverallsSettings
 import com.typesafe.sbt.pgp.PgpSettings._
 import scala.util.Try
@@ -73,6 +73,7 @@ object AeromockBuild extends Build {
       "org.specs2" %% "specs2" % "2.3.12" % "test"
     ),
 
+    ScoverageKeys.highlighting := true,
     scalacOptions += "-feature",
     initialCommands in console := "import scalaz._, Scalaz._"
   )
