@@ -11,7 +11,6 @@ import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.multipart.{HttpPostRequestDecoder, MixedAttribute}
 import jp.co.cyberagent.aeromock.config.MessageManager
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
-import jp.co.cyberagent.aeromock.util.SystemProperty
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.reflect.FieldUtils
 
@@ -87,12 +86,22 @@ package object helper {
   def purple(value: String) = s"\u001b[35m${value}\u001b[00m"
   def lightBlue(value: String) = s"\u001b[36m${value}\u001b[00m"
   def white(value: String) = s"\u001b[37m${value}\u001b[00m"
-  def rollingOver(value: String) = s"\u001b[7m${value}\u001b[00m"
 
   def cast[S: ClassTag](value: Any): Validation[Throwable, S] = {
     val t = implicitly[ClassTag[S]].runtimeClass.asInstanceOf[Class[S]]
     fromTryCatch(t.cast(value))
   }
+
+  object SystemHelper {
+
+    import ValueStrategies.StringValueStrategy
+
+    def property(key: String): Option[String] = property(StringValueStrategy(key)).map(_.right.get.toString)
+
+    def property[A](key: ValueStrategy[A]): Option[Either[Throwable, A]] = key.convert(Option(System.getProperty(key.key)))
+
+  }
+
 
   // implicit classes START
 
@@ -181,7 +190,7 @@ package object helper {
     def withHomeDirectory(): Path = {
 
       if (path.toString().startsWith("~")) {
-        SystemProperty.getValue("user.home") match {
+        SystemHelper.property("user.home") match {
           case Some(home) => {
             val replaceExp = if (System.getProperty("os.name").contains("Windows")) {
               home.replace("""\""", """\\""")
@@ -247,26 +256,6 @@ package object helper {
 
     lazy val extension = getExtension(parsedRequest.url)
 
-    def checkSecurity() {
-      // security guard
-      decoded.replace("/", File.separator) match {
-        case s if s.contains(File.separator + ".") ||
-          s.contains("." + File.separator) ||
-          s.startsWith(".") ||
-          s.endsWith(".") ||
-          INSECURE_URI.matcher(s).matches() => throw new AeromockInvalidRequestException(decoded)
-        case _ =>
-      }
-    }
-
-    def getWithoutExtensionUrl = {
-      val result = WITHOUT_EXTENSION.matcher(parsedRequest.url)
-      result.matches() match {
-        case false => None
-        case true => Some(result.group(1))
-      }
-    }
-
     def toVariableMap(): Map[String, Any] = {
       import io.netty.handler.codec.http.HttpHeaders.Names
 
@@ -290,6 +279,31 @@ package object helper {
     }
   }
 
+  object ValueStrategies {
+
+    case class StringValueStrategy(key: String) extends ValueStrategy[String] {
+      override def convert(value: Option[String]): Option[Either[Throwable, String]] = value.map(trye(_))
+    }
+
+    case class IntValueStrategy(key: String) extends ValueStrategy[Int] {
+      override def convert(value: Option[String]): Option[Either[Throwable, Int]] = value.map(v => trye(v.toInt))
+    }
+  }
+
+  implicit class ExternalString(source: String) {
+    import ValueStrategies._
+
+    def intStrategy: ValueStrategy[Int] = IntValueStrategy(source)
+    def stringStrategy: ValueStrategy[String] = StringValueStrategy(source)
+  }
+
   // implicit classes END
 
+  trait ValueStrategy[ReturnType] {
+    val key: String
+    def convert(value: Option[String]):  Option[Either[Throwable, ReturnType]]
+  }
+
 }
+
+

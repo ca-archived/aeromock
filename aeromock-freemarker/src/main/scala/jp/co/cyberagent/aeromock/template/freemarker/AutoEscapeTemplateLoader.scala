@@ -44,7 +44,7 @@ class AutoEscapeTemplateLoader(templateRootPath: Path) extends TemplateLoader {
 
     val matcher = FTL_PATTERN.matcher(original)
     val ftl = if (matcher.find()) {
-      matcher.replaceFirst("<#ftl$1>" + System.getProperty("line.separator") + ESCAPE_START) + ESCAPE_END
+      matcher.replaceFirst("<#ftl$1>" + SystemHelper.property("line.separator").get + ESCAPE_START) + ESCAPE_END
     } else {
       val builder = new StringBuilder
       builder.append(ESCAPE_START)

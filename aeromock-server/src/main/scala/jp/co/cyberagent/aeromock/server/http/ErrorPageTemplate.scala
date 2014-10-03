@@ -7,6 +7,7 @@ import io.netty.handler.codec.http.HttpResponseStatus
 import jp.co.cyberagent.aeromock._
 import jp.co.cyberagent.aeromock.config.MessageManager
 import org.yaml.snakeyaml.error.YAMLException
+import jp.co.cyberagent.aeromock.helper._
 
 import scalaz.Scalaz._
 
@@ -50,7 +51,7 @@ sealed abstract class ErrorPageTemplate[T <: Throwable](throwable: T) {
   }
 
   private def renderTopic(): String = {
-    val topic = writeTopic().replace(System.getProperty("line.separator"), """<br/>""").replace("\t", "&nbsp;&nbsp;")
+    val topic = writeTopic().replace(SystemHelper.property("line.separator").get, """<br/>""").replace("\t", "&nbsp;&nbsp;")
     println(topic)
     s"""
        |<div class="row bg-danger text-danger well well-sm small trace">
@@ -82,7 +83,7 @@ sealed abstract class ErrorPageTemplate[T <: Throwable](throwable: T) {
            |<div class="row">
            |  <span class="strong">Error Stacktrace</span>
            |  <p class="bg-info text-info well well-sm small trace">
-           |  ${value.replace(System.getProperty("line.separator"), """<br/>""").replace("\t", "&nbsp;&nbsp;")}
+           |  ${value.replace(SystemHelper.property("line.separator").get, """<br/>""").replace("\t", "&nbsp;&nbsp;")}
            |  </p>
            |</div>
          """.stripMargin
@@ -119,7 +120,7 @@ case class BadUsingErrorPage(throwable: AeromockBadUsingException) extends Error
 case class BadImplementationErrorPage(throwable: AeromockBadImplementation) extends ErrorPageTemplate(throwable) {
   override protected def writeTopic(): String = {
     val message = Option(throwable.getCause) match {
-      case Some(e: YAMLException) => e.getMessage.replace(";", System.getProperty("line.separator"))
+      case Some(e: YAMLException) => e.getMessage.replace(";", SystemHelper.property("line.separator").get)
       case Some(e) => e.getMessage
       case None => throwable.getMessage
     }
