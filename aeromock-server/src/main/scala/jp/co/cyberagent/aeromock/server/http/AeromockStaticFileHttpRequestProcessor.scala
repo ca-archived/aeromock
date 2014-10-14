@@ -1,27 +1,22 @@
 package jp.co.cyberagent.aeromock.server.http
 
-import io.netty.handler.codec.http._
-import io.netty.channel.ChannelHandlerContext
+import java.nio.channels.Channels
+
+import io.netty.channel.{ChannelFutureListener, ChannelHandlerContext, ChannelProgressiveFuture, ChannelProgressiveFutureListener}
 import io.netty.handler.codec.http.HttpHeaders.Names._
 import io.netty.handler.codec.http.HttpHeaders._
 import io.netty.handler.codec.http.HttpMethod._
 import io.netty.handler.codec.http.HttpResponseStatus._
 import io.netty.handler.codec.http.HttpVersion._
-import io.netty.channel.ChannelFutureListener
-import io.netty.channel.ChannelProgressiveFutureListener
-import io.netty.channel.ChannelProgressiveFuture
-import jp.co.cyberagent.aeromock.config.Project
-import jp.co.cyberagent.aeromock.{AeromockResourceNotFoundException, AeromockMethodNotAllowedException}
-import org.slf4j.LoggerFactory
+import io.netty.handler.codec.http._
 import io.netty.handler.stream.ChunkedNioStream
-import java.nio.channels.Channels
 import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.{AeromockMethodNotAllowedException, AeromockResourceNotFoundException}
+import scaldi.Injector
 
-object AeromockStaticFileHttpRequestProcessor extends HttpRequestProcessor with HttpResponseWriter {
+class AeromockStaticFileHttpRequestProcessor(implicit inj: Injector) extends HttpRequestProcessor with HttpResponseWriter {
 
-  val LOG = LoggerFactory.getLogger(AeromockStaticFileHttpRequestProcessor.this.getClass())
-
-  override def process(project: Project, request: FullHttpRequest)
+  override def process(request: FullHttpRequest)
     (implicit context: ChannelHandlerContext): HttpResponse = {
 
     if (request.getMethod() != GET) {

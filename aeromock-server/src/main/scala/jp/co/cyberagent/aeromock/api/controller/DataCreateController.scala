@@ -1,15 +1,17 @@
 package jp.co.cyberagent.aeromock.api.controller
 
-import jp.co.cyberagent.aeromock.config.ConfigHolder
+import jp.co.cyberagent.aeromock.AeromockApiBadRequestException
 import jp.co.cyberagent.aeromock.core.Validations._
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import jp.co.cyberagent.aeromock.template.TemplateService
-import jp.co.cyberagent.aeromock.AeromockApiBadRequestException
+import scaldi.Injector
 
 import scalaz.Scalaz._
 import scalaz._
 
-object DataCreateController extends AeromockApiController {
+class DataCreateController(implicit inj: Injector) extends AeromockApiController {
+
+  val templateService = inject[Option[TemplateService]]
 
   override def renderJson(request: ParsedRequest): Map[String, Any] = {
 
@@ -36,7 +38,7 @@ object DataCreateController extends AeromockApiController {
       case Some(value) => ("true" == value).successNel
     }
 
-    val serviceNel = ConfigHolder.getTemplateService match {
+    val serviceNel = templateService match {
       case None => new AeromockApiBadRequestException("/data/create").failureNel[TemplateService]
       case Some(value) => value.successNel[Throwable]
     }

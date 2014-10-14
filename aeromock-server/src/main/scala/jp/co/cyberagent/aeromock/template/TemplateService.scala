@@ -5,7 +5,7 @@ import java.io.Writer
 import groovy.lang.Binding
 import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpHeaders.Names
-import jp.co.cyberagent.aeromock.config.{Project, ConfigHolder, ServerOptionRepository}
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
@@ -16,20 +16,21 @@ import jp.co.cyberagent.aeromock.util.DummyWriter
 import jp.co.cyberagent.aeromock.{AeromockLoadDataException, AeromockNoneRelatedDataException, AeromockRenderException, AeromockSystemException}
 import org.joda.time.DateTime
 import org.yaml.snakeyaml.{DumperOptions, Yaml}
-
-import scalaz._
+import scaldi.{Injectable, Injector}
 
 import scala.collection.JavaConverters._
+import scalaz._
 
 
 /**
  * Base service class of Template.
  * @author stormcat24
  */
-abstract class TemplateService extends AnyRef with ResponseStatusSupport {
+trait TemplateService extends AnyRef with ResponseStatusSupport with Injectable {
 
-  lazy val project = ConfigHolder.getProject
-  lazy val dataFileService = new DataFileService(project)
+  implicit val inj: Injector
+  val project: Project = inject[Project]
+  val listenPort = inject[Int](identified by 'listenPort)
 
   /**
    * Scan template file and data file, then return merged response html data.
@@ -128,7 +129,7 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
       case Right(templateProcess) => {
         val rootStartTimemills = System.currentTimeMillis()
 
-        val dataValidates = dataFileService.getRelatedDataFiles(endpoint).map(dataFile => {
+        val dataValidates = DataFileService.getRelatedDataFiles(endpoint).map(dataFile => {
           val relativeDataPath = dataFile.path.getRelativePath(project._data.root).toString
           val startTimemills = System.currentTimeMillis()
           trye {
@@ -142,7 +143,7 @@ abstract class TemplateService extends AnyRef with ResponseStatusSupport {
             // substitute value of key for value as dummy value
             val imitatedOriginalMap =
               namesClass.getFields.toArray.map(f => (f.getName, f.getName)).toMap ++
-                Map("HOST" -> s"${domain}:${ServerOptionRepository.listenPort}")
+                Map("HOST" -> s"${domain}:${listenPort}")
 
             // TODO [Technical debt]
             val requestMap = imitatedOriginalMap ++ Map(

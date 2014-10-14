@@ -2,6 +2,7 @@ package jp.co.cyberagent.aeromock.template.handlebars
 
 import java.io.{FileNotFoundException, StringWriter, Writer}
 
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data.InstanceProjection
@@ -9,6 +10,7 @@ import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template._
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
 import com.github.jknack.handlebars.HandlebarsException
+import scaldi.Injector
 
 import scala.language.dynamics
 import scalaz.Scalaz._
@@ -18,7 +20,7 @@ import scalaz.Scalaz._
  * @author stormcat24
  */
 @TemplateIdentifier(name = "handlebars", configType = classOf[HandlebarsConfigDef])
-class HandlebarsTemplateService(config: HandlebarsConfig) extends TemplateService {
+class HandlebarsTemplateService(config: HandlebarsConfig)(implicit val inj: Injector) extends TemplateService {
 
   val handlebars = HandlebarsFactory.create(project, config)
 

@@ -36,4 +36,9 @@ object ParsedRequest {
 
     new ParsedRequest(formatted, queryParameters, formData, method)
   }
+
+  def unapply(request: ParsedRequest) = {
+    Some((request.url, request.queryParameters, request.formData, request.method))
+  }
+
 }

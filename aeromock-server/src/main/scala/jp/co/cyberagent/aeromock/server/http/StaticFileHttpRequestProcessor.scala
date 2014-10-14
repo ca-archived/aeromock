@@ -15,12 +15,13 @@ import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.{AeromockMethodNotAllowedException, AeromockResourceNotFoundException}
 import org.slf4j.LoggerFactory
+import scaldi.Injector
 
 abstract class StaticFileHttpRequestProcessor extends HttpRequestProcessor with HttpResponseWriter {
 
-  val LOG = LoggerFactory.getLogger(StaticFileHttpRequestProcessor.this.getClass())
+  val project: Project
 
-  override def process(project: Project, request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
+  override def process(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
 
     if (request.getMethod() != GET) {
       throw new AeromockMethodNotAllowedException(request.getMethod(), request.parsedRequest.url)

@@ -7,7 +7,6 @@ import jp.co.cyberagent.aeromock.config.UserConfig
 import jp.co.cyberagent.aeromock.helper._
 import org.apache.commons.lang3.StringUtils
 
-
 import scala.beans.BeanProperty
 import scalaz.Scalaz._
 import scalaz._

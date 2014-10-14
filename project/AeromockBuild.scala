@@ -68,6 +68,7 @@ object AeromockBuild extends Build {
       "org.scalaz" %% "scalaz-core" % scalazVersion,
       "org.scala-lang" % "scala-reflect" % "2.11.1",
       "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
+      "org.scaldi" %% "scaldi" % "0.4",
       "ch.qos.logback" % "logback-classic" % "1.1.2",
       "jp.co.cyberagent.aeromock" % "aeromock-dsl" % Version.aeromock,
       "org.specs2" %% "specs2" % "2.3.12" % "test"
@@ -76,7 +77,7 @@ object AeromockBuild extends Build {
     ScoverageKeys.highlighting := true,
     scalacOptions += "-feature",
     initialCommands in console := "import scalaz._, Scalaz._"
-  )
+  ) ++ instrumentSettings ++ coverallsSettings
 
   lazy val root = Project(
     id = "root",
@@ -91,7 +92,7 @@ object AeromockBuild extends Build {
   lazy val aeromock_server = Project(
     id = "aeromock-server",
     base = file("aeromock-server"),
-    settings = baseSettings ++ instrumentSettings ++ coverallsSettings
+    settings = baseSettings
   )
 
   lazy val aeromock_cli = Project(

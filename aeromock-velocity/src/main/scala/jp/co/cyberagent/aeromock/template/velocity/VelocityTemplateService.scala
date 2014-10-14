@@ -2,15 +2,17 @@ package jp.co.cyberagent.aeromock.template.velocity
 
 import java.io.{StringWriter, Writer}
 
-import jp.co.cyberagent.aeromock.{AeromockTemplateParseException, AeromockTemplateNotFoundException}
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import jp.co.cyberagent.aeromock.data.InstanceProjection
-import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
 import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
+import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
 import org.apache.velocity.exception.{ParseErrorException, ResourceNotFoundException}
+import scaldi.Injector
 
 import scala.language.dynamics
 
@@ -19,7 +21,7 @@ import scala.language.dynamics
  * @author stormcat24
  */
 @TemplateIdentifier(name = "velocity", configType = classOf[Void], specialConfig = true)
-class VelocityTemplateService extends TemplateService {
+class VelocityTemplateService(implicit val inj: Injector) extends TemplateService {
 
   VelocityConfigurationInitializer.initialize(project)
 

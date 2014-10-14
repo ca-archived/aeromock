@@ -1,14 +1,17 @@
 package jp.co.cyberagent.aeromock.server.http
 
 import io.netty.channel.ChannelHandlerContext
-import io.netty.handler.codec.http.{HttpResponse, FullHttpRequest}
-import jp.co.cyberagent.aeromock.config.{Project, ConfigHolder}
+import io.netty.handler.codec.http.{FullHttpRequest, HttpResponse}
+import org.slf4j.LoggerFactory
+import scaldi.Injectable
 
 /**
  * Base class of request processing.
  * @author stormcat24
  */
-abstract class HttpRequestProcessor {
+trait HttpRequestProcessor extends AnyRef with Injectable {
+
+  val LOG = LoggerFactory.getLogger(this.getClass)
 
   /**
    *
@@ -16,17 +19,14 @@ abstract class HttpRequestProcessor {
    * @param context [[io.netty.channel.ChannelHandlerContext]]
    * @return [[io.netty.handler.codec.http.HttpResponse]]
    */
-  def delegate(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
-    process(ConfigHolder.getProject, request)
-  }
+  def delegate(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = process(request)
 
   /**
    *
-   * @param setting [[Project]]
    * @param request [[io.netty.handler.codec.http.FullHttpRequest]]
    * @param context [[io.netty.channel.ChannelHandlerContext]]
    * @return [[io.netty.handler.codec.http.HttpResponse]]
    */
-  def process(setting: Project, request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse
+  def process(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse
 
 }

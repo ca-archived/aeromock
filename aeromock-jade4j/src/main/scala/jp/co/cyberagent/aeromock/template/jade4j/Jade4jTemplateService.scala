@@ -2,13 +2,15 @@ package jp.co.cyberagent.aeromock.template.jade4j
 
 import java.io.{FileNotFoundException, StringWriter, Writer}
 
+import de.neuland.jade4j.exceptions.JadeParserException
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
-import de.neuland.jade4j.exceptions.JadeParserException
+import scaldi.Injector
 
 import scala.language.dynamics
 import scalaz.Scalaz._
@@ -18,7 +20,7 @@ import scalaz.Scalaz._
  * @author stormcat24
  */
 @TemplateIdentifier(name = "jade4j", configType = classOf[Jade4jConfigDef])
-class Jade4jTemplateService(config: Jade4jConfig) extends TemplateService {
+class Jade4jTemplateService(config: Jade4jConfig)(implicit val inj: Injector) extends TemplateService {
 
   val configuration = JadeConfigurationFactory.create(project, config)
 

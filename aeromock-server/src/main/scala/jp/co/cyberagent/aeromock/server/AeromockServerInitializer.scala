@@ -6,8 +6,9 @@ import io.netty.handler.codec.http.HttpObjectAggregator
 import io.netty.handler.codec.http.HttpRequestDecoder
 import io.netty.handler.codec.http.HttpResponseEncoder
 import io.netty.handler.stream.ChunkedWriteHandler
+import scaldi.Injector
 
-class AeromockServerInitializer extends ChannelInitializer[SocketChannel] {
+class AeromockServerInitializer(implicit inj: Injector) extends ChannelInitializer[SocketChannel] {
 
   override def initChannel(channel: SocketChannel) {
     channel.pipeline()

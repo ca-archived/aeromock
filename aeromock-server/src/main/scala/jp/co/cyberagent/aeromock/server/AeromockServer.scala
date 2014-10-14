@@ -5,13 +5,14 @@ import org.slf4j.LoggerFactory
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.nio.NioServerSocketChannel
+import scaldi.Injector
 
 /**
  * Aeromock Server Daemon
  * @param port listeing port
  * @author stormcat24
  */
-class AeromockServer(val port: Int) {
+class AeromockServer(val port: Int)(implicit inj: Injector) {
 
   val LOG = LoggerFactory.getLogger(classOf[AeromockServer])
   LOG.info("Aeromock server listening on port {}", port)

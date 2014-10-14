@@ -9,25 +9,23 @@ import jp.co.cyberagent.aeromock.cli.report.junit.TestsuiteFactory
 import jp.co.cyberagent.aeromock.cli.{CliJob, Job}
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.http.Endpoint
-import jp.co.cyberagent.aeromock.template.{DataAsserts, TemplateContexts, PageValidation, TemplateService}
 import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.template.{DataAsserts, PageValidation, TemplateContexts, TemplateService}
 import jp.co.cyberagent.aeromock.util.ResourceUtil
-import org.slf4j.LoggerFactory
+import scaldi.Injector
 
 import scala.reflect.io.Directory
 
 /**
  * Job to check templates and data.
  * @author stormcat24
- * @param operation [[jp.co.cyberagent.aeromock.cli.option.JobOperation]]
+ * @param command [[jp.co.cyberagent.aeromock.cli.option.JobOperation]]
  */
 @Job(name = "test", description = "Execute view test.")
-class ViewCheckJob(operation: JobOperation, project: Project,
-                   templateService: Option[TemplateService]) extends CliJob(operation, project, templateService) {
+class ViewCheckJob(override val command: JobOperation)(implicit inj: Injector) extends CliJob {
 
-  val log = LoggerFactory.getLogger(this.getClass())
-
-  val service = templateService match {
+  val project = inject[Project]
+  val service = inject[Option[TemplateService]] match {
     case Some(service) => service
     case None => throw new AeromockBadUsingException("TemplateService is disabled. Please Check template.serviceClass. ")
   }

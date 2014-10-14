@@ -9,6 +9,7 @@ import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template._
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
+import scaldi.Injector
 
 import scala.language.dynamics
 
@@ -17,7 +18,7 @@ import scala.language.dynamics
  * @author stormcat24
  */
 @TemplateIdentifier(name = "freemarker", configType = classOf[FreemarkerConfigDef])
-class FreemarkerTemplateService(config: FreemarkerConfig) extends TemplateService {
+class FreemarkerTemplateService(config: FreemarkerConfig)(implicit val inj: Injector) extends TemplateService {
 
   val configuration = ConfigurationFactory.create(
     project._template.root, project.templateScript, config, project.tag, project.function)

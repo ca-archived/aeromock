@@ -1,8 +1,10 @@
 package jp.co.cyberagent.aeromock.api
 
-import jp.co.cyberagent.aeromock.api.controller.AeromockApiController
-import jp.co.cyberagent.aeromock.api.controller.DataCreateController
 import io.netty.handler.codec.http.HttpMethod
+import io.netty.handler.codec.http.HttpMethod._
+import jp.co.cyberagent.aeromock.api.controller.{AeromockApiController, DataCreateController}
+import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import scaldi.{Injectable, Injector}
 
 sealed abstract class AeromockApi(
   val endpoint: String,
@@ -10,12 +12,13 @@ sealed abstract class AeromockApi(
   val controller: AeromockApiController) {
 }
 
-object AeromockApi {
+object AeromockApi extends Injectable {
 
-  val ENDPOINT_PREFIX = "/aeromock/api"
-
-  case object DATA_CREATE extends AeromockApi("/data/create", HttpMethod.POST, DataCreateController)
-
-  val values = Array[AeromockApi](DATA_CREATE)
+  def fetchController(request: ParsedRequest)(implicit inj: Injector): Option[AeromockApiController] = {
+    request match {
+      case ParsedRequest(_, _, _, GET) => Some(inject[DataCreateController])
+      case _ => None
+    }
+  }
 
 }

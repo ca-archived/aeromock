@@ -3,20 +3,23 @@ package jp.co.cyberagent.aeromock.core.http
 import java.net.{InetSocketAddress, URLDecoder}
 import java.util.regex.Pattern
 
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.dsl.routing.RoutingDsl
-import jp.co.cyberagent.aeromock.config.ConfigHolder
-import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
-import jp.co.cyberagent.aeromock.helper._
 import groovy.lang.Binding
 import io.netty.handler.codec.http.FullHttpRequest
+import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
+import jp.co.cyberagent.aeromock.helper._
 import org.joda.time.DateTime
 import org.slf4j.LoggerFactory
+import scaldi.{Injectable, Injector}
 
 import scala.collection.JavaConverters._
 import scalaz.Scalaz._
 import scalaz._
 
-object HttpRequestProcessor {
+class HttpRequestProcessor(implicit inj: Injector) extends AnyRef with Injectable {
+
+  val project = inject[Project]
 
   val LOG = LoggerFactory.getLogger(this.getClass)
   val qsPattern = Pattern.compile("""(\?.+)$""")
@@ -31,8 +34,6 @@ object HttpRequestProcessor {
     if (uri.startsWith("/aeromock/") || uri == "/favicon.ico") {
       HttpRequestContainer(original, None)
     } else {
-      val project = ConfigHolder.getProject
-
       val staticRoot = project.static match {
         // [注意]Pathのままだと、groovyでimplicit classしたインスタンスが渡されてしまう
         case Success(Some(value)) => value.root.toString().some

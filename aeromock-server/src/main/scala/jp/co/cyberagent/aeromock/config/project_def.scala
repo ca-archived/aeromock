@@ -5,8 +5,10 @@ import java.nio.file.Path
 import jp.co.cyberagent.aeromock.config
 import jp.co.cyberagent.aeromock.config.Tag
 import jp.co.cyberagent.aeromock.config._
+import jp.co.cyberagent.aeromock.template.TemplateContexts._
 import jp.co.cyberagent.aeromock.template.TemplateService
 import org.apache.commons.lang3.StringUtils
+import scaldi.{Injectable, Injector}
 
 import scala.collection.JavaConverters._
 
@@ -17,7 +19,7 @@ import scalaz._
 import jp.co.cyberagent.aeromock.helper._
 
 // root element
-class ProjectDef {
+class ProjectDef extends AnyRef with Injectable {
 
   @BeanProperty var template: TemplateDef = null
   @BeanProperty var data: DataDef = null
@@ -28,8 +30,8 @@ class ProjectDef {
   @BeanProperty var naming: NamingDef = null
   @BeanProperty var test: TestDef = null
 
-  def toValue(projectConfig: Path, projectRoot: Path): Project = {
-    require(projectRoot != null)
+  def toValue(projectConfig: Path)(implicit inj: Injector): Project = {
+    val projectRoot = projectConfig.getParent
 
     val templateVal = Option(template) match {
       case Some(value) => template.toValue(projectRoot)
@@ -87,7 +89,7 @@ class ProjectDef {
 }
 
 // project.yaml -> template
-class TemplateDef {
+class TemplateDef extends AnyRef with Injectable {
   // template -> root
   @BeanProperty var root: String = null
   // template -> serviceClass
@@ -95,7 +97,7 @@ class TemplateDef {
   // template -> contexts
   @BeanProperty var contexts: java.util.List[TemplateContextDef] = null
 
-  def toValue(projectRoot: Path): ValidationNel[String, Option[Template]] = {
+  def toValue(projectRoot: Path)(implicit inj:Injector): ValidationNel[String, Option[Template]] = {
 
     val rootResult = root match {
       case null => message"validation.need.element${"root"}${"template"}".failureNel[Path]
@@ -174,13 +176,13 @@ class TemplateDef {
 
 }
 
-class TemplateContextDef {
+class TemplateContextDef extends AnyRef with Injectable {
   // contexts[] -> domain
   @BeanProperty var domain: String = null
   // contexts[] -> root
   @BeanProperty var root: String = null
 
-  def toValue(templateRootPath: Path): ValidationNel[String, TemplateContext] = {
+  def toValue(templateRootPath: Path)(implicit inj: Injector): ValidationNel[String, TemplateContext] = {
 
     val domainPattern = """^[0-9a-zA-Z\.]+$""".r
 
@@ -208,7 +210,7 @@ class TemplateContextDef {
     }
 
     (domainResult |@| navigatorRootPathResult) {
-      TemplateContext(_, ServerOptionRepository.listenPort, _)
+      TemplateContext(_, inject[Int](identified by 'listenPort), _)
     }
   }
 

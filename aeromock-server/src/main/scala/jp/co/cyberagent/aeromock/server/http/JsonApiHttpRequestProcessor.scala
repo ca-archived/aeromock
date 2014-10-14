@@ -8,16 +8,18 @@ import jp.co.cyberagent.aeromock.core.http.VariableManager
 import jp.co.cyberagent.aeromock.data.{DataFileReaderFactory, DataPathResolver}
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.{AeromockApiNotFoundException, AeromockSystemException}
+import scaldi.Injector
 import scala.collection.JavaConverters._
 
 /**
  * [[jp.co.cyberagent.aeromock.server.http.HttpRequestProcessor]] for JSON API.
  * @author stormcat24
  */
-object JsonApiHttpRequestProcessor extends HttpRequestProcessor with HttpResponseWriter {
+class JsonApiHttpRequestProcessor(implicit inj: Injector) extends HttpRequestProcessor with HttpResponseWriter {
 
-  override def process(project: Project, request: FullHttpRequest)
-    (implicit context: ChannelHandlerContext): HttpResponse = {
+  val project = inject[Project]
+
+  override def process(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
 
     val ajaxRoot = project._ajax.root
     val naming = project._naming

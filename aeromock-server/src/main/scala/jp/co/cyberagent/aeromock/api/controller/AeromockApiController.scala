@@ -7,8 +7,9 @@ import io.netty.handler.codec.http.HttpResponseStatus._
 import io.netty.channel.ChannelHandlerContext
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockConfigurationException, AeromockTemplateParseException, AeromockApiBadRequestException}
 import org.slf4j.LoggerFactory
+import scaldi.Injectable
 
-trait AeromockApiController extends HttpResponseWriter {
+trait AeromockApiController extends HttpResponseWriter with Injectable {
 
   val LOG = LoggerFactory.getLogger(classOf[AeromockApiController])
 

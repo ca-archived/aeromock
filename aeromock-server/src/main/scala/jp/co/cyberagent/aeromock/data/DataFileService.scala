@@ -6,16 +6,19 @@ import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.http.Endpoint
 import jp.co.cyberagent.aeromock.helper._
+import scaldi.{Injectable, Injector}
 
-class DataFileService(project: Project) {
+object DataFileService extends AnyRef with Injectable {
 
   val EXTENSION_PATTERN = ("""^.+\.""" + AllowedDataType.extensions.mkString("(", "|", ")") + "$").r
   val METHOD_NUMBER_PATTERN = """^.+__(options|get|head|post|put|patch|delete|trace|connect)__(\w+)$""".r
   val METHOD_ONLY_PATTERN = """^.+__(options|get|head|post|put|patch|delete|trace|connect)$""".r
   val NUMBER_PATTERN = """^.+__(\w+)$""".r
 
-  def getRelatedDataFiles(endpoint: Endpoint): List[DataFile] = {
+  def getRelatedDataFiles(endpoint: Endpoint)(implicit inj: Injector): List[DataFile] = {
     require(endpoint != null)
+
+    val project = inject[Project]
 
     val dataRootPath = project._data.root
     val pathParts = endpoint.value.split("/")

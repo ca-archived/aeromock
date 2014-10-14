@@ -1,9 +1,12 @@
 package jp.co.cyberagent.aeromock.data
 
+import java.nio.file.Path
+
 import io.netty.handler.codec.http.HttpMethod
-import jp.co.cyberagent.aeromock.SpecSupport
+import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.config.definition.{DataDef, ProjectDef}
 import jp.co.cyberagent.aeromock.core.http.Endpoint
+import jp.co.cyberagent.aeromock.{AeromockTestModule, SpecSupport}
 import org.specs2.mutable.{Specification, Tables}
 
 /**
@@ -12,22 +15,22 @@ import org.specs2.mutable.{Specification, Tables}
  */
 class DataFileServiceSpec extends Specification with Tables with SpecSupport {
 
-  val projectRootPath = getResourcePath("data/DataFileService/")
+  implicit val module = new AeromockTestModule {
+    override val projectConfigPath: Path = getResourcePath("data/DataFileService/").resolve("project.yaml")
+    override val projectDefArround = (projectDef: ProjectDef) => {
+      val dataDef = new DataDef
+      dataDef.root = "./data"
+      projectDef.data = dataDef
+    }
+  }
 
-  val projectDef = new ProjectDef
-  val dataDef = new DataDef
-  dataDef.root = "./data"
-  projectDef.data = dataDef
-
-  val project = projectDef.toValue(projectRootPath.resolve("project.yaml"), projectRootPath)
+  val project = inject[Project]
 
   "getRelatedDataFiles" should {
 
-    val service = new DataFileService(project)
-
     "1st hierarchy" in {
 
-      val actual = service.getRelatedDataFiles(Endpoint("/path1"))
+      val actual = DataFileService.getRelatedDataFiles(Endpoint("/path1"))
       actual must contain(allOf(
         DataFile(None, project._data.root.resolve("path1.yaml")),
         DataFile(Some("2"), project._data.root.resolve("path1__2.yaml")),
@@ -41,7 +44,7 @@ class DataFileServiceSpec extends Specification with Tables with SpecSupport {
     }
 
     "2nd hierarchy" in {
-      val actual = service.getRelatedDataFiles(Endpoint("/path1/path2"))
+      val actual = DataFileService.getRelatedDataFiles(Endpoint("/path1/path2"))
 
       actual must contain(allOf(
         DataFile(None, project._data.root.resolve("path1/path2.yaml")),

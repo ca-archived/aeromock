@@ -10,6 +10,7 @@ import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFa
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
 import org.thymeleaf.context.Context
 import org.thymeleaf.exceptions.{TemplateEngineException, TemplateInputException}
+import scaldi.Injector
 
 import scala.language.dynamics
 import scalaz.Scalaz._
@@ -19,7 +20,7 @@ import scalaz.Scalaz._
  * @author stormcat24
  */
 @TemplateIdentifier(name = "thymeleaf", configType = classOf[ThymeleafConfigDef])
-class ThymeleafTemplateService(config: ThymeleafConfig) extends TemplateService {
+class ThymeleafTemplateService(config: ThymeleafConfig)(implicit val inj: Injector) extends TemplateService {
 
   val engine = TemplateEngineFactory.create(project._template.root, project._function.root, config)
 

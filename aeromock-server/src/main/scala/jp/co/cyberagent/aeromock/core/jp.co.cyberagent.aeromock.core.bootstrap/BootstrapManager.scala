@@ -2,6 +2,7 @@ package jp.co.cyberagent.aeromock.core.bootstrap
 
 import org.apache.commons.lang3.ClassUtils
 import org.slf4j.LoggerFactory
+import jp.co.cyberagent.aeromock.helper._
 
 /**
  * manager to control bootstrap.
@@ -11,18 +12,16 @@ object BootstrapManager {
 
   val LOG = LoggerFactory.getLogger(this.getClass())
 
-  def delegate() {
-    EnabledMode.values.foreach { mode =>
-      try {
+  def delegate = {
+    EnabledMode.values.map { mode =>
+      (mode, trye {
         val bootstrapClass = ClassUtils.getClass(mode.fqdn).asInstanceOf[Class[_ <: Bootstrap]]
 
         if (bootstrapClass != null) {
           bootstrapClass.newInstance.process
           LOG.info(s"## Prepared ${mode} module.")
         }
-      } catch {
-        case e: ClassNotFoundException => // TODO handling
-      }
+      })
     }
   }
 
