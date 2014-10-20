@@ -19,12 +19,12 @@ import scalaz._
 
 class HttpRequestProcessor(implicit inj: Injector) extends AnyRef with Injectable {
 
-  val project = inject[Project]
-
   val LOG = LoggerFactory.getLogger(this.getClass)
   val qsPattern = Pattern.compile("""(\?.+)$""")
 
   def execute(original: FullHttpRequest, remoteAddress: InetSocketAddress): HttpRequestContainer = {
+
+    val project = inject[Project]
 
     val decoded = URLDecoder.decode(original.getUri(), "UTF-8")
     val matcher = qsPattern.matcher(decoded)
