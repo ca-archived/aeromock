@@ -44,8 +44,13 @@ dependencies:
 
 test:
   override:
-    - sbt coveralls
+    - sbt scoverage:test
   post:
+    - >
+      if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
+        echo "start to measure coverage report."
+        sbt coveralls
+      fi
     - cp -R aeromock-server/target/test-reports/* $CIRCLE_ARTIFACTS
     - cp -R aeromock-freemarker/target/test-reports/* $CIRCLE_ARTIFACTS
     - cp -R aeromock-handlebars-java/target/test-reports/* $CIRCLE_ARTIFACTS
