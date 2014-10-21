@@ -44,7 +44,7 @@ dependencies:
 
 test:
   override:
-    - sbt scoverage-test:test
+    - sbt coveralls
   post:
     - cp -R aeromock-server/target/test-reports/* $CIRCLE_ARTIFACTS
     - cp -R aeromock-freemarker/target/test-reports/* $CIRCLE_ARTIFACTS
