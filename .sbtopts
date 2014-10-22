@@ -1,0 +1,5 @@
+-J-Xmx2048M
+-J-Xss1024M
+-J-XX:MaxPermSize=1024M
+-J-XX:+CMSClassUnloadingEnabled
+-J-XX:+UseCodeCacheFlushing

@@ -77,14 +77,12 @@ object AeromockBuild extends Build {
     ScoverageKeys.highlighting := true,
     scalacOptions += "-feature",
     initialCommands in console := "import scalaz._, Scalaz._"
-  ) ++ instrumentSettings ++ coverallsSettings
+  ) ++ instrumentSettings
 
   lazy val root = Project(
     id = "root",
     base = file("."),
-    settings = baseSettings ++ Seq(
-      packagedArtifacts := Map.empty
-    ) ++ Tasks.settingTasks
+    settings = baseSettings ++ coverallsSettings ++ Tasks.settingTasks
   ) copy (
     aggregate = projects.filterNot(p => Set("root").contains(p.id)).map(p => p: ProjectReference)
     )
