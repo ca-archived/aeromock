@@ -29,6 +29,7 @@ class ProjectDef extends AnyRef with Injectable {
   @BeanProperty var function: FunctionDef = null
   @BeanProperty var naming: NamingDef = null
   @BeanProperty var test: TestDef = null
+  @BeanProperty var protobuf: ProtoBufDef = null
 
   def toValue(projectConfig: Path)(implicit inj: Injector): Project = {
     val projectRoot = projectConfig.getParent
@@ -73,6 +74,11 @@ class ProjectDef extends AnyRef with Injectable {
       case None => Test(projectRoot / "aeromock_report").successNel[String]
     }
 
+    val protobufVal = Option(protobuf) match {
+      case Some(value) => protobuf.toValue(projectRoot)
+      case None => none[ProtoBuf].successNel[String]
+    }
+
     Project(
       projectConfig,
       projectRoot,
@@ -83,7 +89,8 @@ class ProjectDef extends AnyRef with Injectable {
       tagVal,
       functionVal,
       namingVal,
-      testVal)
+      testVal,
+      protobufVal)
 
   }
 }
@@ -384,5 +391,41 @@ class TestDef {
       case s if StringUtils.isBlank(s) => Test(projectRoot / "aeromock_report").successNel[String]
       case _ => Test(projectRoot / reportRoot).successNel[String]
     }
+  }
+}
+
+// project.yaml -> protobuf
+class ProtoBufDef {
+  // protobuf
+  @BeanProperty var root: String = null
+  @BeanProperty var apiPrefix: String = null
+
+  def toValue(projectRoot: Path): ValidationNel[String, Option[ProtoBuf]] = {
+
+    val rootResult = root match {
+      case null => message"validation.need.element${"root"}${"protobuf"}".failureNel[Path]
+      case s if StringUtils.isBlank(s) => message"validation.not.blank${"protobuf.root"}".failureNel[Path]
+      case _ => {
+
+        val rootPath = projectRoot / root
+        if (!rootPath.exists) {
+          message"validation.not.exists.path${rootPath}${"protobuf.root"}".failureNel[Path]
+        } else if (!rootPath.isDirectory) {
+          message"validation.not.directory${rootPath}${"protobuf.root"}".failureNel[Path]
+        } else {
+          rootPath.successNel
+        }
+      }
+    }
+
+    val apiPrefixResult = Option(apiPrefix) match {
+      case None => none[String].successNel[String]
+      case Some(s) if StringUtils.isNotBlank(s) => s.some.successNel[String]
+    }
+
+    for {
+      protobufRoot <- rootResult
+      protobufApiPrefix <- apiPrefixResult
+    } yield (ProtoBuf(protobufRoot, protobufApiPrefix).some)
   }
 }

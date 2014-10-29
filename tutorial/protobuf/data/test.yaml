@@ -1,0 +1,11 @@
+__type: TestResponse
+prop1: 100
+prop2: hogehogehoge
+prop3: 11111111111
+prop4:
+  - "1111"
+  - "2222"
+  - "3333"
+prop5:
+  id: 1000
+  name: nekotan

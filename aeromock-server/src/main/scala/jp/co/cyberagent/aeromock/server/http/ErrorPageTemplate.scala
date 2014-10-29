@@ -125,7 +125,8 @@ case class BadImplementationErrorPage(throwable: AeromockBadImplementation) exte
       case None => throwable.getMessage
     }
 
-    s"${super.writeTopic}<br/>${message}"
+    val topic = super.writeTopic
+    if (topic == message) message else s"${super.writeTopic}<br/>${message}"
   }
   override def responseStatus: HttpResponseStatus = HttpResponseStatus.FORBIDDEN
 }

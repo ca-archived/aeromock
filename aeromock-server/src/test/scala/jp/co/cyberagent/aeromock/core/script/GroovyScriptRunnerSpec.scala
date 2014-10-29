@@ -1,7 +1,8 @@
 package jp.co.cyberagent.aeromock.core.script
 
 import groovy.lang.Binding
-import jp.co.cyberagent.aeromock.{AeromockScriptBadReturnTypeException, AeromockScriptExecutionException, SpecSupport}
+import jp.co.cyberagent.aeromock.{AeromockScriptBadReturnTypeException, AeromockScriptExecutionException}
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import org.specs2.mutable.{Specification, Tables}
 
 /**

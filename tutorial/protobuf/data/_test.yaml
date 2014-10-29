@@ -1,0 +1,19 @@
+id: 1000
+user1:
+  id: 1
+  name: hoge1
+  description: hoge1 hogehoge
+  status:
+    age: 20
+    job:
+      id: 100
+      name: job100
+user2:
+  id: 2
+  name: hoge2
+  description: hoge2 hogehoge
+  status:
+    age: 20
+    job:
+      id: 200
+      name: job200

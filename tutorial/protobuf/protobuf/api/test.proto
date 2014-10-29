@@ -1,0 +1,24 @@
+package protobuf.api;
+
+import "schema/user.proto";
+
+message TestRequest {
+    required int32 prop1 = 1;
+    required string prop2 = 2;
+}
+
+message TestResponse {
+    required int32 prop1 = 1;
+    required string prop2 = 2;
+    required int64 prop3 = 3;
+    repeated string prop4 = 4;
+    required schema.TestUser prop5 = 5;
+    optional int64 prop6 = 6 [default = 1];
+}
+
+//message TestResponse {
+//    required int32 id = 1;
+//    optional string description = 2 [default = "hogehoge"];
+//    required schema.User user1 = 4;
+//    required schema.User user2 = 8;
+//}

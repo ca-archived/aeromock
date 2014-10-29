@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.core
 
-import jp.co.cyberagent.aeromock.SpecSupport
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import jp.co.cyberagent.aeromock.core.bootstrap.{BootstrapManager, EnabledMode}
 import org.specs2.mutable.{Specification, Tables}
 

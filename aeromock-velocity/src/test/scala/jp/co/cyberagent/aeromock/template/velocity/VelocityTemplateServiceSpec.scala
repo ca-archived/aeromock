@@ -2,7 +2,8 @@ package jp.co.cyberagent.aeromock.template.velocity
 
 import java.nio.file.Path
 
-import jp.co.cyberagent.aeromock.{SpecSupport, AeromockTestModule}
+import jp.co.cyberagent.aeromock.AeromockTestModule
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import jp.co.cyberagent.aeromock.config.definition.ProjectDef
 import jp.co.cyberagent.aeromock.core.http.VariableManager
 import jp.co.cyberagent.aeromock.helper._

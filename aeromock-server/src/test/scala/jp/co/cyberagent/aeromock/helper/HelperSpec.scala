@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.helper
 
-import jp.co.cyberagent.aeromock.SpecSupport
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import org.specs2.mutable._
 
 /**

@@ -1,0 +1,13 @@
+package protobuf.api;
+
+import "schema/user.proto";
+
+message Nest1Request {
+  required string text = 1;
+}
+
+message Nest1Response {
+  required uint32 id = 1;
+  required schema.User mainUser = 2;
+  repeated schema.User otherUsers = 3;
+}

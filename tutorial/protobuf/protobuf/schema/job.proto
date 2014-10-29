@@ -1,0 +1,6 @@
+package protobuf.schema;
+
+message Job {
+    required uint32 id = 1;
+    required string name = 2;
+}

@@ -2,14 +2,13 @@ package jp.co.cyberagent.aeromock.template.freemarker
 
 import java.nio.file.Path
 
+import jp.co.cyberagent.aeromock.AeromockTestModule
 import jp.co.cyberagent.aeromock.config.definition.ProjectDef
 import jp.co.cyberagent.aeromock.core.http.VariableManager
-import jp.co.cyberagent.aeromock.template.TemplateService
-import jp.co.cyberagent.aeromock.{AeromockTestModule, SpecSupport}
 import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.template.TemplateService
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import org.specs2.mutable.{Specification, Tables}
-
-import scala.io.Source
 
 /**
  *

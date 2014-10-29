@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.template.velocity
 
-import jp.co.cyberagent.aeromock.SpecSupport
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import jp.co.cyberagent.aeromock.helper._
 import org.specs2.mutable.{Specification, Tables}
 

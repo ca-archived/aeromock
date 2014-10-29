@@ -12,6 +12,8 @@ import scala.util.Try
 object AeromockBuild extends Build {
 
   lazy val scalazVersion = "7.0.6"
+  lazy val nettyVersion = "4.0.21.Final"
+  lazy val scaldiVersion = 0.
 
   lazy val baseSettings = super.settings ++ Seq(
     scalaVersion := "2.11.1",
@@ -76,7 +78,8 @@ object AeromockBuild extends Build {
 
     ScoverageKeys.highlighting := true,
     scalacOptions += "-feature",
-    initialCommands in console := "import scalaz._, Scalaz._"
+    initialCommands in console := "import scalaz._, Scalaz._",
+    mainClass in Compile := Some("jp.co.cyberagent.aeromock.Aeromock")
   ) ++ instrumentSettings
 
   lazy val root = Project(
@@ -87,53 +90,59 @@ object AeromockBuild extends Build {
     aggregate = projects.filterNot(p => Set("root").contains(p.id)).map(p => p: ProjectReference)
     )
 
+  lazy val aeromock_spec_support = Project(
+    id = "aeromock-spec-support",
+    base = file("aeromock-spec-support"),
+    settings = baseSettings
+  )
+
   lazy val aeromock_server = Project(
     id = "aeromock-server",
     base = file("aeromock-server"),
     settings = baseSettings
-  )
+  ) dependsOn (aeromock_spec_support % "test")
 
   lazy val aeromock_cli = Project(
     id = "aeromock-cli",
     base = file("aeromock-cli"),
     settings = baseSettings
-  ) dependsOn (aeromock_server)
+  ) dependsOn (aeromock_server, aeromock_spec_support % "test")
 
   lazy val aeromock_freemarker = Project(
     id = "aeromock-freemarker",
     base = file("aeromock-freemarker"),
     settings = baseSettings
-  ) dependsOn(aeromock_server, aeromock_cli)
+  ) dependsOn(aeromock_server, aeromock_cli, aeromock_spec_support % "test")
 
   lazy val aeromock_handlebars_java = Project(
     id = "aeromock-handlebars-java",
     base = file("aeromock-handlebars-java"),
     settings = baseSettings
-  ) dependsOn(aeromock_server, aeromock_cli)
+  ) dependsOn(aeromock_server, aeromock_cli, aeromock_spec_support % "test")
 
   lazy val aeromock_jade4j = Project(
     id = "aeromock-jade4j",
     base = file("aeromock-jade4j"),
     settings = baseSettings
-  ) dependsOn(aeromock_server, aeromock_cli)
+  ) dependsOn(aeromock_server, aeromock_cli, aeromock_spec_support % "test")
 
   lazy val aeromock_velocity = Project(
     id = "aeromock-velocity",
     base = file("aeromock-velocity"),
     settings = baseSettings
-  ) dependsOn(aeromock_server, aeromock_cli)
+  ) dependsOn(aeromock_server, aeromock_cli, aeromock_spec_support % "test")
 
   lazy val aeromock_thymeleaf= Project(
     id = "aeromock-thymeleaf",
     base = file("aeromock-thymeleaf"),
     settings = baseSettings
-  ) dependsOn(aeromock_server, aeromock_cli)
+  ) dependsOn(aeromock_server, aeromock_cli, aeromock_spec_support % "test")
 
   lazy val aeromock_groovy_template = Project(
     id = "aeromock-groovy-template",
     base = file("aeromock-groovy-template"),
     settings = baseSettings
-  ) dependsOn(aeromock_server, aeromock_cli)
+  ) dependsOn(aeromock_server, aeromock_cli, aeromock_spec_support % "test")
 
   object Tasks {
 

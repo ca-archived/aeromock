@@ -2,7 +2,7 @@ package jp.co.cyberagent.aeromock.helper
 
 import java.util.Locale
 
-import jp.co.cyberagent.aeromock.SpecSupport
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import org.specs2.mutable.{Tables, Specification}
 
 /**

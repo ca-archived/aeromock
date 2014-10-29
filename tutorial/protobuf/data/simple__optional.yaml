@@ -1,0 +1,16 @@
+__type: SimpleResponse
+int32Value: 10011
+int64Value: 11011
+uint32Value: 12011
+uint64Value: 13011
+sint32Value: 14011
+sint64Value: 15011
+fixed32Value: 16011
+fixed64Value: 17011
+sfixed32Value: 18011
+sfixed64Value: 19011
+floatValue: 200.11
+doubleValue: 210.11
+boolValue: true
+stringValue: stringValue
+bytesValue: bytesValue

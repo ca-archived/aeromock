@@ -1,7 +1,7 @@
 package jp.co.cyberagent.aeromock.helper
 
 import io.netty.handler.codec.http.{HttpMethod, HttpVersion, DefaultFullHttpRequest}
-import jp.co.cyberagent.aeromock.SpecSupport
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import org.specs2.mutable.{Tables, Specification}
 
 /**

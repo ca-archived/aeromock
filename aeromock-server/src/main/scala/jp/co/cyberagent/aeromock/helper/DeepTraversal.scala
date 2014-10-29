@@ -14,6 +14,8 @@ object DeepTraversal {
   type JMap[K, V] = java.util.Map[K, V]
   type JCollection[E] = java.util.Collection[E]
 
+  val nop = (a: Any) => a
+
   def asScalaMap[K, V](input: JMap[K, V])(arround: (Any => Any)): Map[K, V] = {
     val buffer = new ArrayBuffer[(K, V)]
     input.asScala.foreach { entry =>

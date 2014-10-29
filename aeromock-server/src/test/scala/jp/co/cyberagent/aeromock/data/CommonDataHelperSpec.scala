@@ -3,7 +3,8 @@ package jp.co.cyberagent.aeromock.data
 import java.nio.file.Paths
 
 import jp.co.cyberagent.aeromock.core.http.VariableManager
-import jp.co.cyberagent.aeromock.{AeromockScriptBadReturnTypeException, AeromockScriptExecutionException, SpecSupport}
+import jp.co.cyberagent.aeromock.{AeromockScriptBadReturnTypeException, AeromockScriptExecutionException}
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import jp.co.cyberagent.aeromock.config.Naming
 import org.specs2.mutable.{Tables, Specification}
 

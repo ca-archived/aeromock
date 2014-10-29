@@ -29,12 +29,25 @@ object HttpRequestProcessorSelector extends AnyRef with Injectable {
         //   false =>
         //     拡張子を外したURL
         //     テンプレをチェック
+        //     protobufをチェック
         //      なければAJAXをチェック
 
         val project = inject[Project]
 
         val staticInfo = project.static match {
           case Success(Some(value)) => if ((value.root / url).exists()) inject[UserStaticFileHttpRequestProcessor].some else None
+          case Failure(errors) => throw new AeromockConfigurationException(project.projectConfig, errors)
+          case _ => None
+        }
+
+        val protobufInfo = project.protobuf match {
+          case Success(Some(value)) => {
+            val protoPath = value.apiPrefix match {
+              case Some(apiPrefix) => (value.root / apiPrefix / url + ".proto")
+              case None => (value.root / url + ".proto")
+            }
+            if (protoPath.exists) inject[ProtobufResponseWriter].some else None
+          }
           case Failure(errors) => throw new AeromockConfigurationException(project.projectConfig, errors)
           case _ => None
         }
@@ -48,10 +61,11 @@ object HttpRequestProcessorSelector extends AnyRef with Injectable {
           case _ => None
         }
 
-        (staticInfo, templateInfo) match {
-          case (_, Some(value)) => value
-          case (Some(value), _) => value
-          case (None, None) => inject[JsonApiHttpRequestProcessor]
+        (staticInfo, protobufInfo, templateInfo) match {
+          case (_, _, Some(value)) => value
+          case (_, Some(value), _) => value
+          case (Some(value), _, _) => value
+          case (None, None, None) => inject[JsonApiHttpRequestProcessor]
         }
       }
     }

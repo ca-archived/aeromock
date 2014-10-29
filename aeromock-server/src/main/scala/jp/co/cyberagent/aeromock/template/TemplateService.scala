@@ -5,28 +5,24 @@ import java.io.Writer
 import groovy.lang.Binding
 import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpHeaders.Names
+import jp.co.cyberagent.aeromock.AeromockRenderException
 import jp.co.cyberagent.aeromock.config.Project
-import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
 import jp.co.cyberagent.aeromock.data._
 import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.server.http.{CustomResponse, RenderResult, ResponseStatusSupport}
+import jp.co.cyberagent.aeromock.server.http.{RenderResult, ResponseDataSupport}
 import jp.co.cyberagent.aeromock.util.DummyWriter
-import jp.co.cyberagent.aeromock.{AeromockLoadDataException, AeromockNoneRelatedDataException, AeromockRenderException, AeromockSystemException}
 import org.joda.time.DateTime
 import org.yaml.snakeyaml.{DumperOptions, Yaml}
 import scaldi.{Injectable, Injector}
-
-import scala.collection.JavaConverters._
-import scalaz._
 
 
 /**
  * Base service class of Template.
  * @author stormcat24
  */
-trait TemplateService extends AnyRef with ResponseStatusSupport with Injectable {
+trait TemplateService extends AnyRef with ResponseDataSupport with Injectable {
 
   implicit val inj: Injector
   val project: Project = inject[Project]
@@ -37,14 +33,14 @@ trait TemplateService extends AnyRef with ResponseStatusSupport with Injectable 
    * @param request [[io.netty.handler.codec.http.FullHttpRequest]]
    * @return HTML string
    */
-  def render(request: FullHttpRequest): RenderResult = {
+  def render(request: FullHttpRequest): RenderResult[String] = {
     require(request != null)
 
     if (request.queryString.contains(s"${project._naming.debug}=true")) {
       val dumperOptions = new DumperOptions
       dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW)
 
-      val response = createResponseData(project, request.parsedRequest)
+      val response = createResponseDataWithProjection(project, request.parsedRequest)
       val proxyMap = response._1.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
       RenderResult(new Yaml(dumperOptions).dumpAsMap(proxyMap), response._2, true)
     } else {
@@ -55,8 +51,8 @@ trait TemplateService extends AnyRef with ResponseStatusSupport with Injectable 
     }
   }
 
-  def renderProcess(request: ParsedRequest): Either[Throwable, RenderResult] = {
-    val response = createResponseData(project, request)
+  def renderProcess(request: ParsedRequest): Either[Throwable, RenderResult[String]] = {
+    val response = createResponseDataWithProjection(project, request)
 
     trye {
       try {
@@ -70,53 +66,6 @@ trait TemplateService extends AnyRef with ResponseStatusSupport with Injectable 
   }
 
   protected def renderHtml(request: ParsedRequest, projection: InstanceProjection): String
-
-  /**
-   * Create [[jp.co.cyberagent.aeromock.data.InstanceProjection]]
-   * @param project [[Project]]
-   * @param request [[jp.co.cyberagent.aeromock.core.http.ParsedRequest]]
-   * @return [[jp.co.cyberagent.aeromock.data.InstanceProjection]]
-   */
-  protected def createResponseData(project: Project, request: ParsedRequest): (InstanceProjection, Option[CustomResponse]) = {
-
-    val dataRootDir = project._data.root
-    val naming = project._naming
-    val dataFile = DataPathResolver.resolve(dataRootDir, request, naming) match {
-      case None => throw new AeromockNoneRelatedDataException(request.url)
-      case Some(file) => file
-    }
-
-    val dataMap = DataFileReaderFactory.create(dataFile) match {
-      case None => throw new AeromockSystemException(s"Cannot read Data file '${dataFile.toString}'")
-      case Some(reader) => {
-        reader.readFile(dataFile).collect {
-          case (key, value) => (key, value)
-        }.toMap
-      }
-    }
-
-    val commonDataHelper = new CommonDataHelper(project._naming)
-    val commonMergedMap = commonDataHelper.getMergedDataMap(dataRootDir, project.dataScript)
-    val mergedMap = commonDataHelper.mergeAdditional(commonMergedMap, dataMap)
-
-    val customResponse = createCustomResponse(project._naming, mergedMap) match {
-      case Success(value) => value
-      case Failure(e) => {
-        val errors = e.list.map(_.getMessage)
-        throw new AeromockLoadDataException(NonEmptyList(errors.head, errors.drop(1): _*))
-      }
-    }
-
-    val reducedMap = mergedMap - project._naming.response
-
-    // 関数合成することでasJavaMapの抽象度を保ちつつ、走査のついでに変数置換を行う
-    val variableHelper = new VariableHelper(VariableManager.getRequestMap ++ VariableManager.getOriginalVariableMap().asScala.toMap)
-
-    new InstanceProjectionFactory(variableHelper, project._naming).create(reducedMap) match {
-      case Failure(errors) => throw new AeromockLoadDataException(errors.map(_.getMessage))
-      case Success(p) => (p, customResponse)
-    }
-  }
 
   def validateData(endpoint: Endpoint, domain: String)
       (reporting: PageValidation => Unit = {v: PageValidation =>}): PageValidation = {
@@ -169,7 +118,7 @@ trait TemplateService extends AnyRef with ResponseStatusSupport with Injectable 
             }
             VariableManager.initializeOriginalVariableMap(originalVariables)
 
-            val response = createResponseData(project, imitatedRequest)
+            val response = createResponseDataWithProjection(project, imitatedRequest)
             val proxyMap = response._1.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
             VariableManager.initializeDataMap(proxyMap)
 
