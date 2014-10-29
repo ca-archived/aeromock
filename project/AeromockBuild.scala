@@ -13,7 +13,7 @@ object AeromockBuild extends Build {
 
   lazy val scalazVersion = "7.0.6"
   lazy val nettyVersion = "4.0.21.Final"
-  lazy val scaldiVersion = 0.
+  lazy val scaldiVersion = "0.4"
 
   lazy val baseSettings = super.settings ++ Seq(
     scalaVersion := "2.11.1",
