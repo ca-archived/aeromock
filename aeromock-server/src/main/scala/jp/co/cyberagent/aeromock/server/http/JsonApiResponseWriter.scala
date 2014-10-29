@@ -44,7 +44,7 @@ class JsonApiArrayResponseWriter(project: Project, variableHelper: VariableHelpe
  * @param data map data
  */
 class JsonApiMapResponseWriter(project: Project, variableHelper: VariableHelper, data: Map[Any, Any])
-  extends JsonApiResponseWriter with ResponseStatusSupport{
+  extends JsonApiResponseWriter with ResponseDataSupport{
 
   /**
    * @inheritdoc

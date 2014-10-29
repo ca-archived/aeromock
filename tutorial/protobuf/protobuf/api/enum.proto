@@ -1,0 +1,15 @@
+package protobuf.api;
+
+message WithEnumResponse {
+
+    enum TestEnum {
+      KEY1 = 100;
+      KEY2 = 101;
+      KEY3 = 102;
+    }
+
+    required int32 prop1 = 1;
+    required TestEnum prop2 = 2 [default = KEY2];
+    repeated TestEnum enumList = 3;
+    repeated TestEnum enumEmptyList = 4;
+}

@@ -66,6 +66,11 @@ class AeromockApiNotFoundException(uri: String, cause: Throwable)
   extends AeromockNotFoundException(classOf[AeromockApiNotFoundException], cause, uri) {
   def this(uri: String) = this(uri, null)
 }
+
+class AeromockProtoFileNotFoundException(protoPath: String, cause: Throwable)
+  extends AeromockNotFoundException(classOf[AeromockProtoFileNotFoundException], cause, protoPath) {
+  def this(protoPath: String) = this(protoPath, null)
+}
 // NotFound END
 
 // BadImplementation START
@@ -102,6 +107,14 @@ class AeromockTemplateParseException(path: String, cause: Throwable)
 
 class AeromockELException(expression: String, cause: Throwable)
   extends AeromockBadImplementation(classOf[AeromockELException], cause, expression) {
+}
+
+class AeromockProtoTypeNotSpecifiedException(dataPath: String)
+  extends AeromockBadImplementation(classOf[AeromockProtoTypeNotSpecifiedException], null, dataPath) {
+}
+
+class AeromockProtoTypeNotFoundException(typeName: String)
+  extends AeromockBadImplementation(classOf[AeromockProtoTypeNotFoundException], null, typeName) {
 }
 
 class AeromockLoadDataException(errors: NonEmptyList[String]) extends AeromockBadImplementation(errors.list.mkString(",")) {

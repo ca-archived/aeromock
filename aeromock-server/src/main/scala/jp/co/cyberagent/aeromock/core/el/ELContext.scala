@@ -15,7 +15,7 @@ import org.apache.commons.lang3.StringUtils
 class ELContext(values: Map[String, Any] = Map.empty) {
 
   val EL_PATTERN = """\$\{([^\$]+)\}""".r
-  val nop = (a: Any) => a
+
 
   /**
    * execute EL expression.

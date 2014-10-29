@@ -1,7 +1,8 @@
 package jp.co.cyberagent.aeromock
 
-import java.nio.file.Path
+import java.nio.file.{Paths, Path}
 
+import com.squareup.protoparser.ProtoSchemaParser
 import jp.co.cyberagent.aeromock.core.bootstrap.BootstrapManager
 import jp.co.cyberagent.aeromock.server.AeromockServer
 import org.slf4j.LoggerFactory
@@ -25,6 +26,8 @@ object Aeromock extends App with Injectable {
 
   LOG.info(s"configuration file = ${configFile.toAbsolutePath.toString}")
   LOG.info(s"listening port = ${listenPort}")
+
+  val protofile = Paths.get("/Users/a13062/.ghq/github.com/CyberAgent/aeromock/tutorial/protobuf/protobuf/polyline.proto")
 
   try {
     BootstrapManager.delegate

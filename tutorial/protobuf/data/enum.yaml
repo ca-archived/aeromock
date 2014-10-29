@@ -1,0 +1,7 @@
+__type: WithEnumResponse
+prop1: 100
+prop2: KEY2
+enumList:
+  - KEY1
+  - KEY3
+enumEmptyList: []

@@ -19,7 +19,8 @@ case class Project(
   tag: ValidationNel[String, Option[Tag]],
   function: ValidationNel[String, Option[Function]],
   naming: ValidationNel[String, Naming],
-  test: ValidationNel[String, Test]) {
+  test: ValidationNel[String, Test],
+  protobuf: ValidationNel[String, Option[ProtoBuf]]) {
 
   def _template: Template = {
     template match {
@@ -85,6 +86,14 @@ case class Project(
     }
   }
 
+  def _protobuf: ProtoBuf = {
+    protobuf match {
+      case Failure(errors) => throw new AeromockConfigurationException(projectConfig, errors)
+      case Success(None) => throw new AeromockConfigurationException(projectConfig, message"configuration.not.specified${"protobuf"}")
+      case Success(Some(value)) => value
+    }
+  }
+
   def templateScript: Path = root / "template.script"
   def dataScript: Path = root / "data.groovy"
   def ajaxScript: Path = root / "ajax.groovy"
@@ -109,5 +118,7 @@ case class Naming(dataPrefix: String = "__", dataidQuery: String = "_dataid") {
   def additional = s"${dataPrefix}additional"
   def debug = s"${dataPrefix}debug"
   def response = s"${dataPrefix}response"
+  def `type` = s"${dataPrefix}type"
 }
 case class Test(reportRoot: Path)
+case class ProtoBuf(root: Path, apiPrefix: Option[String])

@@ -6,7 +6,8 @@ import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.config.definition.{DataDef, ProjectDef}
 import jp.co.cyberagent.aeromock.core.http.Endpoint
-import jp.co.cyberagent.aeromock.{AeromockTestModule, SpecSupport}
+import jp.co.cyberagent.aeromock.AeromockTestModule
+import jp.co.cyberagent.aeromock.test.SpecSupport
 import org.specs2.mutable.{Specification, Tables}
 
 /**

@@ -37,13 +37,24 @@ trait HttpResponseWriter {
   }
 
   def renderHtml(content: String, status: HttpResponseStatus, customResponse: Option[CustomResponse])(implicit context: ChannelHandlerContext): HttpResponse = {
-
     val responseStatus = selectResponseStatus(status, customResponse)
     val response = new DefaultFullHttpResponse(HTTP_1_1, responseStatus,
       Unpooled.copiedBuffer(content, CharsetUtil.UTF_8))
     addDefaultHeader(response)
     addCustomResponse(response, customResponse)
     response.headers().set(CONTENT_TYPE, "text/html; charset=UTF-8")
+    response.headers().set(CONTENT_LENGTH, response.content().readableBytes())
+
+    context.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
+    response
+  }
+
+  def renderProtobuf(data: Array[Byte], status: HttpResponseStatus, customResponse: Option[CustomResponse])(implicit context: ChannelHandlerContext): HttpResponse = {
+    val responseStatus = selectResponseStatus(status, customResponse)
+    val response = new DefaultFullHttpResponse(HTTP_1_1, responseStatus, Unpooled.copiedBuffer(data))
+    addDefaultHeader(response)
+    addCustomResponse(response, customResponse)
+    response.headers().set(CONTENT_TYPE, "application/x-protobuf")
     response.headers().set(CONTENT_LENGTH, response.content().readableBytes())
 
     context.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
@@ -101,7 +112,7 @@ trait HttpResponseWriter {
     }
   }
 
-  private def addDefaultHeader(response: HttpResponse) {
+  protected def addDefaultHeader(response: HttpResponse) {
     response.headers().set(CACHE_CONTROL, "no-cache")
     response.headers().set(DATE, DateTime.now().toString("EEE, dd MMM yyy HH:mm:ss z"))
     response.headers().set(SERVER, "Aeromock")

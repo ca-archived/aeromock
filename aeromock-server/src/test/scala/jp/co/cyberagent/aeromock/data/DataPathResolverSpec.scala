@@ -3,7 +3,8 @@ package jp.co.cyberagent.aeromock.data
 import java.nio.file.Paths
 
 import io.netty.handler.codec.http.HttpMethod._
-import jp.co.cyberagent.aeromock.{SpecSupport, AeromockBadUsingException}
+import jp.co.cyberagent.aeromock.test.SpecSupport
+import jp.co.cyberagent.aeromock.AeromockBadUsingException
 import jp.co.cyberagent.aeromock.config.Naming
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import org.specs2.mutable.{Specification, Tables}

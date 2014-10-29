@@ -1,0 +1,39 @@
+package protobuf.api;
+
+message SimpleRequest {
+  required string text = 1;
+}
+
+message SimpleResponse {
+
+  required int32 int32Value = 100;
+  optional int32 int32OptValue = 101 [default = 10100];
+  required int64 int64Value = 110;
+  optional int64 int64OptValue = 111 [default = 11100];
+  required uint32 uint32Value = 120;
+  optional uint32 uint32OptValue = 121 [default = 12100];
+  required uint64 uint64Value = 130;
+  optional uint64 uint64OptValue = 131 [default = 13100];
+  required sint32 sint32Value = 140;
+  optional sint32 sint32OptValue = 141 [default = 14100];
+  required sint64 sint64Value = 150;
+  optional sint64 sint64OptValue = 151 [default = 15100];
+  required fixed32 fixed32Value = 160;
+  optional fixed32 fixed32OptValue = 161 [default = 16100];
+  required fixed64 fixed64Value = 170;
+  optional fixed64 fixed64OptValue = 171 [default = 17100];
+  required sfixed32 sfixed32Value = 180;
+  optional sfixed32 sfixed32OptValue = 181 [default = 18100];
+  required sfixed64 sfixed64Value = 190;
+  optional sfixed64 sfixed64OptValue = 191 [default = 19100];
+  required float floatValue = 200;
+  optional float floatOptValue = 201 [default = 20100];
+  required double doubleValue = 210;
+  optional double doubleOptValue = 211 [default = 21100];
+  required bool boolValue = 220;
+  optional bool boolOptValue = 221 [default = true];
+  required string stringValue = 230;
+  optional string stringOptValue = 231 [default = "defaultValue"];
+  required bytes bytesValue = 240;
+  optional bytes bytesOptValue = 241 [default = "defaultValue"];
+}
