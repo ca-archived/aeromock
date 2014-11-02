@@ -29,3 +29,55 @@ stringValue: stringValue
 stringOptValue: stringOptValue
 bytesValue: bytesValue
 bytesOptValue: bytesOptValue
+stringList:
+  - string1
+  - string2
+int32List:
+  - 100
+  - 200
+  - -100
+int64List:
+  - 8000000000
+  - 9000000000
+  - -8000000000
+uint32List:
+  - 101
+  - 201
+uint64List:
+  - 8000000001
+  - 9000000001
+sint32List:
+  - 102
+  - 202
+  - -102
+sint64List:
+  - 8000000002
+  - 9000000002
+  - -8000000002
+fixed32List:
+  - 103
+  - 203
+  - -103
+fixed64List:
+  - 8000000003
+  - 9000000003
+  - -8000000003
+sfixed32List:
+  - 104
+  - 204
+  - -104
+sfixed64List:
+  - 8000000004
+  - 9000000004
+  - -8000000004
+floatList:
+  - 111.1
+  - 222.2
+  - -333.3
+doubleList:
+  - 8000000000.1
+  - 9000000000.1
+  - -8000000000.1
+boolList:
+  - true
+  - false

@@ -2,7 +2,7 @@ package jp.co.cyberagent.aeromock.protobuf
 
 import io.netty.handler.codec.http.FullHttpRequest
 import jp.co.cyberagent.aeromock.helper.DeepTraversal._
-import jp.co.cyberagent.aeromock.{AeromockProtoTypeNotSpecifiedException, AeromockProtoFileNotFoundException}
+import jp.co.cyberagent.aeromock.{AeromockIllegalProtoException, AeromockProtoTypeNotSpecifiedException, AeromockProtoFileNotFoundException}
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.core.http.VariableManager
@@ -11,6 +11,8 @@ import jp.co.cyberagent.aeromock.helper._
 import org.apache.commons.lang3.StringUtils
 import scaldi.{Injectable, Injector}
 import scala.collection.JavaConverters._
+import scalaz._
+import Scalaz._
 
 /**
  *
@@ -42,8 +44,9 @@ object ProtobufResponseService extends AnyRef with Injectable with ResponseDataS
     val filteredMap = scanMap(response._1 - naming.`type`)(variableHelper.variableConversion)
 
     val parser = new ProtoFileParser(protobuf.root)
-    val result = parser.parseProto(protoFile)
-
-    RenderResult(result.buildData(apiTypeName, filteredMap), response._2, false)
+    parser.parseProto(protoFile) match {
+      case Success(parsedProto) => RenderResult(parsedProto.buildData(apiTypeName, filteredMap), response._2, false)
+      case Failure(f) => throw new AeromockIllegalProtoException(f.toList.mkString("\n"))
+    }
   }
 }

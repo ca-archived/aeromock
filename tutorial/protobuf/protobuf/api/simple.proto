@@ -36,4 +36,18 @@ message SimpleResponse {
   optional string stringOptValue = 231 [default = "defaultValue"];
   required bytes bytesValue = 240;
   optional bytes bytesOptValue = 241 [default = "defaultValue"];
+  repeated string stringList = 250;
+  repeated int32 int32List = 251;
+  repeated int64 int64List = 252;
+  repeated uint32 uint32List = 253;
+  repeated uint64 uint64List = 254;
+  repeated sint32 sint32List = 255;
+  repeated sint64 sint64List = 256;
+  repeated fixed32 fixed32List = 257;
+  repeated fixed64 fixed64List = 258;
+  repeated sfixed32 sfixed32List = 259;
+  repeated sfixed64 sfixed64List = 260;
+  repeated float floatList = 261;
+  repeated double doubleList = 262;
+  repeated bool boolList = 263;
 }

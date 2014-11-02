@@ -1,7 +1,10 @@
 package jp.co.cyberagent.aeromock.protobuf
 
 import com.google.protobuf.CodedOutputStream
-import jp.co.cyberagent.aeromock.AeromockProtoTypeNotFoundException
+import jp.co.cyberagent.aeromock.{AeromockProtoDataViolationException, AeromockInvalidDataFileException, AeromockProtoTypeNotFoundException}
+
+import scalaz._
+import Scalaz._
 
 /**
  *
@@ -13,9 +16,18 @@ case class ParsedProto(
 ) {
 
   def buildData(targetTypeName: String, data: Map[Any, Any]): Array[Byte] = {
-    val result = types.get(targetTypeName) match {
+
+    val result = (types.get(targetTypeName) match {
       case None => throw new AeromockProtoTypeNotFoundException(targetTypeName)
-      case Some(value) => value.flatMap(f => f.toValue(data, dependencyTypes))
+      case Some(value) => value.map(f => {
+        f.toValue(data, dependencyTypes)
+      })
+    }).sequenceU match {
+      case Success(value) => value.flatten
+      case Failure(errors) => {
+        val errorLocations = errors.map(e => s"${e}").toList
+        throw new AeromockProtoDataViolationException(errorLocations.mkString("\n"))
+      }
     }
 
     val totalSize = result.foldLeft(0)((left, right) => left + right.serializedSize)

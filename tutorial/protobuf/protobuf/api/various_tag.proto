@@ -1,0 +1,49 @@
+package protobuf.api;
+
+import "schema/various_nest.proto";
+
+message VariousTagRequest {
+  required string text = 1;
+}
+
+message VariousTagResponse {
+
+  enum VariousEnum {
+    ENUM1 = 101;
+    ENUM2 = 102;
+    ENUM3 = 103;
+  }
+
+  // tag size = 1
+  required int32 int32TagSize1 = 1;
+  optional int32 int32OptTagSize1 = 2;
+  repeated int32 int32ListTagSize1 = 3;
+  required VariousEnum enumTagSize1 = 4;
+  optional VariousEnum enumOptTagSize1 = 5;
+  repeated VariousEnum enumListTagSize1 = 6;
+  required schema.VariousNest nestTagSize1 = 7;
+  required schema.VariousNest nestOptTagSize1 = 8;
+  repeated schema.VariousNest nestListTagSize1 = 9;
+
+  // tag size = 2
+  required int32 int32TagSize2 = 16;
+  optional int32 int32OptTagSize2 = 17;
+  repeated int32 int32ListTagSize2 = 18;
+  required VariousEnum enumTagSize2 = 19;
+  optional VariousEnum enumOptTagSize2 = 20;
+  repeated VariousEnum enumListTagSize2 = 21;
+  required schema.VariousNest nestTagSize2 = 22;
+  optional schema.VariousNest nestOptTagSize2 = 23;
+  repeated schema.VariousNest nestListTagSize2 = 24;
+
+  // tag size = 3
+  required int32 int32TagSize3 = 2048;
+  optional int32 int32OptTagSize3 = 2049;
+  repeated int32 int32ListTagSize3 = 2050;
+  required VariousEnum enumTagSize3 = 2051;
+  optional VariousEnum enumOptTagSize3 = 2052;
+  repeated VariousEnum enumListTagSize3 = 2053;
+  required schema.VariousNest nestTagSize3 = 2054;
+  optional schema.VariousNest nestOptTagSize3 = 2055;
+  repeated schema.VariousNest nestListTagSize3 = 2056;
+}

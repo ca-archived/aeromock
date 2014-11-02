@@ -1,0 +1,7 @@
+package protobuf.schema;
+
+message VariousNest {
+  required string textTagSize1 = 1;
+  required string textTagSize2 = 16;
+  required string textTagSize3 = 2048;
+}

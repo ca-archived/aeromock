@@ -11,6 +11,7 @@ target/
 .idea/
 .settings/
 *.iml
+out/
 
 # JS
 bower_components/

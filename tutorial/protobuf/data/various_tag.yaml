@@ -1,0 +1,81 @@
+__type: VariousTagResponse
+# tag size = 1
+int32TagSize1: 100
+int32OptTagSize1: 100
+int32ListTagSize1:
+  - 101
+  - 201
+enumTagSize1: ENUM1
+enumOptTagSize1: ENUM1
+enumListTagSize1:
+  - ENUM1
+  - ENUM2
+  - ENUM3
+nestTagSize1:
+  textTagSize1: text11
+  textTagSize2: text12
+  textTagSize3: text13
+nestOptTagSize1:
+  textTagSize1: text11
+  textTagSize2: text12
+  textTagSize3: text13
+nestListTagSize1:
+  - textTagSize1: text11
+    textTagSize2: text12
+    textTagSize3: text13
+
+# tag size = 2
+int32TagSize2: 200
+int32OptTagSize2: 200
+int32ListTagSize2:
+  - 102
+  - 202
+enumTagSize2: ENUM2
+enumOptTagSize2: ENUM2
+enumListTagSize2:
+  - ENUM1
+  - ENUM2
+  - ENUM3
+nestTagSize2:
+  textTagSize1: text21
+  textTagSize2: text22
+  textTagSize3: text23
+nestOptTagSize2:
+  textTagSize1: text21
+  textTagSize2: text22
+  textTagSize3: text23
+nestListTagSize2:
+  - textTagSize1: text21
+    textTagSize2: text22
+    textTagSize3: text23
+
+# tag size = 3
+int32TagSize3: 300
+int32OptTagSize3: 300
+int32ListTagSize3:
+  - 103
+  - 203
+enumTagSize3: ENUM3
+enumOptTagSize3: ENUM3
+enumListTagSize3:
+  - ENUM1
+  - ENUM2
+  - ENUM3
+nestTagSize3:
+  textTagSize1: text31
+  textTagSize2: text32
+  textTagSize3: text33
+nestOptTagSize3:
+  textTagSize1: text31
+  textTagSize2: text32
+  textTagSize3: text33
+nestListTagSize3:
+  - textTagSize1: text31
+    textTagSize2: text32
+    textTagSize3: text33
+
+
+
+
+
+

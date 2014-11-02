@@ -2,20 +2,32 @@ package jp.co.cyberagent.aeromock.protobuf
 
 import com.squareup.protoparser.MessageType
 import jp.co.cyberagent.aeromock.AeromockSystemException
+import scalaz._
+import Scalaz._
 
 /**
  *
  * @author stormcat24
  */
-sealed abstract class ProtoFieldLabel
+sealed trait ProtoFieldLabel {
+  val name: String
+
+  override def toString(): String = name
+}
 
 object ProtoFieldLabel {
 
-  case object REQUIRED extends ProtoFieldLabel
+  case object REQUIRED extends ProtoFieldLabel {
+    override val name = "required"
+  }
 
-  case object OPTIONAL extends ProtoFieldLabel
+  case object OPTIONAL extends ProtoFieldLabel {
+    override val name = "optional"
+  }
 
-  case object REPEATED extends ProtoFieldLabel
+  case object REPEATED extends ProtoFieldLabel {
+    override val name = "repeated"
+  }
 
   val map = Map(
     MessageType.Label.REQUIRED -> REQUIRED,
@@ -23,10 +35,12 @@ object ProtoFieldLabel {
     MessageType.Label.REPEATED -> REPEATED
   )
 
-  def valueOf(label: MessageType.Label): ProtoFieldLabel = {
+  def valueOf(label: MessageType.Label): ValidationNel[String, ProtoFieldLabel] = {
     map.get(label) match {
-      case Some(v) => v
-      case _ => throw new AeromockSystemException(s"label '${label.toString}' is not supported.")
+      case Some(v) => v.successNel[String]
+      case _ => {
+        s"label '${label.toString}' is not supported.".failureNel[ProtoFieldLabel]
+      }
     }
   }
 }

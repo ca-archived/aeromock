@@ -45,7 +45,6 @@ abstract class DynamicProxyBuilder[C: ClassTag] {
     })
 
     if (result.isEmpty) {
-      // TODO Exception
       throw new AeromockSystemException("cannot create instance!")
     }
 
