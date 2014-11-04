@@ -9,14 +9,19 @@ import org.kohsuke.args4j.spi.{MapOptionHandler, StringArrayOptionHandler}
  */
 class Command {
 
-  @Option(name = "-v", usage = "show version")
+  type Args4jOption = org.kohsuke.args4j.Option
+
+  @Args4jOption(name = "-v", usage = "show version")
   var version: Boolean = false
 
-  @Option(name = "-h", usage = "show usage message")
+  @Args4jOption(name = "-h", usage = "show usage message")
   var help: Boolean = false
 
-  @Option(name = "-d", usage = "display debug log")
+  @Args4jOption(name = "-d", usage = "display debug log")
   var debug: Boolean = false
+
+  @Args4jOption(name = "-c", usage = "path of config file")
+  var configFile: String = null
 
   @Argument(index = 0, metaVar = "job")
   var job: String = null
@@ -24,7 +29,7 @@ class Command {
   @Argument(index = 1, metaVar = "arguments...", handler = classOf[StringArrayOptionHandler])
   var arguments: Array[String] = null
 
-  @Option(name = "-D", handler = classOf[MapOptionHandler])
+  @Args4jOption(name = "-D", handler = classOf[MapOptionHandler])
   var jobOptions: java.util.Map[String, String] = null
 
   def toJobOperation(): JobOperation = {

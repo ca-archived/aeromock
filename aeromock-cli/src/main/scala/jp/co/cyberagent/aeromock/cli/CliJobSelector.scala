@@ -24,8 +24,12 @@ object CliJobSelector extends AnyRef with Injectable {
 
     BootstrapManager.delegate
 
-    // TODO args
-    implicit val injector = new AeromockAppModule(Array.empty)
+    val args = Option(command.configFile) match {
+      case Some(configFile) => Array(s"-c $configFile")
+      case None => Array.empty[String]
+    }
+
+    implicit val injector = new AeromockAppModule(args)
 
     val formattedJob = command.job.toLowerCase()
 
@@ -33,10 +37,8 @@ object CliJobSelector extends AnyRef with Injectable {
       case job if job.getAnnotation(classOf[Job]) != null && job.getAnnotation(classOf[Job]).name == formattedJob => job
     } match {
       case Some(jobType) => {
-        val project = inject[Project]
-        val templateService = inject[Option[TemplateService]]
         val instances = jobType.getConstructors.flatMap(c => {
-          tryo(c.newInstance(command.toJobOperation, project, templateService).asInstanceOf[CliJob])
+          tryo(c.newInstance(command.toJobOperation, injector).asInstanceOf[CliJob])
         })
 
         if (instances.isEmpty) {
