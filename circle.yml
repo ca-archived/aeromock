@@ -44,11 +44,12 @@ dependencies:
 
 test:
   override:
-    - sbt scoverage:test
+    - sbt test
   post:
     - >
       if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
         echo "start to measure coverage report."
+        sbt scoverage:test
         sbt coveralls
       fi
     - cp -R aeromock-server/target/test-reports/* $CIRCLE_ARTIFACTS
@@ -71,3 +72,13 @@ deployment:
     commands:
       - ./aeromock-dsl/gradlew -p aeromock-dsl uploadArchives
       - sbt publishSigned
+  production:
+    branch: /^production\/.+$/
+    owner: CyberAgent
+    commands:
+      - >
+        echo "current branch is $CIRCLE_BRANCH."
+        NEXT_VERSION=`echo $CIRCLE_BRANCH | sed -e 's/^production\/\(.*\)$/\1/'`
+        echo "start deploy version=$NEXT_VERSION"
+        fab release:next_version=$NEXT_VERSION
+        exit $?
