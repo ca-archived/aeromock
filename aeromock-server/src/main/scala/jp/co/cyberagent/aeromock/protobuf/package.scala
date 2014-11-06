@@ -63,8 +63,9 @@ package object protobuf {
   ) {
 
     def toValue(data: Any, dependencies: Map[String, List[ProtoField]]): ValidationNel[String, Option[ProtoValue[_, _]]] = {
-      val dataMap = data.asInstanceOf[Map[Any, Any]]
-      `type`.toValue(name, dataMap.get(name), tag, dependencies)
+      Option(data).map {
+        case dataMap: Map[Any, Any] @unchecked => `type`.toValue(name, dataMap.get(name), tag, dependencies)
+      }.getOrElse("${name} of element may be null.".failureNel[Option[ProtoValue[_, _]]])
     }
   }
 
