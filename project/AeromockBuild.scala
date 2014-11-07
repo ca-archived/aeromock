@@ -12,7 +12,7 @@ import scala.util.Try
 object AeromockBuild extends Build {
 
   lazy val scalazVersion = "7.0.6"
-  lazy val nettyVersion = "4.0.21.Final"
+  lazy val nettyVersion = "4.0.24.Final"
   lazy val scaldiVersion = "0.4"
 
   lazy val baseSettings = super.settings ++ Seq(
