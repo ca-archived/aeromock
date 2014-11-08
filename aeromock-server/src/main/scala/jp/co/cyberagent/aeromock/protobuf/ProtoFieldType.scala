@@ -316,8 +316,6 @@ object ProtoFieldTypes {
               nests.map(_.toValue(value.asInstanceOf[Map[Any, Any]], dependencies)).sequenceU
             }
           } yield (ProtoMessageValue(MESSAGE(typeName, label), value.flatten, tag))
-//
-//          s"cannot find '${typeName}'.".failureNel[ProtoMessageValue[_]]
         }
       }
     }
