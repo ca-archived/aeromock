@@ -294,7 +294,7 @@ object ProtoFieldTypes {
     }
   }
 
-  case class MESSAGE(typeName: String, label: ProtoFieldLabel) extends ProtoFieldType[ProtoMessageValue[_]] {
+  case class MESSAGE(typeName: String, label: ProtoFieldLabel, nests: List[ProtoField] = List.empty) extends ProtoFieldType[ProtoMessageValue[_]] {
     override def computeSize(tag: Int, value: ProtoMessageValue[_]): Int = {
       computeTagSize(tag) + computeRawVarint32Size(value.serializedSize) + value.serializedSize
     }
@@ -310,7 +310,15 @@ object ProtoFieldTypes {
             }
           } yield (ProtoMessageValue(MESSAGE(typeName, label), value.flatten, tag))
         }
-        case None => s"cannot find '${typeName}'.".failureNel[ProtoMessageValue[_]]
+        case None => {
+          for {
+            value <- {
+              nests.map(_.toValue(value.asInstanceOf[Map[Any, Any]], dependencies)).sequenceU
+            }
+          } yield (ProtoMessageValue(MESSAGE(typeName, label), value.flatten, tag))
+//
+//          s"cannot find '${typeName}'.".failureNel[ProtoMessageValue[_]]
+        }
       }
     }
 

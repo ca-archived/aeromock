@@ -8,6 +8,7 @@ import jp.co.cyberagent.aeromock.config.definition.ProjectDef
 import jp.co.cyberagent.aeromock.test.{RequestScope, SpecSupport}
 import org.specs2.mutable.{Specification, Tables}
 import protobuf.api.Enum.WithEnumResponse.TestEnum
+import protobuf.api.Nest2.Nest2Response
 import protobuf.api.VariousTag.VariousTagResponse.VariousEnum
 import protobuf.api._
 import protobuf.schema.JobOuterClass.Job
@@ -235,9 +236,28 @@ class ProtobufResponseServiceSpec extends Specification with Tables with SpecSup
         )
         .build
 
-      expected.toByteArray
       val result = ProtobufResponseService.render(request("/nest1"))
       result.content must_== expected.toByteArray
+    }
+  }
+
+  "/api/nest2.proto" should {
+    implicit val module = new AeromockTestModule {
+      override val projectConfigPath: Path = getResourcePath(".").resolve("../../../../tutorial/protobuf/project.yaml").toRealPath()
+      override val projectDefArround = (projectDef: ProjectDef) => {}
+    }
+
+    "test" in RequestScope {
+      val expected = Nest2Response.newBuilder
+        .setId(100)
+        .setInner(Nest2Response.Nest2Inner.newBuilder.setId(1000).setName("innerName").build)
+        .addInnerList(Nest2Response.Nest2Inner.newBuilder.setId(1001).setName("innerName1").build)
+        .addInnerList(Nest2Response.Nest2Inner.newBuilder.setId(1002).setName("innerName2").build)
+        .build
+
+      val result = ProtobufResponseService.render(request("/nest2"))
+      result.content must_== expected.toByteArray
+
     }
   }
 

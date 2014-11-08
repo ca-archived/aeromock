@@ -1,0 +1,10 @@
+__type: Nest2Response
+id: 100
+inner:
+  id: 1000
+  name: innerName
+innerList:
+  - id: 1001
+    name: innerName1
+  - id: 1002
+    name: innerName2

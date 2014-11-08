@@ -4,6 +4,7 @@ import java.nio.file.Path
 
 import com.squareup.protoparser.{ProtoFile, EnumType, MessageType, ProtoSchemaParser}
 import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.protobuf.ProtoFieldTypes.MESSAGE
 
 import scala.collection.JavaConverters._
 import scalaz._
@@ -66,10 +67,7 @@ class ProtoFileParser(protobufRoot: Path) {
   }
 
   def fetchType(tuple: (String, MessageType, ProtoFile)): ValidationNel[String, (String, List[ProtoField])] = {
-    // TODO nest対応
-    val netstedTypes = tuple._2.getNestedTypes.asScala.collect {
-      case et: EnumType => (et.getName, et.getValues.asScala.toList)
-    }.toMap
+    val nestedTypes = tuple._2.getNestedTypes.asScala.map(t => (t.getName, t)).toMap
 
     val token = tuple._1.split("/")
     val fqdnParts = token.slice(0, token.length -1).toList
@@ -78,33 +76,55 @@ class ProtoFileParser(protobufRoot: Path) {
       case mt: MessageType => (mt.getName, mt)
     }.toMap
 
-    val fieldsVal = tuple._2.getFields.asScala.sortBy(_.getTag).toList.map { value =>
-      ProtoFieldLabel.valueOf(value.getLabel) match {
-        case Failure(f) => f.failure[ProtoField]
-        case Success(label) => {
-          val fieldType = netstedTypes.get(value.getType) match {
-            case Some(enumType) => {
-              ProtoFieldTypes.ENUM(value.getType, enumType.map(e => (e.getName -> e.getTag)).toMap, label)
-            }
-            case _ => {
+    def fetchProtoFields(fields: List[MessageType.Field], nestedTypes: Map[String, com.squareup.protoparser.Type], otherMap: Map[String, MessageType]): ValidationNel[String, (String, List[ProtoField])] = {
+      fields.sortBy(_.getTag).toList.map { value =>
+        ProtoFieldLabel.valueOf(value.getLabel) match {
+          case Failure(f) => f.failure[ProtoField]
+          case Success(label) => {
+            (nestedTypes.get(value.getType).map {
+              case et: EnumType => {
+                ProtoField(
+                  ProtoFieldTypes.ENUM(value.getType, et.getValues.asScala.map(e => (e.getName -> e.getTag)).toMap, label),
+                  value.getName, value.getTag
+                ).successNel[String]
+              }
+              case mt: MessageType => {
+                for {
+                  result <- fetchProtoFields(mt.getFields.asScala.toList, mt.getNestedTypes.asScala.map(t => (t.getName, t)).toMap, otherMap)
+                } yield {
+                  ProtoField(MESSAGE(mt.getName, label, result._2), value.getName, value.getTag)
+                }
+              }
+            }).getOrElse {
               otherMap.get(value.getType) match {
                 case Some(t) => {
-                  ProtoFieldTypes.valueOf(fqdnParts ++ List(t.getName) mkString("", ".", ""), label)
+                  ProtoField(
+                    ProtoFieldTypes.valueOf(fqdnParts ++ List(t.getName) mkString("", ".", ""), label),
+                    value.getName,
+                    value.getTag
+                  ).successNel[String]
                 }
-                case None => ProtoFieldTypes.valueOf(value.getType, label)
+                case None => {
+                  ProtoField(
+                    ProtoFieldTypes.valueOf(value.getType, label),
+                    value.getName,
+                    value.getTag
+                  ).successNel[String]
+                }
               }
             }
           }
-          ProtoField(fieldType, value.getName, tag = value.getTag).successNel[String]
         }
       }
-    }
-    fieldsVal.sequenceU match {
+    }.sequenceU match {
       case Success(fields) => {
         val fqdn = fqdnParts ++ List(tuple._2.getName) mkString("", ".", "")
         (fqdn -> fields).successNel[String]
       }
       case Failure(f) => f.failure[(String, List[ProtoField])]
     }
+
+    fetchProtoFields(tuple._2.getFields.asScala.toList, nestedTypes, otherMap)
   }
+
 }

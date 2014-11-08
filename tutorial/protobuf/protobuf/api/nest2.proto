@@ -1,0 +1,16 @@
+package protobuf.api;
+
+message Nest2Request {
+  required string text = 1;
+}
+
+message Nest2Response {
+  message Nest2Inner {
+    required int32 id = 10;
+    required string name = 20;
+  }
+
+  required uint32 id = 1;
+  required Nest2Inner inner = 2;
+  repeated Nest2Inner innerList = 3;
+}
