@@ -1,0 +1,8 @@
+# テンプレート関連
+template:
+  root: ./template
+  serviceClass: jp.co.cyberagent.aeromock.cli.TestTemplateService
+  contexts: []
+
+data:
+  root: ./data

@@ -1,13 +1,12 @@
 package jp.co.cyberagent.aeromock
 
-import java.nio.file.{Path, Paths}
+import java.nio.file.Paths
 
 import jp.co.cyberagent.aeromock.api.controller.DataCreateController
 import jp.co.cyberagent.aeromock.config._
-import jp.co.cyberagent.aeromock.config.definition.{SpecifiedTemplateDef, UserConfigDef}
+import jp.co.cyberagent.aeromock.config.definition.SpecifiedTemplateDef
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.HttpRequestProcessor
-import jp.co.cyberagent.aeromock.core.{CacheKey, ObjectCache}
 import jp.co.cyberagent.aeromock.data.{JsonDataFileReader, YamlDataFileReader}
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.server.http._
@@ -88,4 +87,5 @@ trait AeromockModule extends Module {
   bind [JsonApiHttpRequestProcessor] toProvider new JsonApiHttpRequestProcessor
   bind [UserStaticFileHttpRequestProcessor] toProvider new UserStaticFileHttpRequestProcessor
   bind [ProtobufResponseWriter] toProvider new ProtobufResponseWriter
+
 }
