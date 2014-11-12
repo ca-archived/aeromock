@@ -89,6 +89,17 @@ class DataPathResolverSpec extends Specification with Tables with SpecSupport {
         DataPathResolver.resolve(dataRootPath, request, Naming()) must beSome(dataRootPath.resolve(s"path1/$expect"))
       }
     }
+
+    "include dot directory" in {
+      "method" | "params"                     | "expect"               |
+      GET      ! Map.empty[String, String]    ! "path3.yaml"           |
+      GET      ! Map("_dataid" -> "2")        ! "path3__2.yaml"        |
+      GET      ! Map("_dataid" -> "4")        ! "path3__4.json"        |> { (method, params, expect) =>
+
+        val request = ParsedRequest("/path1/path2.dot/path3", params, Map.empty, method)
+        DataPathResolver.resolve(dataRootPath, request, Naming()) must beSome(dataRootPath.resolve(s"path1/path2.dot/$expect"))
+      }
+    }
   }
 
 }
