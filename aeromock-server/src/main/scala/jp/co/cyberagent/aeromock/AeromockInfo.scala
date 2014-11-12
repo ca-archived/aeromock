@@ -9,7 +9,7 @@ import org.joda.time.DateTime
  */
 object AeromockInfo {
 
-  val version = "0.2.0-RC3"
+  val version = "0.2.0-RC4"
 
   val currentYear = DateTime.now().getYear()
 
