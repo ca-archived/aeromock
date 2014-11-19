@@ -1,9 +1,0 @@
-{
-  "name": "aeromock-view",
-  "version": "0.1.0",
-  "dependencies": {},
-  "devDependencies": {
-    "handlebars": "~1.3.0",
-    "flat-ui": "2.1.3"
-  }
-}
