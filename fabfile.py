@@ -165,7 +165,7 @@ def finish_release(release_version, next_version):
     # add files
     local('git add -A')
     # commit release version
-    local('git commit -m "[Aeromock Release Task] pre tag commit \'%s\'."' % release_version)
+    local('git commit -m "[Aeromock Release Task][ci skip] pre tag commit \'%s\'."' % release_version)
     # create tag
     local('git tag v%s' % release_version)
 
@@ -173,4 +173,4 @@ def commit(message):
     # add files
     local('git add -A')
     # commit
-    local('git commit -m "[Aeromock Release Task] %s"' % message)
+    local('git commit -m "[Aeromock Release Task][ci skip] %s"' % message)

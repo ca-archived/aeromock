@@ -1,6 +1,5 @@
 package jp.co.cyberagent.aeromock
 
-import java.io.File
 import java.net.{InetSocketAddress, URLDecoder}
 import java.nio.file._
 import java.nio.file.attribute.BasicFileAttributes
@@ -11,6 +10,7 @@ import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.multipart.{HttpPostRequestDecoder, MixedAttribute}
 import jp.co.cyberagent.aeromock.config.MessageManager
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.util.ResourceUtil
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.reflect.FieldUtils
 
@@ -207,14 +207,15 @@ package object helper {
     }
 
     def toCheckSum(): String = {
-      val is = Files.newInputStream(path, StandardOpenOption.READ)
-      val buf = new Array[Byte](4096)
+      ResourceUtil.processResrouce(Files.newInputStream(path, StandardOpenOption.READ)) { is =>
+        val buf = new Array[Byte](4096)
 
-      val md = MessageDigest.getInstance("MD5")
+        val md = MessageDigest.getInstance("MD5")
 
-      var len = 0
-      while ({len = is.read(buf, 0, buf.length); len >= 0}) md.update(buf, 0, len)
-      md.digest().map("%02x" format _).mkString
+        var len = 0
+        while ({len = is.read(buf, 0, buf.length); len >= 0}) md.update(buf, 0, len)
+        md.digest().map("%02x" format _).mkString
+      }
     }
 
     def getExtension(): Option[String] = helper.getExtension(path.getFileName.toString)
