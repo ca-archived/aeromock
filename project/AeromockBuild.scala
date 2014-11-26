@@ -73,7 +73,7 @@ object AeromockBuild extends Build {
       "org.scaldi" %% "scaldi" % scaldiVersion,
       "ch.qos.logback" % "logback-classic" % "1.1.2",
       "jp.co.cyberagent.aeromock" % "aeromock-dsl" % Version.aeromock,
-      "org.specs2" %% "specs2" % "2.4.13" % "test"
+      "org.specs2" %% "specs2" % "2.3.12" % "test"
     ),
 
     ScoverageKeys.highlighting := true,
