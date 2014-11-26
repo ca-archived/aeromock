@@ -12,6 +12,6 @@ libraryDependencies ++= Seq(
   "org.apache.commons" % "commons-lang3" % "3.1",
   "args4j" % "args4j" % "2.0.28",
   "org.glassfish" % "javax.el" % "3.0.0",
-  "com.google.protobuf" % "protobuf-java" % "2.6.0",
+  "com.google.protobuf" % "protobuf-java" % "2.6.1",
   "com.squareup" % "protoparser" % "3.1.4"
 )
