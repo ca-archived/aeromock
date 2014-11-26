@@ -11,12 +11,12 @@ import scala.util.Try
  */
 object AeromockBuild extends Build {
 
-  lazy val scalazVersion = "7.0.6"
+  lazy val scalazVersion = "7.1.0"
   lazy val nettyVersion = "4.0.24.Final"
   lazy val scaldiVersion = "0.4"
 
   lazy val baseSettings = super.settings ++ Seq(
-    scalaVersion := "2.11.1",
+    scalaVersion := "2.11.2",
     organization := "jp.co.cyberagent.aeromock",
     version := Version.aeromock,
     pgpPassphrase := Some(Try(sys.env("PGP_PASSPHRASE")).getOrElse("").toCharArray),
@@ -68,12 +68,12 @@ object AeromockBuild extends Build {
 
     libraryDependencies ++= Seq(
       "org.scalaz" %% "scalaz-core" % scalazVersion,
-      "org.scala-lang" % "scala-reflect" % "2.11.1",
+      "org.scala-lang" % "scala-reflect" % "2.11.2",
       "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
       "org.scaldi" %% "scaldi" % scaldiVersion,
       "ch.qos.logback" % "logback-classic" % "1.1.2",
       "jp.co.cyberagent.aeromock" % "aeromock-dsl" % Version.aeromock,
-      "org.specs2" %% "specs2" % "2.3.12" % "test"
+      "org.specs2" %% "specs2" % "2.4.2" % "test"
     ),
 
     ScoverageKeys.highlighting := true,
@@ -85,7 +85,7 @@ object AeromockBuild extends Build {
   lazy val root = Project(
     id = "root",
     base = file("."),
-    settings = baseSettings ++ coverallsSettings ++ Tasks.settingTasks
+    settings = baseSettings ++ coverallsSettings
   ) copy (
     aggregate = projects.filterNot(p => Set("root").contains(p.id)).map(p => p: ProjectReference)
     )
@@ -144,24 +144,24 @@ object AeromockBuild extends Build {
     settings = baseSettings
   ) dependsOn(aeromock_server, aeromock_cli, aeromock_spec_support % "test")
 
-  object Tasks {
-
-    val dslProject = "aeromock-dsl"
-
-    val installDsl = TaskKey[Int]("installDsl", "install aeromock-dsl")
-    lazy val installDslTask = installDsl := {
-      s"./$dslProject/gradlew -p $dslProject clean test" !
-    }
-
-    val deployDsl = TaskKey[Int]("deployDsl", "deploy aeromock-dsl")
-    lazy val deployDslTask = deployDsl := {
-      s"./$dslProject/gradlew -p $dslProject clean test uploadArchives" !
-    }
-
-    val settingTasks = Seq(
-      installDslTask,
-      deployDslTask
-    )
-  }
+//  object Tasks {
+//
+//    val dslProject = "aeromock-dsl"
+//
+//    val installDsl = TaskKey[Int]("installDsl", "install aeromock-dsl")
+//    lazy val installDslTask = installDsl := {
+//      s"./$dslProject/gradlew -p $dslProject clean test" !
+//    }
+//
+//    val deployDsl = TaskKey[Int]("deployDsl", "deploy aeromock-dsl")
+//    lazy val deployDslTask = deployDsl := {
+//      s"./$dslProject/gradlew -p $dslProject clean test uploadArchives" !
+//    }
+//
+//    val settingTasks = Seq(
+//      installDslTask,
+//      deployDslTask
+//    )
+//  }
 
 }
