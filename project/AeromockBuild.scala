@@ -70,10 +70,10 @@ object AeromockBuild extends Build {
       "org.scalaz" %% "scalaz-core" % scalazVersion,
       "org.scala-lang" % "scala-reflect" % "2.11.1",
       "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
-      "org.scaldi" %% "scaldi" % "0.4",
+      "org.scaldi" %% "scaldi" % scaldiVersion,
       "ch.qos.logback" % "logback-classic" % "1.1.2",
       "jp.co.cyberagent.aeromock" % "aeromock-dsl" % Version.aeromock,
-      "org.specs2" %% "specs2" % "2.3.12" % "test"
+      "org.specs2" %% "specs2" % "2.4.13" % "test"
     ),
 
     ScoverageKeys.highlighting := true,
