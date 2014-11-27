@@ -76,10 +76,7 @@ deployment:
     branch: /^next\/.+$/
     owner: CyberAgent
     commands:
-      - >
-        echo "current branch is $CIRCLE_BRANCH."
-        NEXT_VERSION=`echo $CIRCLE_BRANCH | sed -e 's/^next\/\(.*\)$/\1/'`
-        echo "start deploy version=$NEXT_VERSION"
-        git checkout master
-        fab release:next_version=$NEXT_VERSION
-        exit $?
+      - echo "current branch is $CIRCLE_BRANCH."
+      - git checkout master
+      - fab release:next_version=`echo $CIRCLE_BRANCH | sed -e 's/^next\/\(.*\)$/\1/'`
+      - exit $?
