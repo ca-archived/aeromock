@@ -78,5 +78,6 @@ deployment:
     commands:
       - echo "current branch is $CIRCLE_BRANCH."
       - git checkout master
+      - git merge origin/master
       - fab release:next_version=`echo $CIRCLE_BRANCH | sed -e 's/^next\/\(.*\)$/\1/'`
       - exit $?
