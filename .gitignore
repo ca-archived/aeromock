@@ -19,6 +19,7 @@ bower_components/
 # Others
 .DS_Store
 *.pyc
+venv
 
 # test report
 aeromock_report/
