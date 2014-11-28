@@ -10,7 +10,7 @@ import jp.co.cyberagent.aeromock.helper._
 
 object DataPathResolver {
 
-  val PATTERN = """^(\/.+)\..+""".r
+  val PATTERN = """^(.+)\..+$""".r
 
   def resolve(rootDir: Path, parsedRequest: ParsedRequest, naming: Naming): Option[Path] = {
     require(rootDir != null)
@@ -35,8 +35,9 @@ object DataPathResolver {
     val url = parsedRequest.url
     val dataId = parsedRequest.queryParameters.get(naming.dataidQuery)
 
-    val basePath = url match {
-      case PATTERN(value) => value
+    val tokens = url.split("/")
+    val basePath = tokens.last match {
+      case PATTERN(value) => (tokens.take(tokens.length - 1) ++ Array(s"/$value")).mkString("/", "", "")
       case _ => url
     }
 
