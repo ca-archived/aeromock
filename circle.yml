@@ -41,6 +41,8 @@ dependencies:
         pwd: aeromock-view
     - grunt build:
         pwd: aeromock-view
+  override:
+    - ./sbt test:compile
 
 test:
   override:
