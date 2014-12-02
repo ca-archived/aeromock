@@ -66,6 +66,8 @@ object AeromockBuild extends Build {
       Resolver.sonatypeRepo("snapshots")
     ),
 
+    updateOptions := updateOptions.value.withCachedResolution(true),
+
     libraryDependencies ++= Seq(
       "org.scalaz" %% "scalaz-core" % scalazVersion,
       "org.scala-lang" % "scala-reflect" % "2.11.2",

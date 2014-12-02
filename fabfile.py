@@ -16,7 +16,7 @@ def snapshot_release():
     local('./aeromock-dsl/gradlew -p aeromock-dsl install uploadArchives')
 
     # build aeromock
-    local('sbt publishSigned')
+    local('./sbt publishSigned')
 
 def release(next_version):
     # remove SNAPSHOT scala
@@ -29,7 +29,7 @@ def release(next_version):
     local('./aeromock-dsl/gradlew -p aeromock-dsl install uploadArchives')
 
     # build aeromock
-    local('sbt publishSigned')
+    local('./sbt publishSigned')
 
     # update versions.txt
     update_versions_file(release_version)
