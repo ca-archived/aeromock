@@ -10,7 +10,7 @@ import scala.util.matching.Regex
  *
  * @author stormcat24
  */
-trait AeromockNewApi {
+trait AeromockApiController {
 
   import HttpMethod._
 
@@ -24,7 +24,7 @@ trait AeromockNewApi {
 }
 
 
-case class ApiInfo(
+case class ApiMeta(
   method: HttpMethod,
   endpoint: String,
   regex: Regex,

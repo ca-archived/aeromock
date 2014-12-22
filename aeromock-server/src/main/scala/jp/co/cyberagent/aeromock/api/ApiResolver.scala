@@ -12,7 +12,7 @@ import scaldi.{Injectable, Injector}
  */
 class ApiResolver(implicit inj: Injector) extends Injectable {
 
-  val controllers = inject[Seq[AeromockNewApi]]('controllers)
+  val controllers = inject[Seq[AeromockApiController]]('controllers)
 
   def dispatch(rawRequest: FullHttpRequest) : Map[String, Any] = {
     val result = controllers.flatMap(api => {

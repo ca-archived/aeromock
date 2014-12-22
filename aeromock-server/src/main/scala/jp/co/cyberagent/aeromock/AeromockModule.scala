@@ -3,7 +3,6 @@ package jp.co.cyberagent.aeromock
 import java.nio.file.Paths
 
 import jp.co.cyberagent.aeromock.api.ApiResolver
-import jp.co.cyberagent.aeromock.api.controller.DataCreateController
 import jp.co.cyberagent.aeromock.config._
 import jp.co.cyberagent.aeromock.config.definition.SpecifiedTemplateDef
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
@@ -80,7 +79,6 @@ trait AeromockModule extends Module {
 
   //  bind [TemplateServiceFactory] to new TemplateServiceFactory
   bind [HttpRequestProcessor] to new HttpRequestProcessor
-  bind [DataCreateController] toProvider new DataCreateController
 
   // HttpRequestProcessor
   bind [AeromockStaticFileHttpRequestProcessor] toProvider new AeromockStaticFileHttpRequestProcessor

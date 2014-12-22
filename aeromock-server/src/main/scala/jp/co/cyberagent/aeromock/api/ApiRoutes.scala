@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils
  */
 class ApiRoutes {
 
-  var routes = List.empty[ApiInfo]
+  var routes = List.empty[ApiMeta]
 
   def addRoute(method: HttpMethod, endpoint: String, callback: AeromockHttpRequest => Map[String, Any]): Unit = {
 
@@ -24,12 +24,12 @@ class ApiRoutes {
       }
     })
 
-    routes = ApiInfo(method, endpoint, (routePath._1 + "$").r, routePath._2, callback) :: routes
+    routes = ApiMeta(method, endpoint, (routePath._1 + "$").r, routePath._2, callback) :: routes
   }
 
   def findRoute(method: HttpMethod, url: String): Option[(AeromockHttpRequest => Map[String, Any], Map[String, String])] = {
     routes.collectFirst {
-      case ApiInfo(method, _, regex, routeParamNames, callback) if regex.pattern.matcher(url).matches => {
+      case ApiMeta(method, _, regex, routeParamNames, callback) if regex.pattern.matcher(url).matches => {
         val routeParameters = regex.findFirstMatchIn(url) match {
           case Some(m) =>
             (for (groupIndex <- 1 to m.groupCount) yield routeParamNames(groupIndex -1) -> m.group(groupIndex)).toMap
