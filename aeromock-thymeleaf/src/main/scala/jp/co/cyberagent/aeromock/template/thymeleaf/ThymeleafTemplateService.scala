@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.template.thymeleaf
 import java.io.{StringWriter, Writer}
 
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
@@ -27,7 +27,7 @@ class ThymeleafTemplateService(config: ThymeleafConfig)(implicit val inj: Inject
   /**
    * @inheritdoc
    */
-  override def renderHtml(request: ParsedRequest, projection: InstanceProjection): String = {
+  override def renderHtml(request: AeromockHttpRequest, projection: InstanceProjection): String = {
     val context = new Context()
 
     val proxyMap = projection.toInstanceJava().asInstanceOf[java.util.Map[String, _]]

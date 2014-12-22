@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.data
 import java.nio.file.{Files, Path}
 import jp.co.cyberagent.aeromock.config.Naming
 import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
+import jp.co.cyberagent.aeromock.core.http.{AeromockHttpRequest, VariableManager}
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
 import groovy.lang.Binding
 
@@ -32,7 +32,7 @@ class CommonDataHelper(naming: Naming) {
     }
 
     dataPaths.toSet.foldLeft(Map.empty[Any, Any])((left, dataPath) => {
-      val map = DataPathResolver.resolve(rootDir, ParsedRequest(s"/$dataPath", Map.empty, Map.empty), naming) match {
+      val map = DataPathResolver.resolve(rootDir, AeromockHttpRequest(s"/$dataPath", Map.empty, Map.empty), naming) match {
         case Some(file) if file.exists() => {
           DataFileReaderFactory.create(file) match {
             case None => Map.empty[Any, Any]

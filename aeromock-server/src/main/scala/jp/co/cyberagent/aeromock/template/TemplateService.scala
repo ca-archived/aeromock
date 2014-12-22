@@ -7,7 +7,7 @@ import io.netty.handler.codec.http.FullHttpRequest
 import io.netty.handler.codec.http.HttpHeaders.Names
 import jp.co.cyberagent.aeromock.AeromockRenderException
 import jp.co.cyberagent.aeromock.config.Project
-import jp.co.cyberagent.aeromock.core.http.{Endpoint, ParsedRequest, VariableManager}
+import jp.co.cyberagent.aeromock.core.http.{Endpoint, AeromockHttpRequest, VariableManager}
 import jp.co.cyberagent.aeromock.core.script.GroovyScriptRunner
 import jp.co.cyberagent.aeromock.data._
 import jp.co.cyberagent.aeromock.helper._
@@ -30,28 +30,32 @@ trait TemplateService extends AnyRef with ResponseDataSupport with Injectable {
 
   /**
    * Scan template file and data file, then return merged response html data.
-   * @param request [[io.netty.handler.codec.http.FullHttpRequest]]
+   * @param rawRequest [[io.netty.handler.codec.http.FullHttpRequest]]
    * @return HTML string
    */
-  def render(request: FullHttpRequest): RenderResult[String] = {
-    require(request != null)
+  def render(rawRequest: FullHttpRequest): RenderResult[String] = {
+    require(rawRequest != null)
 
-    if (request.queryString.contains(s"${project._naming.debug}=true")) {
-      val dumperOptions = new DumperOptions
-      dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW)
+    val request = rawRequest.toAeromockRequest(Map.empty)
 
-      val response = createResponseDataWithProjection(project, request.parsedRequest)
-      val proxyMap = response._1.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
-      RenderResult(new Yaml(dumperOptions).dumpAsMap(proxyMap), response._2, true)
-    } else {
-      renderProcess(request.parsedRequest) match {
-        case Left(e) => throw new AeromockRenderException(request.parsedRequest.url, e.getCause)
-        case Right(result) => result
-      }
+    request.queryParameters.get(project._naming.debug) match {
+      case Some("true") =>
+        val dumperOptions = new DumperOptions
+        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW)
+
+        val response = createResponseDataWithProjection(project, request)
+        val proxyMap = response._1.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
+        RenderResult(new Yaml(dumperOptions).dumpAsMap(proxyMap), response._2, true)
+      case _ =>
+        renderProcess(request) match {
+          case Left(e) => throw new AeromockRenderException(request.url, e.getCause)
+          case Right(result) => result
+        }
     }
+
   }
 
-  def renderProcess(request: ParsedRequest): Either[Throwable, RenderResult[String]] = {
+  def renderProcess(request: AeromockHttpRequest): Either[Throwable, RenderResult[String]] = {
     val response = createResponseDataWithProjection(project, request)
 
     trye {
@@ -65,7 +69,7 @@ trait TemplateService extends AnyRef with ResponseDataSupport with Injectable {
     }
   }
 
-  protected def renderHtml(request: ParsedRequest, projection: InstanceProjection): String
+  protected def renderHtml(request: AeromockHttpRequest, projection: InstanceProjection): String
 
   def validateData(endpoint: Endpoint, domain: String)
       (reporting: PageValidation => Unit = {v: PageValidation =>}): PageValidation = {
@@ -84,8 +88,8 @@ trait TemplateService extends AnyRef with ResponseDataSupport with Injectable {
           trye {
 
             val imitatedRequest = dataFile match {
-              case DataFile(None, _, method) => ParsedRequest(endpoint.value, Map.empty, Map.empty, method)
-              case DataFile(Some(id), _, method) => ParsedRequest(endpoint.value, Map("_dataid" -> id), Map.empty, method)
+              case DataFile(None, _, method) => AeromockHttpRequest(endpoint.value, Map.empty, Map.empty, Map.empty, method)
+              case DataFile(Some(id), _, method) => AeromockHttpRequest(endpoint.value, Map("_dataid" -> id), Map.empty, Map.empty, method)
             }
 
             val namesClass = classOf[Names]

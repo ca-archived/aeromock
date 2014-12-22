@@ -14,7 +14,7 @@ object HttpRequestProcessorSelector extends AnyRef with Injectable {
 
   def select(request: HttpRequest)(implicit inj: Injector): HttpRequestProcessor = {
 
-    request.parsedRequest.url match {
+    request.requestUri match {
       // Aeromockのfavicon
       case "/favicon.ico" => inject[AeromockStaticFileHttpRequestProcessor]
       // スラッシュのみ（index.htmlと同義）

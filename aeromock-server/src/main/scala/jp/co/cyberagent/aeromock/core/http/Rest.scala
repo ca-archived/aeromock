@@ -12,17 +12,20 @@ case class Endpoint(raw: String) {
 }
 
 
-class ParsedRequest(
+class AeromockHttpRequest(
   val url: String,
   val queryParameters: Map[String, String],
   val formData: Map[String, String],
+  val routeParameters: Map[String, String],
   val method: HttpMethod = HttpMethod.GET
 )
 
-object ParsedRequest {
+object AeromockHttpRequest {
 
   def apply(url: String, queryParameters: Map[String, String],
-        formData: Map[String, String], method: HttpMethod = HttpMethod.GET): ParsedRequest = {
+        formData: Map[String, String],
+        routeParameters: Map[String, String] = Map.empty,
+        method: HttpMethod = HttpMethod.GET): AeromockHttpRequest = {
     require(url != null)
 
     val s = url.trim
@@ -34,11 +37,11 @@ object ParsedRequest {
       s
     }
 
-    new ParsedRequest(formatted, queryParameters, formData, method)
+    new AeromockHttpRequest(formatted, queryParameters, formData, routeParameters, method)
   }
 
-  def unapply(request: ParsedRequest) = {
-    Some((request.url, request.queryParameters, request.formData, request.method))
+  def unapply(request: AeromockHttpRequest) = {
+    Some((request.url, request.queryParameters, request.formData, request.routeParameters, request.method))
   }
 
 }

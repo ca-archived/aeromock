@@ -45,8 +45,8 @@ class HttpRequestProcessor(implicit inj: Injector) extends AnyRef with Injectabl
         "REQUEST_METHOD" -> original.getMethod().name(),
         "REQUEST_URI" -> original.requestUri,
         "QUERY_STRING" -> original.queryString,
-        "PARAMETERS" -> original.parsedRequest.queryParameters.asJava,
-        "FORM_DATA" -> original.parsedRequest.formData.asJava,
+        "PARAMETERS" -> original.queryParameters.asJava,
+        "FORM_DATA" -> original.postParameters.asJava,
         "NOW" -> DateTime.now().toDate()
       )
 

@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.server.http
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
 import jp.co.cyberagent.aeromock.{AeromockLoadDataException, AeromockSystemException, AeromockNoneRelatedDataException}
 import jp.co.cyberagent.aeromock.config.{Project, Naming}
-import jp.co.cyberagent.aeromock.core.http.{VariableManager, ParsedRequest}
+import jp.co.cyberagent.aeromock.core.http.{VariableManager, AeromockHttpRequest}
 import jp.co.cyberagent.aeromock.data._
 import jp.co.cyberagent.aeromock.helper._
 
@@ -49,10 +49,10 @@ trait ResponseDataSupport {
   /**
    * Create [[jp.co.cyberagent.aeromock.data.InstanceProjection]]
    * @param project [[Project]]
-   * @param request [[jp.co.cyberagent.aeromock.core.http.ParsedRequest]]
+   * @param request [[jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest]]
    * @return [[jp.co.cyberagent.aeromock.data.InstanceProjection]]
    */
-  protected def createResponseDataWithProjection(project: Project, request: ParsedRequest): (InstanceProjection, Option[CustomResponse]) = {
+  protected def createResponseDataWithProjection(project: Project, request: AeromockHttpRequest): (InstanceProjection, Option[CustomResponse]) = {
 
     val data = createResponseData(project, request)
     // 関数合成することでasJavaMapの抽象度を保ちつつ、走査のついでに変数置換を行う
@@ -65,7 +65,7 @@ trait ResponseDataSupport {
 
   }
 
-  protected def createResponseData(project: Project, request: ParsedRequest): (Map[Any, Any], Option[CustomResponse]) = {
+  protected def createResponseData(project: Project, request: AeromockHttpRequest): (Map[Any, Any], Option[CustomResponse]) = {
 
     val dataRootDir = project._data.root
     val naming = project._naming

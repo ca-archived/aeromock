@@ -20,21 +20,24 @@ class ProtobufResponseWriter(implicit inj: Injector) extends HttpRequestProcesso
 
   /**
    *
-   * @param request [[FullHttpRequest]]
+   * @param rawRequest [[FullHttpRequest]]
    * @param context [[ChannelHandlerContext]]
    * @return [[HttpResponse]]
    */
-  override def process(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
-    if (request.queryString.contains(s"${project._naming.debug}=true")) {
-      val dumperOptions = new DumperOptions
-      dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW)
+  override def process(rawRequest: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
 
-      val response = createResponseData(project, request.parsedRequest)
-      renderYaml(new Yaml(dumperOptions).dumpAsMap(asJavaMap(response._1)(nop)), HttpResponseStatus.OK)
-    } else {
+    val request = rawRequest.toAeromockRequest(Map.empty)
+    request.queryParameters.get(project._naming.debug) match {
+      case Some("true") => {
+        val dumperOptions = new DumperOptions
+        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.FLOW)
 
-      val result = ProtobufResponseService.render(request)
-      renderProtobuf(result.content, HttpResponseStatus.OK, result.response)
+        val response = createResponseData(project, request)
+        renderYaml(new Yaml(dumperOptions).dumpAsMap(asJavaMap(response._1)(nop)), HttpResponseStatus.OK)
+      }
+      case _ =>
+        val result = ProtobufResponseService.render(request)
+        renderProtobuf(result.content, HttpResponseStatus.OK, result.response)
     }
   }
 

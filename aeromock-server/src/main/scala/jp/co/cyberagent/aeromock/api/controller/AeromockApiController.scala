@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.api.controller
 
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.server.http.HttpResponseWriter
 import io.netty.handler.codec.http.HttpResponse
 import io.netty.handler.codec.http.HttpResponseStatus._
@@ -13,7 +13,7 @@ trait AeromockApiController extends HttpResponseWriter with Injectable {
 
   val LOG = LoggerFactory.getLogger(classOf[AeromockApiController])
 
-  def render(request: ParsedRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
+  def render(request: AeromockHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
 
     try {
       renderJson(Map("status" -> OK.code()) ++ renderJson(request), OK)
@@ -33,5 +33,6 @@ trait AeromockApiController extends HttpResponseWriter with Injectable {
     }
   }
 
-  def renderJson(request: ParsedRequest): Map[String, Any]
+  def renderJson(request: AeromockHttpRequest): Map[String, Any]
+
 }

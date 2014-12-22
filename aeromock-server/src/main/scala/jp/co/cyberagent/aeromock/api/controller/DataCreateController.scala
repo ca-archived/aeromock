@@ -2,7 +2,7 @@ package jp.co.cyberagent.aeromock.api.controller
 
 import jp.co.cyberagent.aeromock.AeromockApiBadRequestException
 import jp.co.cyberagent.aeromock.core.Validations._
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.template.TemplateService
 import scaldi.Injector
 
@@ -13,7 +13,7 @@ class DataCreateController(implicit inj: Injector) extends AeromockApiController
 
   val templateService = inject[Option[TemplateService]]
 
-  override def renderJson(request: ParsedRequest): Map[String, Any] = {
+  override def renderJson(request: AeromockHttpRequest): Map[String, Any] = {
 
     val endpointNel = request.formData.get("endpoint") match {
       case None => new AeromockApiBadRequestException(request.url).failureNel[String]

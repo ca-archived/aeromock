@@ -5,14 +5,14 @@ import java.nio.file.Path
 import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.AeromockBadUsingException
 import jp.co.cyberagent.aeromock.config.Naming
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.helper._
 
 object DataPathResolver {
 
   val PATTERN = """^(.+)\..+$""".r
 
-  def resolve(rootDir: Path, parsedRequest: ParsedRequest, naming: Naming): Option[Path] = {
+  def resolve(rootDir: Path, parsedRequest: AeromockHttpRequest, naming: Naming): Option[Path] = {
     require(rootDir != null)
     require(parsedRequest != null)
 
@@ -23,7 +23,8 @@ object DataPathResolver {
         if (parsedRequest.method == HttpMethod.GET) {
           None
         } else {
-          resolve(rootDir, ParsedRequest(parsedRequest.url, parsedRequest.queryParameters, parsedRequest.formData, HttpMethod.GET), naming)
+          resolve(rootDir, AeromockHttpRequest(parsedRequest.url, parsedRequest.queryParameters,
+            parsedRequest.formData, Map.empty, HttpMethod.GET), naming)
         }
       }
       case 1 => Some(files.last)
@@ -31,7 +32,7 @@ object DataPathResolver {
     }
   }
 
-  private def getCandidates(rootDir: Path, parsedRequest: ParsedRequest, naming: Naming): Seq[Path] = {
+  private def getCandidates(rootDir: Path, parsedRequest: AeromockHttpRequest, naming: Naming): Seq[Path] = {
     val url = parsedRequest.url
     val dataId = parsedRequest.queryParameters.get(naming.dataidQuery)
 
