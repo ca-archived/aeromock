@@ -3,7 +3,7 @@ machine:
   java:
     version: oraclejdk7
   node:
-    version: 0.10.28
+    version: 0.10.33
   pre:
     - git config --global user.name "CircleCI"
     - git config --global user.email "circleci@example.com"
@@ -32,15 +32,15 @@ dependencies:
     - ~/aeromock/aeromock-groovy-template/target/resolution-cache
     - ~/aeromock/aeromock-thymeleaf/target/resolution-cache
   pre:
-    - npm install -g grunt-cli bower
+    #- npm install -g grunt-cli bower
     - ./gradlew install -x signArchives:
         pwd: aeromock-dsl
-    - npm install:
-        pwd: aeromock-view
-    - bower install:
-        pwd: aeromock-view
-    - grunt build:
-        pwd: aeromock-view
+    #- npm install:
+    #    pwd: aeromock-view
+    #- bower install:
+    #    pwd: aeromock-view
+    #- grunt build:
+    #    pwd: aeromock-view
   override:
     - ./sbt test:compile
 
