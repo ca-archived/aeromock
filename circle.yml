@@ -3,7 +3,7 @@ machine:
   java:
     version: oraclejdk7
   node:
-    version: 0.10.32
+    version: 0.10.28
   pre:
     - git config --global user.name "CircleCI"
     - git config --global user.email "circleci@example.com"
