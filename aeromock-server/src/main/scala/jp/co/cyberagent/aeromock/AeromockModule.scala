@@ -88,8 +88,15 @@ trait AeromockModule extends Module {
   bind [UserStaticFileHttpRequestProcessor] toProvider new UserStaticFileHttpRequestProcessor
   bind [ProtobufResponseWriter] toProvider new ProtobufResponseWriter
 
+  // controllers
+  bind [TestController] toProvider new TestController
+  bind [ContextController] toProvider new ContextController
+  bind [DirectoryController] toProvider new DirectoryController
+
   binding identifiedBy 'controllers to Seq(
-    new TestController
+    inject[TestController],
+    inject[ContextController],
+    inject[DirectoryController]
   )
   bind [ApiResolver] toProvider new ApiResolver
 }

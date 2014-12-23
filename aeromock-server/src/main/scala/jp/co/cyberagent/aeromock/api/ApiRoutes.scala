@@ -16,11 +16,11 @@ class ApiRoutes {
 
     val tokens = endpoint.split("/").filter(s => StringUtils.isNotBlank(s)).toSeq
 
-    val routeRegex = """^:(\w+)$""".r
+    val routeRegex = """^:([\w\.]+)$""".r
     val routePath = tokens.foldLeft(("^", Seq.empty[String]))((left, right) => {
       routeRegex.findFirstMatchIn(right) match {
-        case Some(m) => (left._1 + """/(\w+)""", left._2 ++ Seq(m.group(1)))
-        case None => (left._1 + """/""" + right, left._2)
+        case Some(m) => (left._1 + """\/([\w\.\/]+)""", left._2 ++ Seq(m.group(1)))
+        case None => (left._1 + """\/""" + right, left._2)
       }
     })
 

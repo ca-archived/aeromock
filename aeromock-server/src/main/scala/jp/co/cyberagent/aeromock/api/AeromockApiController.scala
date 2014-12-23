@@ -2,6 +2,7 @@ package jp.co.cyberagent.aeromock.api
 
 import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
+import scaldi.{Injector, Injectable}
 
 import scala.util.matching.Regex
 
@@ -10,7 +11,9 @@ import scala.util.matching.Regex
  *
  * @author stormcat24
  */
-trait AeromockApiController {
+trait AeromockApiController extends AnyRef with Injectable {
+
+  val injector: Injector
 
   import HttpMethod._
 
