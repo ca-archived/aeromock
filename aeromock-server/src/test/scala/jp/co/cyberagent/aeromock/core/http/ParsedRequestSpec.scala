@@ -11,7 +11,7 @@ class ParsedRequestSpec extends Specification with Tables {
   "ParsedRequest" should {
 
     "url is null" in {
-      ParsedRequest(null, Map.empty, Map.empty) must throwA[IllegalArgumentException]
+      AeromockHttpRequest(null, Map.empty, Map.empty) must throwA[IllegalArgumentException]
     }
 
     "apply url" in {
@@ -26,7 +26,7 @@ class ParsedRequestSpec extends Specification with Tables {
       "/path1/path2"       ! "/path1/path2" |
       "/path1/path2/"      ! "/path1/path2/index" |
       "/path1/path2/index" ! "/path1/path2/index" |> {
-        (url, expect) => ParsedRequest(url, Map.empty, Map.empty).url must_== expect
+        (url, expect) => AeromockHttpRequest(url, Map.empty, Map.empty).url must_== expect
       }
     }
 
@@ -36,7 +36,7 @@ class ParsedRequestSpec extends Specification with Tables {
       val queryParameters = Map("qs1" -> "1", "qs2" -> "2")
       val formData = Map("fd1" -> "1", "fd2" -> "2")
 
-      val actual = ParsedRequest(url, queryParameters, formData)
+      val actual = AeromockHttpRequest(url, queryParameters, formData)
       actual.url must_== url
       actual.queryParameters must_== Map("qs1" -> "1", "qs2" -> "2")
       actual.formData must_== Map("fd1" -> "1", "fd2" -> "2")

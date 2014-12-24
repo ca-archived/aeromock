@@ -16,14 +16,16 @@ import scaldi.Injector
 
 class AeromockStaticFileHttpRequestProcessor(implicit inj: Injector) extends HttpRequestProcessor with HttpResponseWriter {
 
-  override def process(request: FullHttpRequest)
+  override def process(rawRequest: FullHttpRequest)
     (implicit context: ChannelHandlerContext): HttpResponse = {
 
-    if (request.getMethod() != GET) {
-      throw new AeromockMethodNotAllowedException(request.getMethod(), request.parsedRequest.url)
+    val request = rawRequest.toAeromockRequest(Map.empty)
+
+    if (request.method != GET) {
+      throw new AeromockMethodNotAllowedException(request.method, request.url)
     }
 
-    val filePath = request.parsedRequest.url match {
+    val filePath = request.url match {
       case "/favicon.ico" => "public/favicon.ico"
       case url => url.replaceFirst("/aeromock", "public")
     }
@@ -31,7 +33,7 @@ class AeromockStaticFileHttpRequestProcessor(implicit inj: Injector) extends Htt
     val is = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath)
 
     if (is == null) {
-      throw new AeromockResourceNotFoundException(request.parsedRequest.url)
+      throw new AeromockResourceNotFoundException(request.url)
     }
 
     val response = new DefaultHttpResponse(HTTP_1_1, OK);
@@ -55,7 +57,7 @@ class AeromockStaticFileHttpRequestProcessor(implicit inj: Injector) extends Htt
     })
 
     val lastContentFuture = context.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT)
-    if (!isKeepAlive(request)) {
+    if (!isKeepAlive(rawRequest)) {
       lastContentFuture.addListener(ChannelFutureListener.CLOSE)
     }
 

@@ -2,7 +2,7 @@ package jp.co.cyberagent.aeromock
 
 import java.nio.file.Paths
 
-import jp.co.cyberagent.aeromock.api.controller.DataCreateController
+import jp.co.cyberagent.aeromock.api.ApiResolver
 import jp.co.cyberagent.aeromock.config._
 import jp.co.cyberagent.aeromock.config.definition.SpecifiedTemplateDef
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
@@ -11,6 +11,7 @@ import jp.co.cyberagent.aeromock.data.{JsonDataFileReader, YamlDataFileReader}
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.server.http._
 import jp.co.cyberagent.aeromock.template.TemplateService
+import jp.co.cyberagent.aeromock.api.controller._
 import org.apache.commons.lang3.reflect.ConstructorUtils
 import scaldi.{Injector, Module}
 
@@ -78,7 +79,6 @@ trait AeromockModule extends Module {
 
   //  bind [TemplateServiceFactory] to new TemplateServiceFactory
   bind [HttpRequestProcessor] to new HttpRequestProcessor
-  bind [DataCreateController] toProvider new DataCreateController
 
   // HttpRequestProcessor
   bind [AeromockStaticFileHttpRequestProcessor] toProvider new AeromockStaticFileHttpRequestProcessor
@@ -88,4 +88,15 @@ trait AeromockModule extends Module {
   bind [UserStaticFileHttpRequestProcessor] toProvider new UserStaticFileHttpRequestProcessor
   bind [ProtobufResponseWriter] toProvider new ProtobufResponseWriter
 
+  // controllers
+  bind [TestController] toProvider new TestController
+  bind [ContextController] toProvider new ContextController
+  bind [DirectoryController] toProvider new DirectoryController
+
+  binding identifiedBy 'controllers to Seq(
+    inject[TestController],
+    inject[ContextController],
+    inject[DirectoryController]
+  )
+  bind [ApiResolver] toProvider new ApiResolver
 }

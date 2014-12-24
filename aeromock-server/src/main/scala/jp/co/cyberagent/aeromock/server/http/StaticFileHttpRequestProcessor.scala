@@ -11,7 +11,7 @@ import io.netty.handler.codec.http.HttpResponseStatus.OK
 import io.netty.handler.codec.http.HttpVersion._
 import io.netty.handler.codec.http._
 import jp.co.cyberagent.aeromock.config.Project
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.{AeromockMethodNotAllowedException, AeromockResourceNotFoundException}
 import org.slf4j.LoggerFactory
@@ -21,15 +21,17 @@ abstract class StaticFileHttpRequestProcessor extends HttpRequestProcessor with 
 
   val project: Project
 
-  override def process(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
+  override def process(rawRequest: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
 
-    if (request.getMethod() != GET) {
-      throw new AeromockMethodNotAllowedException(request.getMethod(), request.parsedRequest.url)
+    val request = rawRequest.toAeromockRequest(Map.empty)
+
+    if (request.method != GET) {
+      throw new AeromockMethodNotAllowedException(request.method, request.url)
     }
 
-    val target = getStaticFile(project, request.parsedRequest)
+    val target = getStaticFile(project, request)
     if (!target.exists() || target.isDirectory()) {
-      throw new AeromockResourceNotFoundException(request.parsedRequest.url)
+      throw new AeromockResourceNotFoundException(request.url)
     }
 
     val raf = new RandomAccessFile(target.toFile(), "r")
@@ -37,7 +39,7 @@ abstract class StaticFileHttpRequestProcessor extends HttpRequestProcessor with 
 
     val response = new DefaultHttpResponse(HTTP_1_1, OK);
     setContentLength(response, fileLength)
-    setStaticResponseHeader(response, request.extension)
+    setStaticResponseHeader(response, rawRequest.extension)
     if (isKeepAlive(response)) {
       response.headers().set(CONNECTION, HttpHeaders.Values.KEEP_ALIVE)
     }
@@ -46,13 +48,13 @@ abstract class StaticFileHttpRequestProcessor extends HttpRequestProcessor with 
     context.write(new DefaultFileRegion(raf.getChannel, 0, fileLength))
 
     val lastContentFuture = context.writeAndFlush(LastHttpContent.EMPTY_LAST_CONTENT)
-    if (!isKeepAlive(request)) {
+    if (!isKeepAlive(rawRequest)) {
       lastContentFuture.addListener(ChannelFutureListener.CLOSE)
     }
 
     response
   }
 
-  protected def getStaticFile(project: Project, parsedRequest: ParsedRequest): Path
+  protected def getStaticFile(project: Project, parsedRequest: AeromockHttpRequest): Path
 
 }

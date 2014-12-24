@@ -3,7 +3,7 @@ machine:
   java:
     version: oraclejdk7
   node:
-    version: 0.10.32
+    version: 0.10.33
   pre:
     - git config --global user.name "CircleCI"
     - git config --global user.email "circleci@example.com"
@@ -32,25 +32,27 @@ dependencies:
     - ~/aeromock/aeromock-groovy-template/target/resolution-cache
     - ~/aeromock/aeromock-thymeleaf/target/resolution-cache
   pre:
-    - npm install -g grunt-cli bower
+    #- npm install -g grunt-cli bower
     - ./gradlew install -x signArchives:
         pwd: aeromock-dsl
-    - npm install:
-        pwd: aeromock-view
-    - bower install:
-        pwd: aeromock-view
-    - grunt build:
-        pwd: aeromock-view
+    #- npm install:
+    #    pwd: aeromock-view
+    #- bower install:
+    #    pwd: aeromock-view
+    #- grunt build:
+    #    pwd: aeromock-view
+  override:
+    - ./sbt test:compile
 
 test:
   override:
-    - sbt test
+    - ./sbt test
   post:
     - >
       if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
         echo "start to measure coverage report."
-        sbt scoverage:test
-        sbt coveralls
+        ./sbt scoverage:test
+        ./sbt coveralls
       fi
     - cp -R aeromock-server/target/test-reports/* $CIRCLE_ARTIFACTS
     - cp -R aeromock-freemarker/target/test-reports/* $CIRCLE_ARTIFACTS
@@ -71,7 +73,7 @@ deployment:
     owner: CyberAgent
     commands:
       - ./aeromock-dsl/gradlew -p aeromock-dsl uploadArchives
-      - sbt publishSigned
+      - ./sbt publishSigned
   next:
     branch: /^next\/.+$/
     owner: CyberAgent

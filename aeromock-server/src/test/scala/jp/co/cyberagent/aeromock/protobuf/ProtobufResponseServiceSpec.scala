@@ -2,8 +2,9 @@ package jp.co.cyberagent.aeromock.protobuf
 
 import java.nio.file.Path
 
-import com.google.protobuf.{CodedOutputStream, ByteString}
+import com.google.protobuf.ByteString
 import jp.co.cyberagent.aeromock.AeromockTestModule
+import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.config.definition.ProjectDef
 import jp.co.cyberagent.aeromock.test.{RequestScope, SpecSupport}
 import org.specs2.mutable.{Specification, Tables}
@@ -70,7 +71,7 @@ class ProtobufResponseServiceSpec extends Specification with Tables with SpecSup
         .addNestListTagSize3(VariousNest.newBuilder.setTextTagSize1("text31").setTextTagSize2("text32").setTextTagSize3("text33").build)
         .build
 
-      val result = ProtobufResponseService.render(request("/various_tag"))
+      val result = ProtobufResponseService.render(request("/various_tag").toAeromockRequest(Map.empty))
       result.content must_== expected.toByteArray
     }
   }
@@ -153,7 +154,7 @@ class ProtobufResponseServiceSpec extends Specification with Tables with SpecSup
         .addBoolList(false)
         .build
 
-      val result = ProtobufResponseService.render(request("/simple"))
+      val result = ProtobufResponseService.render(request("/simple").toAeromockRequest(Map.empty))
       result.content must_== expected.toByteArray
     }
 
@@ -175,7 +176,7 @@ class ProtobufResponseServiceSpec extends Specification with Tables with SpecSup
         .setStringValue("stringValue")
         .setBytesValue(ByteString.copyFromUtf8("bytesValue"))
         .build
-      val result = ProtobufResponseService.render(request("/simple?_dataid=optional"))
+      val result = ProtobufResponseService.render(request("/simple?_dataid=optional").toAeromockRequest(Map.empty))
 
       result.content must_== expected.toByteArray
     }
@@ -196,7 +197,7 @@ class ProtobufResponseServiceSpec extends Specification with Tables with SpecSup
         .addEnumList(TestEnum.KEY3)
         .build
 
-      val result = ProtobufResponseService.render(request("/enum"))
+      val result = ProtobufResponseService.render(request("/enum").toAeromockRequest(Map.empty))
       result.content must_== expected.toByteArray
     }
   }
@@ -236,7 +237,7 @@ class ProtobufResponseServiceSpec extends Specification with Tables with SpecSup
         )
         .build
 
-      val result = ProtobufResponseService.render(request("/nest1"))
+      val result = ProtobufResponseService.render(request("/nest1").toAeromockRequest(Map.empty))
       result.content must_== expected.toByteArray
     }
   }
@@ -255,7 +256,7 @@ class ProtobufResponseServiceSpec extends Specification with Tables with SpecSup
         .addInnerList(Nest2Response.Nest2Inner.newBuilder.setId(1002).setName("innerName2").build)
         .build
 
-      val result = ProtobufResponseService.render(request("/nest2"))
+      val result = ProtobufResponseService.render(request("/nest2").toAeromockRequest(Map.empty))
       result.content must_== expected.toByteArray
 
     }

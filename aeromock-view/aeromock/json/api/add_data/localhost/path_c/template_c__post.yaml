@@ -1,0 +1,16 @@
+# POST /api/add_data/localhost/path_c/template_c
+
+# parameters
+## id: データファイルのid（'__n'のnの部分）
+## id未指定の場合、idなしで空のデータファイルが作られる
+## idの入力チェックはサーバサイドに任せる。問題があれば、400Bad Requestを返す
+## 既にデータファイルが存在する場合、400Bad Requestを返す
+## id未指定時に、既にid無しのデータファイルが存在する場合、idをサーバサイドで適当にインクリメントしてデータを返す
+
+# データファイル作成成功時に返すレスポンス
+path: template_c
+data_files:
+  -
+    id: null
+    method: GET
+    link: http://localhost:3183/path_c/template_c

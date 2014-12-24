@@ -6,7 +6,7 @@ import io.netty.handler.codec.http.HttpMethod._
 import jp.co.cyberagent.aeromock.test.SpecSupport
 import jp.co.cyberagent.aeromock.AeromockBadUsingException
 import jp.co.cyberagent.aeromock.config.Naming
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import org.specs2.mutable.{Specification, Tables}
 
 
@@ -28,7 +28,7 @@ class DataPathResolverSpec extends Specification with Tables with SpecSupport {
       DELETE   ! Map.empty[String, String]  |
       GET      ! Map("_dataid" -> "2")      |> { (method, params) =>
 
-        val request = ParsedRequest("/duplicated", params, Map.empty, method)
+        val request = AeromockHttpRequest("/duplicated", params, Map.empty, Map.empty, method)
         DataPathResolver.resolve(dataRootPath, request, Naming()) must throwA[AeromockBadUsingException]
       }
     }
@@ -41,7 +41,7 @@ class DataPathResolverSpec extends Specification with Tables with SpecSupport {
       "/none"    ! DELETE   ! Map.empty[String, String]  |
       "/none"    ! GET      ! Map.empty[String, String]  |> { (path, method, params) =>
 
-        val request = ParsedRequest(path, params, Map.empty, method)
+        val request = AeromockHttpRequest(path, params, Map.empty, Map.empty, method)
         DataPathResolver.resolve(dataRootPath, request, Naming()) must beNone
       }
     }
@@ -53,7 +53,7 @@ class DataPathResolverSpec extends Specification with Tables with SpecSupport {
        PUT     ! Map.empty[String, String]    ! "other.yaml"           | // not hit, use default
        DELETE  ! Map.empty[String, String]    ! "other.yaml"           |> { (method, params, expect) =>
 
-        val request = ParsedRequest("/other", params, Map.empty, method)
+        val request = AeromockHttpRequest("/other", params, Map.empty, Map.empty, method)
         DataPathResolver.resolve(dataRootPath, request, Naming()) must beSome(dataRootPath.resolve(expect))
       }
     }
@@ -69,7 +69,7 @@ class DataPathResolverSpec extends Specification with Tables with SpecSupport {
       PUT      ! Map.empty[String, String]    ! "path1__put.yaml"      |
       GET      ! Map("_dataid" -> "xx")       ! "path1__xx.yaml"       |> { (method, params, expect) =>
 
-        val request = ParsedRequest("/path1", params, Map.empty, method)
+        val request = AeromockHttpRequest("/path1", params, Map.empty, Map.empty, method)
         DataPathResolver.resolve(dataRootPath, request, Naming()) must beSome(dataRootPath.resolve(expect))
       }
     }
@@ -85,7 +85,7 @@ class DataPathResolverSpec extends Specification with Tables with SpecSupport {
       PUT      ! Map.empty[String, String]    ! "path2__put.yaml"      |
       GET      ! Map("_dataid" -> "xx")       ! "path2__xx.yaml"       |> { (method, params, expect) =>
 
-        val request = ParsedRequest("/path1/path2", params, Map.empty, method)
+        val request = AeromockHttpRequest("/path1/path2", params, Map.empty, Map.empty, method)
         DataPathResolver.resolve(dataRootPath, request, Naming()) must beSome(dataRootPath.resolve(s"path1/$expect"))
       }
     }
@@ -96,7 +96,7 @@ class DataPathResolverSpec extends Specification with Tables with SpecSupport {
       GET      ! Map("_dataid" -> "2")        ! "path3__2.yaml"        |
       GET      ! Map("_dataid" -> "4")        ! "path3__4.json"        |> { (method, params, expect) =>
 
-        val request = ParsedRequest("/path1/path2.dot/path3", params, Map.empty, method)
+        val request = AeromockHttpRequest("/path1/path2.dot/path3", params, Map.empty, Map.empty, method)
         DataPathResolver.resolve(dataRootPath, request, Naming()) must beSome(dataRootPath.resolve(s"path1/path2.dot/$expect"))
       }
     }

@@ -1,0 +1,32 @@
+# GET /api/list/local.fp.example.com/path_a
+
+directories:
+  - path_aa
+  - path_ab
+files:
+  -
+    path: template_a
+    data_files:
+      # template_a.yaml
+      -
+        id: null
+        method: GET
+        link: http://local.fp.example.com:3183/path_a/template_a
+  -
+    path: template_b
+    data_files:
+      # template_b.yaml
+      -
+        id: null
+        method: GET
+        link: http://local.fp.example.com:3183/path_a/template_b
+      # template_b__2.yaml
+      -
+        id: 2
+        method: GET
+        link: http://local.fp.example.com:3183/path_a/template_b?__dataid=2
+  -
+    path: template_c
+    # 紐づくデータファイルなし
+    data_files: []
+

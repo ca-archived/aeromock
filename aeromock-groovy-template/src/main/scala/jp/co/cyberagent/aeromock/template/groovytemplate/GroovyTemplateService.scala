@@ -5,7 +5,7 @@ import java.nio.file.Paths
 
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
@@ -28,7 +28,7 @@ class GroovyTemplateService(config: GroovyTemplateConfig)(implicit val inj: Inje
   /**
    * @inheritdoc
    */
-  override def renderHtml(request: ParsedRequest, projection: InstanceProjection): String = {
+  override def renderHtml(request: AeromockHttpRequest, projection: InstanceProjection): String = {
     require(request != null)
 
     val templatePath = project._template.root / request.url + extension

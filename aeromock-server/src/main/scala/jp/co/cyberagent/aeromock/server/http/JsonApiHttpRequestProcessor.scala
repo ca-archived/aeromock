@@ -19,13 +19,14 @@ class JsonApiHttpRequestProcessor(implicit inj: Injector) extends HttpRequestPro
 
   val project = inject[Project]
 
-  override def process(request: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
+  override def process(rawRequest: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
 
     val ajaxRoot = project._ajax.root
     val naming = project._naming
 
-    val dataFile = DataPathResolver.resolve(ajaxRoot, request.parsedRequest, naming) match {
-      case None => throw new AeromockApiNotFoundException(request.parsedRequest.url)
+    val request = rawRequest.toAeromockRequest(Map.empty)
+    val dataFile = DataPathResolver.resolve(ajaxRoot, request, naming) match {
+      case None => throw new AeromockApiNotFoundException(request.url)
       case Some(file) => file
     }
 

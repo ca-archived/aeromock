@@ -6,10 +6,11 @@ import java.nio.file.attribute.BasicFileAttributes
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
+import io.netty.handler.codec.http.HttpMethod._
 import io.netty.handler.codec.http.HttpRequest
 import io.netty.handler.codec.http.multipart.{HttpPostRequestDecoder, MixedAttribute}
 import jp.co.cyberagent.aeromock.config.MessageManager
-import jp.co.cyberagent.aeromock.core.http.ParsedRequest
+import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.util.ResourceUtil
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.reflect.FieldUtils
@@ -229,33 +230,35 @@ package object helper {
 
     lazy val queryString = if (decoded.contains("?")) decoded.substring(decoded.indexOf("?") + 1, decoded.length()) else ""
 
-    lazy val parsedRequest = {
-      import io.netty.handler.codec.http.HttpMethod._
-
-      // query parameter
-      val urlTuple = if (decoded.contains("?")) {
-        val uri = decoded.substring(0, decoded.indexOf("?"))
-        (uri, decoded.substring(decoded.indexOf("?") + 1, decoded.length()).split("&").map(s => {
-          val pair = s.split("=")
-          if (pair.length > 1) (pair(0), pair(1)) else (pair(0), "")
-        }).toMap)
-      } else {
-        (decoded, Map.empty[String, String])
-      }
-
-      val formData = if (Array(POST, PUT, PATCH).contains(original.getMethod())) {
-        val postDecoder = new HttpPostRequestDecoder(original)
-        (postDecoder.getBodyHttpDatas().asScala.collect {
-          case a: MixedAttribute => (a.getName() -> a.getValue())
-        }).toMap
-      } else {
-        Map.empty[String, String]
-      }
-
-      ParsedRequest(urlTuple._1, urlTuple._2, formData, original.getMethod())
+    lazy val queryParameters = if (StringUtils.isBlank(queryString)) {
+      Map.empty[String, String]
+    } else {
+      queryString.split("&").map(s => {
+        val pair = s.split("=")
+        if (pair.length > 1) (pair(0), pair(1)) else (pair(0), "")
+      }).toMap
     }
 
-    lazy val extension = getExtension(parsedRequest.url)
+    lazy val postParameters = if (Array(POST, PUT, PATCH).contains(original.getMethod())) {
+      val postDecoder = new HttpPostRequestDecoder(original)
+      (postDecoder.getBodyHttpDatas().asScala.collect {
+        case a: MixedAttribute => (a.getName() -> a.getValue())
+      }).toMap
+    } else {
+      Map.empty[String, String]
+    }
+
+    def toAeromockRequest(routeParameters: Map[String, String]) = {
+      AeromockHttpRequest(
+        url = requestUri,
+        queryParameters = queryParameters,
+        formData = postParameters,
+        routeParameters = routeParameters,
+        method = original.getMethod
+      )
+    }
+
+    lazy val extension = getExtension(requestUri)
 
     def toVariableMap(): Map[String, Any] = {
       import io.netty.handler.codec.http.HttpHeaders.Names
