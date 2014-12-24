@@ -89,14 +89,14 @@ trait AeromockModule extends Module {
   bind [ProtobufResponseWriter] toProvider new ProtobufResponseWriter
 
   // controllers
-  bind [TestController] toProvider new TestController
   bind [ContextController] toProvider new ContextController
-  bind [DirectoryController] toProvider new DirectoryController
+  bind [ListController] toProvider new ListController
+  bind [AddDataController] toProvider new AddDataController
 
   binding identifiedBy 'controllers to Seq(
-    inject[TestController],
     inject[ContextController],
-    inject[DirectoryController]
+    inject[ListController],
+    inject[AddDataController]
   )
   bind [ApiResolver] toProvider new ApiResolver
 }

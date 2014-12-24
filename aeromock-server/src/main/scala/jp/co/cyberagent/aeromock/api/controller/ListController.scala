@@ -10,9 +10,9 @@ import Scalaz._
  *
  * @author stormcat24
  */
-class DirectoryController(implicit val injector: Injector) extends AeromockApiController {
+class ListController(implicit val injector: Injector) extends AeromockApiController {
 
-  get("/aeromock/api/:context/:dir/list") { request =>
+  get("/aeromock/api/list/:context/:dir") { request =>
 
     val project = inject[Project]
     val contexts = project._template.contexts
