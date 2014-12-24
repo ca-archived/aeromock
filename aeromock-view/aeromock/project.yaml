@@ -1,0 +1,4 @@
+ajax:
+  root: ./json
+
+# ~/.aeromock/config.yamlのproject_config_pathにこのproject.yamlのパスを設定
