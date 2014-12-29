@@ -1,0 +1,25 @@
+id: 100
+mainUser:
+  id: 1
+  name: メインユーザー
+  status:
+    age: 50
+    job:
+      id: 100
+      name: programmer
+  description: null
+otherUsers:
+  - id: 11
+    name: 他のユーザー11
+    status:
+      age: 21
+      job:
+        id: 101
+        name: designer
+  - id: 12
+    name: 他のユーザー12
+    status:
+      age: 25
+      job:
+        id: 102
+        name: illustrator
