@@ -22,7 +22,7 @@ AeromockはテンプレートファイルとデータファイルだけでHTML�
 * スクリプトによってURL Rewriteを制御できます。
 * モックJSON APIサーバとしても機能します。
 * 静的ファイルサーバとしても機能します（js, css, 画像等)。
-* Protocol Buffersのバイナリデータをレスポンスできます。
+* Protocol Buffersやmessagepackのバイナリデータをレスポンスできます。
 
 利用するには
 ===

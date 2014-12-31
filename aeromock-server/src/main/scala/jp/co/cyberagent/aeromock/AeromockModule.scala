@@ -87,6 +87,7 @@ trait AeromockModule extends Module {
   bind [JsonApiHttpRequestProcessor] toProvider new JsonApiHttpRequestProcessor
   bind [UserStaticFileHttpRequestProcessor] toProvider new UserStaticFileHttpRequestProcessor
   bind [ProtobufResponseWriter] toProvider new ProtobufResponseWriter
+  bind [MessagepackResponseWriter] toProvider new MessagepackResponseWriter
 
   // controllers
   bind [ContextController] toProvider new ContextController

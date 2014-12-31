@@ -30,6 +30,7 @@ class ProjectDef extends AnyRef with Injectable {
   @BeanProperty var naming: NamingDef = null
   @BeanProperty var test: TestDef = null
   @BeanProperty var protobuf: ProtoBufDef = null
+  @BeanProperty var messagepack: MessagepackDef = null
 
   def toValue(projectConfig: Path)(implicit inj: Injector): Project = {
     val projectRoot = projectConfig.getParent
@@ -79,6 +80,11 @@ class ProjectDef extends AnyRef with Injectable {
       case None => none[ProtoBuf].successNel[String]
     }
 
+    val messagepackVal = Option(messagepack) match {
+      case Some(value) => messagepack.toValue(projectRoot)
+      case None => none[Messagepack].successNel[String]
+    }
+
     Project(
       projectConfig,
       projectRoot,
@@ -90,7 +96,8 @@ class ProjectDef extends AnyRef with Injectable {
       functionVal,
       namingVal,
       testVal,
-      protobufVal)
+      protobufVal,
+      messagepackVal)
 
   }
 }
@@ -427,5 +434,29 @@ class ProtoBufDef {
       protobufRoot <- rootResult
       protobufApiPrefix <- apiPrefixResult
     } yield (ProtoBuf(protobufRoot, protobufApiPrefix).some)
+  }
+}
+
+// project.yaml -> messagepack
+class MessagepackDef {
+  // messagepack
+  @BeanProperty var root: String = null
+
+  def toValue(projectRoot: Path): ValidationNel[String, Option[Messagepack]] = {
+    root match {
+      case null => message"validation.need.element${"root"}${"messagepack"}".failureNel[Option[Messagepack]]
+      case s if StringUtils.isBlank(s) => message"validation.not.blank${"messagepack.root"}".failureNel[Option[Messagepack]]
+      case _ => {
+
+        val rootPath = projectRoot / root
+        if (!rootPath.exists) {
+          message"validation.not.exists.path${rootPath}${"messagepack.root"}".failureNel[Option[Messagepack]]
+        } else if (!rootPath.isDirectory) {
+          message"validation.not.directory${rootPath}${"messagepack.root"}".failureNel[Option[Messagepack]]
+        } else {
+          Messagepack(rootPath).some.successNel
+        }
+      }
+    }
   }
 }

@@ -21,7 +21,7 @@ Features
 * URL rewriting can be controlled via a routing script.
 * Capable of functioning as a mock JSON API server.
 * Capable of functioning as a static content server (js, css, images).
-* Respond binary data of Protocol Buffers.
+* Respond binary data of Protocol Buffers, and messagepack.
 
 Getting started
 ===

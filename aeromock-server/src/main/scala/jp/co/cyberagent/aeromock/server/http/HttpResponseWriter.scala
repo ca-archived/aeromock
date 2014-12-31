@@ -61,6 +61,18 @@ trait HttpResponseWriter {
     response
   }
 
+  def renderMessagepack(data: Array[Byte], status: HttpResponseStatus, customResponse: Option[CustomResponse])(implicit context: ChannelHandlerContext): HttpResponse = {
+    val responseStatus = selectResponseStatus(status, customResponse)
+    val response = new DefaultFullHttpResponse(HTTP_1_1, responseStatus, Unpooled.copiedBuffer(data))
+    addDefaultHeader(response)
+    addCustomResponse(response, customResponse)
+    response.headers().set(CONTENT_TYPE, "application/x-msgpack")
+    response.headers().set(CONTENT_LENGTH, response.content().readableBytes())
+
+    context.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE)
+    response
+  }
+
   private def selectResponseStatus(status: HttpResponseStatus, customResponse: Option[CustomResponse]): HttpResponseStatus = {
     if (customResponse.isDefined) customResponse.get.getResponseStatus else status
   }

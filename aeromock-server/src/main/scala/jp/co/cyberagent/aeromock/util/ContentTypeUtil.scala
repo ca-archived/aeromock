@@ -10,7 +10,9 @@ object ContentTypeUtil {
     "csv" -> "text/csv",
     "tsv" -> "text/tab-separated-values",
     "rtf" -> "text/richtext",
+    "htm" -> "text/html",
     "html" -> "text/html",
+    "htc" -> "text/x-component",
     "js" -> "application/javascript",
     "pdf" -> "application/pdf",
     "zip" -> "application/zip",
@@ -18,6 +20,7 @@ object ContentTypeUtil {
     "jpg" -> "image/jpeg",
     "gif" -> "image/gif",
     "png" -> "image/png",
+    "svg" -> "image/svg+xml",
     "swf" -> "application/x-shockwave-flash",
     "pdf" -> "application/pdf",
     "mp3" -> "audio/mp3",
@@ -40,7 +43,14 @@ object ContentTypeUtil {
     "mpm" -> "video/mpeg",
     "mpv" -> "video/mpeg",
     "mpa" -> "video/mpeg",
-    "avi" -> "video/avi"
+    "avi" -> "video/avi",
+    "mov" -> "video/quicktime",
+    "qt" -> "video/quicktime",
+    "dart" -> "application/dart",
+    "xml" -> "text/xml",
+    "yaml" -> "text/yaml",
+    "yml" -> "text/yaml"
+
   )
 
   def getContentType(extension: String): Option[String] = contentTypeMap.get(extension)
