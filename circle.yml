@@ -43,6 +43,7 @@ dependencies:
         pwd: aeromock-view
   override:
     - ./sbt test:compile
+    - pip install fabric
 
 test:
   override:
