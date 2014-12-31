@@ -5,6 +5,7 @@ import java.nio.file.Path
 import jp.co.cyberagent.aeromock.AeromockTestModule
 import jp.co.cyberagent.aeromock.config.definition.ProjectDef
 import jp.co.cyberagent.aeromock.test.{RequestScope, SpecSupport}
+import jp.co.cyberagent.aeromock.helper._
 import org.msgpack.ScalaMessagePack
 import org.specs2.mutable.{Tables, Specification}
 import MessagepackResponseService._
@@ -29,7 +30,7 @@ class MessagepackResponseServiceSpec extends Specification with Tables with Spec
         createIntegerValue(300)
       ))
 
-      val result = render(request("/array"))
+      val result = render(request("/array").toAeromockRequest(Map.empty))
       result.content must_== ScalaMessagePack.writeV(expected)
     }
 
@@ -49,7 +50,7 @@ class MessagepackResponseServiceSpec extends Specification with Tables with Spec
         createIntegerValue(999999999999L)
       ))
 
-      val result = render(request("/array_mix"))
+      val result = render(request("/array_mix").toAeromockRequest(Map.empty))
       result.content must_== ScalaMessagePack.writeV(expected)
     }
   }
@@ -100,7 +101,7 @@ class MessagepackResponseServiceSpec extends Specification with Tables with Spec
           ))
         ))
       ))
-      val result = render(request("/nest"))
+      val result = render(request("/nest").toAeromockRequest(Map.empty))
       result.content must_== ScalaMessagePack.writeV(expected)
     }
   }

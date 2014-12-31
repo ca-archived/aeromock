@@ -1,11 +1,9 @@
 package jp.co.cyberagent.aeromock.msgpack
 
-import io.netty.handler.codec.http.FullHttpRequest
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.el.VariableHelper
-import jp.co.cyberagent.aeromock.core.http.VariableManager
+import jp.co.cyberagent.aeromock.core.http.{AeromockHttpRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data.{DataFileReaderFactory, DataPathResolver}
-import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.server.http.{JsonApiResponseWriterFactory, RenderResult, ResponseDataSupport}
 import jp.co.cyberagent.aeromock.{AeromockApiNotFoundException, AeromockSystemException}
 import org.msgpack.ScalaMessagePack
@@ -19,13 +17,13 @@ import scala.collection.JavaConverters._
  */
 object MessagepackResponseService extends AnyRef with Injectable with ResponseDataSupport {
 
-  def render(request: FullHttpRequest)(implicit inj: Injector): RenderResult[Array[Byte]] = {
+  def render(request: AeromockHttpRequest)(implicit inj: Injector): RenderResult[Array[Byte]] = {
     val project = inject[Project]
     val naming = project._naming
     val messagepack = project._messagepack
 
-    val dataFile = DataPathResolver.resolve(messagepack.root, request.parsedRequest, naming) match {
-      case None => throw new AeromockApiNotFoundException(request.parsedRequest.url)
+    val dataFile = DataPathResolver.resolve(messagepack.root, request, naming) match {
+      case None => throw new AeromockApiNotFoundException(request.url)
       case Some(file) => file
     }
 
