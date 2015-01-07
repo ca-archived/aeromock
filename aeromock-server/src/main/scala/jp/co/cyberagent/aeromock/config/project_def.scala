@@ -3,7 +3,6 @@ package jp.co.cyberagent.aeromock.config.definition
 import java.nio.file.Path
 
 import jp.co.cyberagent.aeromock.config
-import jp.co.cyberagent.aeromock.config.Tag
 import jp.co.cyberagent.aeromock.config._
 import jp.co.cyberagent.aeromock.template.TemplateContexts._
 import jp.co.cyberagent.aeromock.template.TemplateService
@@ -426,14 +425,11 @@ class ProtoBufDef {
     }
 
     val apiPrefixResult = Option(apiPrefix) match {
-      case None => none[String].successNel[String]
       case Some(s) if StringUtils.isNotBlank(s) => s.some.successNel[String]
+      case None => none[String].successNel
     }
 
-    for {
-      protobufRoot <- rootResult
-      protobufApiPrefix <- apiPrefixResult
-    } yield (ProtoBuf(protobufRoot, protobufApiPrefix).some)
+    (rootResult |@| apiPrefixResult) apply ProtoBuf rightMap(_.some)
   }
 }
 
@@ -441,6 +437,7 @@ class ProtoBufDef {
 class MessagepackDef {
   // messagepack
   @BeanProperty var root: String = null
+  @BeanProperty var mode: String = null
 
   def toValue(projectRoot: Path): ValidationNel[String, Option[Messagepack]] = {
     root match {
@@ -449,13 +446,20 @@ class MessagepackDef {
       case _ => {
 
         val rootPath = projectRoot / root
-        if (!rootPath.exists) {
-          message"validation.not.exists.path${rootPath}${"messagepack.root"}".failureNel[Option[Messagepack]]
+        val rootPathResult = if (!rootPath.exists) {
+          message"validation.not.exists.path${rootPath}${"messagepack.root"}".failureNel[Path]
         } else if (!rootPath.isDirectory) {
-          message"validation.not.directory${rootPath}${"messagepack.root"}".failureNel[Option[Messagepack]]
+          message"validation.not.directory${rootPath}${"messagepack.root"}".failureNel[Path]
         } else {
-          Messagepack(rootPath).some.successNel
+          rootPath.successNel
         }
+
+        val modeResult = Option(mode) match {
+          case Some(s) => s.successNel[String]
+          case None => "json".successNel[String]
+        }
+
+        (rootPathResult |@| modeResult) apply Messagepack rightMap(_.some)
       }
     }
   }

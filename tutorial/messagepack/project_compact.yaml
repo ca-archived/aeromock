@@ -1,6 +1,6 @@
 messagepack:
   root: ./data
-  mode: json
+  mode: compact
 
 static:
   root: ../static

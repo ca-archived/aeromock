@@ -38,7 +38,7 @@ object MessagepackResponseService extends AnyRef with Injectable with ResponseDa
     val responseWriter = JsonApiResponseWriterFactory.create(project, variableHelper, dataMap)
 
     val response = responseWriter.write
-    val dynamicValue = MessagepackValue.fromIterable(response._1.asInstanceOf[Iterable[_]])
+    val dynamicValue = MessagepackValue(messagepack.mode).fromIterable(response._1.asInstanceOf[Iterable[_]])
 
     val serialized = ScalaMessagePack.writeV(dynamicValue)
     RenderResult(serialized, response._2, false)
