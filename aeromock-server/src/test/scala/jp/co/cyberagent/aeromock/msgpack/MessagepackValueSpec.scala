@@ -20,7 +20,7 @@ class MessagepackValueSpec extends Specification with Tables with SpecSupport {
         ValueFactory.createIntegerValue(300)
       ))
       val input = List(100, 200, 300)
-      MessagepackValue.fromIterable(input) must_== expected
+      MessagepackValue("compact").fromIterable(input) must_== expected
     }
 
     "array complex" in {
@@ -36,7 +36,7 @@ class MessagepackValueSpec extends Specification with Tables with SpecSupport {
         ValueFactory.createRawValue("700")
       ))
       val input = List(100, 20.0f, 30.0, true, 400.toShort, 500L, BigInteger.valueOf(600L), null, "700")
-      MessagepackValue.fromIterable(input) must_== expected
+      MessagepackValue("compact").fromIterable(input) must_== expected
     }
   }
 
@@ -57,7 +57,7 @@ class MessagepackValueSpec extends Specification with Tables with SpecSupport {
           "stringprop" -> "prop1mapValue"
         )
       )
-      MessagepackValue.fromIterable(input) must_== expected
+      MessagepackValue("compact").fromIterable(input) must_== expected
     }
 
     "complex" in {
@@ -101,7 +101,7 @@ class MessagepackValueSpec extends Specification with Tables with SpecSupport {
         )
       )
 
-      MessagepackValue.fromIterable(input) must_== expected
+      MessagepackValue("compact").fromIterable(input) must_== expected
     }
   }
 }

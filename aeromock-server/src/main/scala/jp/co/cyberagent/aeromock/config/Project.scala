@@ -131,4 +131,4 @@ case class Naming(dataPrefix: String = "__", dataidQuery: String = "_dataid") {
 }
 case class Test(reportRoot: Path)
 case class ProtoBuf(root: Path, apiPrefix: Option[String])
-case class Messagepack(root: Path)
+case class Messagepack(root: Path, mode: String)
