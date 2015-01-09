@@ -117,7 +117,7 @@ case class Template(
 case class TemplateContext(domain: String, port: Int, root: Path)
 case class Data(root: Path)
 case class Static(root: Path)
-case class Ajax(root: Path)
+case class Ajax(root: Path, jsonpCallbackName: Option[String] = None)
 case class Tag(root: Path)
 case class Function(root: Path)
 case class Naming(dataPrefix: String = "__", dataidQuery: String = "_dataid") {
