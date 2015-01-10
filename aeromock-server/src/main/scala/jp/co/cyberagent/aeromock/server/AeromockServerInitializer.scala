@@ -18,6 +18,7 @@ class AeromockServerInitializer(implicit inj: Injector) extends ChannelInitializ
       .addLast(classOf[HttpResponseEncoder].getName, new HttpResponseEncoder)
       .addLast(classOf[ProtobufEncoder].getName, new ProtobufEncoder)
       .addLast(classOf[ChunkedWriteHandler].getName, new ChunkedWriteHandler)
-      .addLast(classOf[AeromockServerHandler].getName, new AeromockServerHandler(true))
+//      .addLast(classOf[AeromockServerHandler].getName, new AeromockServerHandler(true))
+      .addLast(classOf[AeromockHttpContentHandler].getName, new AeromockHttpContentHandler)
   }
 }
