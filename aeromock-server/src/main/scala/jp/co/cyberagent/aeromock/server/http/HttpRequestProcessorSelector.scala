@@ -1,6 +1,6 @@
 package jp.co.cyberagent.aeromock.server.http
 
-import io.netty.handler.codec.http.HttpRequest
+import io.netty.handler.codec.http.FullHttpRequest
 import jp.co.cyberagent.aeromock.AeromockConfigurationException
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.helper._
@@ -12,7 +12,7 @@ import Scalaz._
 
 object HttpRequestProcessorSelector extends AnyRef with Injectable {
 
-  def select(request: HttpRequest)(implicit inj: Injector): HttpRequestProcessor = {
+  def select(request: FullHttpRequest)(implicit inj: Injector): HttpRequestProcessor = {
 
     request.parsedRequest.url match {
       // Aeromockのfavicon

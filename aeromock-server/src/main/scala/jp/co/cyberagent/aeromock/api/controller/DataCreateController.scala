@@ -15,25 +15,25 @@ class DataCreateController(implicit inj: Injector) extends AeromockApiController
 
   override def renderJson(request: ParsedRequest): Map[String, Any] = {
 
-    val endpointNel = request.formData.get("endpoint") match {
+    val endpointNel = request.postData.get("endpoint") match {
       case None => new AeromockApiBadRequestException(request.url).failureNel[String]
       case Some(value) => {
         (for {
-          endpoint <- value |> blank
+          endpoint <- value.toString |> blank
         } yield (endpoint)).toValidationNel
       }
     }
 
-    val domainNel = request.formData.get("domain") match {
+    val domainNel = request.postData.get("domain") match {
       case None => "localhost".successNel[Throwable]
       case Some(value) => {
         (for {
-          domain <- value |> blank
+          domain <- value.toString |> blank
         } yield (domain)).toValidationNel
       }
     }
 
-    val overwriteNel = request.formData.get("overwrite") match {
+    val overwriteNel = request.postData.get("overwrite") match {
       case None => false.successNel[Throwable]
       case Some(value) => ("true" == value).successNel
     }

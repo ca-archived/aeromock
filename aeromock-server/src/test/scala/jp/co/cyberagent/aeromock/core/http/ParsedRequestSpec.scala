@@ -34,12 +34,12 @@ class ParsedRequestSpec extends Specification with Tables {
 
       val url = "/test"
       val queryParameters = Map("qs1" -> "1", "qs2" -> "2")
-      val formData = Map("fd1" -> "1", "fd2" -> "2")
+      val postData = Map("fd1" -> "1", "fd2" -> "2")
 
-      val actual = ParsedRequest(url, queryParameters, formData)
+      val actual = ParsedRequest(url, queryParameters, postData)
       actual.url must_== url
       actual.queryParameters must_== Map("qs1" -> "1", "qs2" -> "2")
-      actual.formData must_== Map("fd1" -> "1", "fd2" -> "2")
+      actual.postData must_== Map("fd1" -> "1", "fd2" -> "2")
     }
   }
 

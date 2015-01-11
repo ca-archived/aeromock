@@ -23,7 +23,7 @@ object DataPathResolver {
         if (parsedRequest.method == HttpMethod.GET) {
           None
         } else {
-          resolve(rootDir, ParsedRequest(parsedRequest.url, parsedRequest.queryParameters, parsedRequest.formData, HttpMethod.GET), naming)
+          resolve(rootDir, ParsedRequest(parsedRequest.url, parsedRequest.queryParameters, parsedRequest.postData, HttpMethod.GET), naming)
         }
       }
       case 1 => Some(files.last)

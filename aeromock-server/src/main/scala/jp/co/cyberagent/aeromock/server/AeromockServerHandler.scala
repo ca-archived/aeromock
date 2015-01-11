@@ -5,6 +5,7 @@ import java.util.Locale
 
 import io.netty.channel.{ChannelHandlerContext, SimpleChannelInboundHandler}
 import io.netty.handler.codec.http.FullHttpRequest
+import io.netty.util.CharsetUtil
 import jp.co.cyberagent.aeromock.config.UserConfig
 import jp.co.cyberagent.aeromock.core.http.HttpRequestProcessor
 import jp.co.cyberagent.aeromock.data.DynamicMethodValueStore

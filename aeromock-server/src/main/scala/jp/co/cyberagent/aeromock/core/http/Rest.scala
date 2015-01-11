@@ -15,14 +15,14 @@ case class Endpoint(raw: String) {
 class ParsedRequest(
   val url: String,
   val queryParameters: Map[String, String],
-  val formData: Map[String, String],
+  val postData: Map[String, Any],
   val method: HttpMethod = HttpMethod.GET
 )
 
 object ParsedRequest {
 
   def apply(url: String, queryParameters: Map[String, String],
-        formData: Map[String, String], method: HttpMethod = HttpMethod.GET): ParsedRequest = {
+            postData: Map[String, Any], method: HttpMethod = HttpMethod.GET): ParsedRequest = {
     require(url != null)
 
     val s = url.trim
@@ -34,11 +34,11 @@ object ParsedRequest {
       s
     }
 
-    new ParsedRequest(formatted, queryParameters, formData, method)
+    new ParsedRequest(formatted, queryParameters, postData, method)
   }
 
   def unapply(request: ParsedRequest) = {
-    Some((request.url, request.queryParameters, request.formData, request.method))
+    Some((request.url, request.queryParameters, request.postData, request.method))
   }
 
 }

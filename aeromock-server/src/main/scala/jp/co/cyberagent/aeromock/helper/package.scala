@@ -1,13 +1,15 @@
 package jp.co.cyberagent.aeromock
 
 import java.net.{InetSocketAddress, URLDecoder}
+import java.nio.charset.Charset
 import java.nio.file._
 import java.nio.file.attribute.BasicFileAttributes
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
-import io.netty.handler.codec.http.HttpRequest
+import io.netty.handler.codec.http.{FullHttpRequest, HttpHeaders, HttpRequest}
 import io.netty.handler.codec.http.multipart.{HttpPostRequestDecoder, MixedAttribute}
+import io.netty.util.CharsetUtil
 import jp.co.cyberagent.aeromock.config.MessageManager
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import jp.co.cyberagent.aeromock.util.ResourceUtil
@@ -30,6 +32,7 @@ package object helper {
   val INSECURE_URI = Pattern.compile( """.*[<>&"].*""")
   val EXTENSION = Pattern.compile( """.*\.(.+)""")
   val WITHOUT_EXTENSION = Pattern.compile("""(.+)\..+""")
+  val CONTENTTYPE_CHARSET = """^(.+);\s*charset=(.*)$""".r
 
   type Closable = { def close(): Unit }
   def processResource[A <: Closable, B](resource: A)(f: A => B) = try {
@@ -221,7 +224,7 @@ package object helper {
     def getExtension(): Option[String] = helper.getExtension(path.getFileName.toString)
   }
 
-  implicit class FullHttpRequestHelper(original: HttpRequest) {
+  implicit class FullHttpRequestHelper(original: FullHttpRequest) {
 
     lazy val decoded = URLDecoder.decode(original.getUri(), "UTF-8")
 
@@ -231,6 +234,8 @@ package object helper {
 
     lazy val parsedRequest = {
       import io.netty.handler.codec.http.HttpMethod._
+      import org.json4s._
+      import org.json4s.native.JsonMethods._
 
       // query parameter
       val urlTuple = if (decoded.contains("?")) {
@@ -243,16 +248,28 @@ package object helper {
         (decoded, Map.empty[String, String])
       }
 
-      val formData = if (Array(POST, PUT, PATCH).contains(original.getMethod())) {
-        val postDecoder = new HttpPostRequestDecoder(original)
-        (postDecoder.getBodyHttpDatas().asScala.collect {
-          case a: MixedAttribute => (a.getName() -> a.getValue())
-        }).toMap
-      } else {
-        Map.empty[String, String]
+      val data = Option(original.headers.get(HttpHeaders.Names.CONTENT_TYPE)).flatMap {
+        case CONTENTTYPE_CHARSET("application/json", charset) => Option(original.content.toString(Charset.forName(charset)))
+        case "application/json" => Option(original.content.toString(CharsetUtil.UTF_8))
+      }.map(parse(_)).map {
+        case j: JObject => j.values
       }
 
-      ParsedRequest(urlTuple._1, urlTuple._2, formData, original.getMethod())
+      val postData = data match {
+        case Some(d) => d
+        case None => {
+          if (Array(POST, PUT, PATCH).contains(original.getMethod())) {
+            val postDecoder = new HttpPostRequestDecoder(original)
+            (postDecoder.getBodyHttpDatas().asScala.collect {
+              case a: MixedAttribute => (a.getName() -> a.getValue())
+            }).toMap
+          } else {
+            Map.empty[String, Any]
+          }
+        }
+      }
+
+      ParsedRequest(urlTuple._1, urlTuple._2, postData, original.getMethod())
     }
 
     lazy val extension = getExtension(parsedRequest.url)

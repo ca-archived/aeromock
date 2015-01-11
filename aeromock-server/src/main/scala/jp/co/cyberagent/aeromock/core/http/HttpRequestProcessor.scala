@@ -46,7 +46,8 @@ class HttpRequestProcessor(implicit inj: Injector) extends AnyRef with Injectabl
         "REQUEST_URI" -> original.requestUri,
         "QUERY_STRING" -> original.queryString,
         "PARAMETERS" -> original.parsedRequest.queryParameters.asJava,
-        "FORM_DATA" -> original.parsedRequest.formData.asJava,
+        "FORM_DATA" -> original.parsedRequest.postData.asJava, // TODO FORM_DATA is deprecated, will be removed at ver 0.3.
+        "POST_DATA" -> original.parsedRequest.postData.asJava, // use POST_DATA instead of FORM_DATA
         "NOW" -> DateTime.now().toDate()
       )
 
