@@ -70,7 +70,7 @@ notify:
 
 deployment:
   snapshot:
-    branch: /.+-snapshot$/
+    branch: /^feature\/.+$/
     owner: CyberAgent
     commands:
       - ./aeromock-dsl/gradlew -p aeromock-dsl uploadArchives
