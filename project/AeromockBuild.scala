@@ -87,7 +87,7 @@ object AeromockBuild extends Build {
   lazy val root = Project(
     id = "root",
     base = file("."),
-    settings = baseSettings ++ coverallsSettings
+    settings = Seq(publish := { }) ++ baseSettings ++ coverallsSettings
   ) copy (
     aggregate = projects.filterNot(p => Set("root").contains(p.id)).map(p => p: ProjectReference)
     )
@@ -95,7 +95,7 @@ object AeromockBuild extends Build {
   lazy val aeromock_spec_support = Project(
     id = "aeromock-spec-support",
     base = file("aeromock-spec-support"),
-    settings = baseSettings
+    settings = Seq(publish := { }) ++ baseSettings
   )
 
   lazy val aeromock_server = Project(
