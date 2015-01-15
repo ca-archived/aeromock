@@ -19,7 +19,8 @@ import org.apache.commons.lang3.reflect.FieldUtils
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
-import scalaz.Validation
+import scalaz._
+import Scalaz._
 import scalaz.Validation._
 import scala.language.reflectiveCalls
 
@@ -233,7 +234,6 @@ package object helper {
     lazy val queryString = if (decoded.contains("?")) decoded.substring(decoded.indexOf("?") + 1, decoded.length()) else ""
 
     lazy val parsedRequest = {
-      import io.netty.handler.codec.http.HttpMethod._
       import org.json4s._
       import org.json4s.native.JsonMethods._
 
@@ -248,28 +248,40 @@ package object helper {
         (decoded, Map.empty[String, String])
       }
 
-      val data = Option(original.headers.get(HttpHeaders.Names.CONTENT_TYPE)).flatMap {
-        case CONTENTTYPE_CHARSET("application/json", charset) => Option(original.content.toString(Charset.forName(charset)))
-        case "application/json" => Option(original.content.toString(CharsetUtil.UTF_8))
-      }.map(parse(_)).map {
-        case j: JObject => j.values
-      }
-
-      val postData = data match {
-        case Some(d) => d
-        case None => {
-          if (Array(POST, PUT, PATCH).contains(original.getMethod())) {
-            val postDecoder = new HttpPostRequestDecoder(original)
-            (postDecoder.getBodyHttpDatas().asScala.collect {
-              case a: MixedAttribute => (a.getName() -> a.getValue())
-            }).toMap
-          } else {
-            Map.empty[String, Any]
+      val postData = Option(original.headers.get(HttpHeaders.Names.CONTENT_TYPE)).map {
+        case CONTENTTYPE_CHARSET(ct, charset) => (ct, Charset.forName(charset))
+        case s => (s, CharsetUtil.UTF_8)
+      }.map {
+        case ("application/json", cs) => {
+          val json = original.content.toString(cs)
+          parse(json) match {
+            case j: JObject => j.values.right[String]
+            case JNothing => s"Failed to parse json: $json".left[Map[String, Any]]
+            case _ => Map.empty[String, Any].right[String]
           }
+        }
+        case ("application/x-www-form-urlencoded", cs) => {
+          (new HttpPostRequestDecoder(original).getBodyHttpDatas().asScala.collect {
+            case a: MixedAttribute => (a.getName() -> a.getValue())
+          }).toMap.right[String]
+        }
+        case (ct, cs) if ct.startsWith("multipart/form-data") => {
+          (new HttpPostRequestDecoder(original).getBodyHttpDatas().asScala.collect {
+            case a: MixedAttribute => (a.getName() -> a.getValue())
+          }).toMap.right[String]
+        }
+        case (ct, cs) => {
+          // ignore, do not parse
+          Map.empty[String, Any].right[String]
         }
       }
 
-      ParsedRequest(urlTuple._1, urlTuple._2, postData, original.getMethod())
+      postData match {
+        case Some(\/-(d)) => ParsedRequest(urlTuple._1, urlTuple._2, d, original.getMethod())
+        case Some(-\/(e)) => throw new AeromockInvalidRequestException(e)
+        case _ => ParsedRequest(urlTuple._1, urlTuple._2, Map.empty, original.getMethod())
+      }
+
     }
 
     lazy val extension = getExtension(parsedRequest.url)
