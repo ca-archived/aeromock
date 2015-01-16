@@ -254,11 +254,16 @@ package object helper {
       }.map {
         case ("application/json", cs) => {
           val json = original.content.toString(cs)
-          parse(json) match {
-            case j: JObject => j.values.right[String]
-            case JNothing => s"Failed to parse json: $json".left[Map[String, Any]]
-            case _ => Map.empty[String, Any].right[String]
+          if (StringUtils.isBlank(json)) {
+            Map.empty[String, Any].right[String]
+          } else {
+            \/.fromTryCatchNonFatal(parse(json)) match {
+              case \/-(j: JObject) => j.values.right[String]
+              case \/-(j) => Map.empty[String, Any].right[String]
+              case -\/(e) => s"Failed to parse json: $json".left[Map[String, Any]]
+            }
           }
+
         }
         case ("application/x-www-form-urlencoded", cs) => {
           (new HttpPostRequestDecoder(original).getBodyHttpDatas().asScala.collect {
