@@ -15,7 +15,7 @@ case class Endpoint(raw: String) {
 class AeromockHttpRequest(
   val url: String,
   val queryParameters: Map[String, String],
-  val formData: Map[String, String],
+  val postData: Map[String, Any],
   val routeParameters: Map[String, String],
   val method: HttpMethod = HttpMethod.GET
 )
@@ -23,7 +23,7 @@ class AeromockHttpRequest(
 object AeromockHttpRequest {
 
   def apply(url: String, queryParameters: Map[String, String],
-        formData: Map[String, String],
+        postData: Map[String, Any],
         routeParameters: Map[String, String] = Map.empty,
         method: HttpMethod = HttpMethod.GET): AeromockHttpRequest = {
     require(url != null)
@@ -37,11 +37,11 @@ object AeromockHttpRequest {
       s
     }
 
-    new AeromockHttpRequest(formatted, queryParameters, formData, routeParameters, method)
+    new AeromockHttpRequest(formatted, queryParameters, postData, routeParameters, method)
   }
 
   def unapply(request: AeromockHttpRequest) = {
-    Some((request.url, request.queryParameters, request.formData, request.routeParameters, request.method))
+    Some((request.url, request.queryParameters, request.postData, request.routeParameters, request.method))
   }
 
 }

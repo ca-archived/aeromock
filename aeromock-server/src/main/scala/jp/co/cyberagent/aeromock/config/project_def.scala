@@ -286,6 +286,7 @@ class StaticDef {
 class AjaxDef {
   // ajax -> root
   @BeanProperty var root: String = null
+  @BeanProperty var jsonp_callback_name: String = null
 
   def toValue(projectRoot: Path): ValidationNel[String, Option[Ajax]] = {
 
@@ -305,9 +306,12 @@ class AjaxDef {
       }
     }
 
-    for {
-      ajaxRoot <- rootResult
-    } yield (Ajax(ajaxRoot).some)
+    val jsonpCallbackNameResult = Option(jsonp_callback_name) match {
+      case None => none[String].successNel
+      case Some(s) => s.some.successNel
+    }
+
+    (rootResult |@| jsonpCallbackNameResult) apply Ajax rightMap(_.some)
   }
 
 }

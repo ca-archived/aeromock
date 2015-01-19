@@ -24,7 +24,7 @@ object DataPathResolver {
           None
         } else {
           resolve(rootDir, AeromockHttpRequest(parsedRequest.url, parsedRequest.queryParameters,
-            parsedRequest.formData, Map.empty, HttpMethod.GET), naming)
+            parsedRequest.postData, Map.empty, HttpMethod.GET), naming)
         }
       }
       case 1 => Some(files.last)

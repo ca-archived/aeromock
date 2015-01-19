@@ -21,7 +21,8 @@ class JsonApiHttpRequestProcessor(implicit inj: Injector) extends HttpRequestPro
 
   override def process(rawRequest: FullHttpRequest)(implicit context: ChannelHandlerContext): HttpResponse = {
 
-    val ajaxRoot = project._ajax.root
+    val ajax = project._ajax
+    val ajaxRoot = ajax.root
     val naming = project._naming
 
     val request = rawRequest.toAeromockRequest(Map.empty)
@@ -39,6 +40,11 @@ class JsonApiHttpRequestProcessor(implicit inj: Injector) extends HttpRequestPro
     val responseWriter = JsonApiResponseWriterFactory.create(project, variableHelper, dataMap)
 
     val response = responseWriter.write
-    renderJson(response._1, HttpResponseStatus.OK, response._2)
+
+    ajax.jsonpCallbackName.flatMap(p => request.queryParameters.get(p)) match {
+      case None => renderJson(response._1, HttpResponseStatus.OK, response._2)
+      case Some(callbackName) => renderJsonp(response._1, callbackName, HttpResponseStatus.OK, response._2)
+    }
+
   }
 }

@@ -69,7 +69,7 @@ class MessagepackResponseServiceSpec extends Specification with Tables with Spec
         createIntegerValue(300)
       ))
 
-      val result = render(request("/array"))
+      val result = render(request("/array").toAeromockRequest(Map.empty))
       result.content must_== ScalaMessagePack.writeV(expected)
     }
 
@@ -91,7 +91,7 @@ class MessagepackResponseServiceSpec extends Specification with Tables with Spec
         createIntegerValue(999999999999L)
       ))
 
-      val result = render(request("/array_mix"))
+      val result = render(request("/array_mix").toAeromockRequest(Map.empty))
       result.content must_== ScalaMessagePack.writeV(expected)
     }
   }
@@ -193,7 +193,7 @@ class MessagepackResponseServiceSpec extends Specification with Tables with Spec
           ))
         ))
       ))
-      val result = render(request("/nest"))
+      val result = render(request("/nest").toAeromockRequest(Map.empty))
       result.content must_== ScalaMessagePack.writeV(expected)
     }
   }

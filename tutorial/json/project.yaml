@@ -1,2 +1,3 @@
 ajax:
   root: ./ajax
+  jsonp_callback_name: callback

@@ -1,14 +1,15 @@
 package jp.co.cyberagent.aeromock
 
 import java.net.{InetSocketAddress, URLDecoder}
+import java.nio.charset.Charset
 import java.nio.file._
 import java.nio.file.attribute.BasicFileAttributes
 import java.security.MessageDigest
 import java.util.regex.Pattern
 
-import io.netty.handler.codec.http.HttpMethod._
-import io.netty.handler.codec.http.HttpRequest
+import io.netty.handler.codec.http.{FullHttpRequest, HttpHeaders, HttpRequest}
 import io.netty.handler.codec.http.multipart.{HttpPostRequestDecoder, MixedAttribute}
+import io.netty.util.CharsetUtil
 import jp.co.cyberagent.aeromock.config.MessageManager
 import jp.co.cyberagent.aeromock.core.http.AeromockHttpRequest
 import jp.co.cyberagent.aeromock.util.ResourceUtil
@@ -18,7 +19,8 @@ import org.apache.commons.lang3.reflect.FieldUtils
 import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
-import scalaz.Validation
+import scalaz._
+import Scalaz._
 import scalaz.Validation._
 import scala.language.reflectiveCalls
 
@@ -31,6 +33,7 @@ package object helper {
   val INSECURE_URI = Pattern.compile( """.*[<>&"].*""")
   val EXTENSION = Pattern.compile( """.*\.(.+)""")
   val WITHOUT_EXTENSION = Pattern.compile("""(.+)\..+""")
+  val CONTENTTYPE_CHARSET = """^(.+);\s*charset=(.*)$""".r
 
   type Closable = { def close(): Unit }
   def processResource[A <: Closable, B](resource: A)(f: A => B) = try {
@@ -222,7 +225,7 @@ package object helper {
     def getExtension(): Option[String] = helper.getExtension(path.getFileName.toString)
   }
 
-  implicit class FullHttpRequestHelper(original: HttpRequest) {
+  implicit class FullHttpRequestHelper(original: FullHttpRequest) {
 
     lazy val decoded = URLDecoder.decode(original.getUri(), "UTF-8")
 
@@ -239,20 +242,55 @@ package object helper {
       }).toMap
     }
 
-    lazy val postParameters = if (Array(POST, PUT, PATCH).contains(original.getMethod())) {
-      val postDecoder = new HttpPostRequestDecoder(original)
-      (postDecoder.getBodyHttpDatas().asScala.collect {
-        case a: MixedAttribute => (a.getName() -> a.getValue())
-      }).toMap
-    } else {
-      Map.empty[String, String]
+    lazy val postData = {
+      import org.json4s._
+      import org.json4s.native.JsonMethods._
+
+      val postData = Option(original.headers.get(HttpHeaders.Names.CONTENT_TYPE)).map {
+        case CONTENTTYPE_CHARSET(ct, charset) => (ct, Charset.forName(charset))
+        case s => (s, CharsetUtil.UTF_8)
+      }.map {
+        case ("application/json", cs) => {
+          val json = original.content.toString(cs)
+          if (StringUtils.isBlank(json)) {
+            Map.empty[String, Any].right[String]
+          } else {
+            \/.fromTryCatchNonFatal(parse(json)) match {
+              case \/-(j: JObject) => j.values.right[String]
+              case \/-(j) => Map.empty[String, Any].right[String]
+              case -\/(e) => s"Failed to parse json: $json".left[Map[String, Any]]
+            }
+          }
+
+        }
+        case ("application/x-www-form-urlencoded", cs) => {
+          (new HttpPostRequestDecoder(original).getBodyHttpDatas().asScala.collect {
+            case a: MixedAttribute => (a.getName() -> a.getValue())
+          }).toMap.right[String]
+        }
+        case (ct, cs) if ct.startsWith("multipart/form-data") => {
+          (new HttpPostRequestDecoder(original).getBodyHttpDatas().asScala.collect {
+            case a: MixedAttribute => (a.getName() -> a.getValue())
+          }).toMap.right[String]
+        }
+        case (ct, cs) => {
+          // ignore, do not parse
+          Map.empty[String, Any].right[String]
+        }
+      }
+
+      postData match {
+        case Some(\/-(d)) => d
+        case Some(-\/(e)) => throw new AeromockInvalidRequestException(e)
+        case _ => Map.empty[String, Any]
+      }
     }
 
     def toAeromockRequest(routeParameters: Map[String, String]) = {
       AeromockHttpRequest(
         url = requestUri,
         queryParameters = queryParameters,
-        formData = postParameters,
+        postData = postData,
         routeParameters = routeParameters,
         method = original.getMethod
       )
