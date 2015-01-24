@@ -13,6 +13,8 @@ machine:
     - rm ~/sec.key
     - mkdir -p ~/.gradle
     - echo 'signing.keyId=CC041648' > ~/.gradle/gradle.properties
+    # compass
+    - gem install compass
   environment:
     SBT_OPTS: -Xmx2G -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=2G -Xss2M
 
@@ -32,15 +34,13 @@ dependencies:
     - ~/aeromock/aeromock-groovy-template/target/resolution-cache
     - ~/aeromock/aeromock-thymeleaf/target/resolution-cache
   pre:
-    #- npm install -g grunt-cli bower
+    - npm install -g grunt-cli gulp bower
     - ./gradlew install -x signArchives:
         pwd: aeromock-dsl
-    #- npm install:
-    #    pwd: aeromock-view
-    #- bower install:
-    #    pwd: aeromock-view
-    #- grunt build:
-    #    pwd: aeromock-view
+    - npm install:
+        pwd: aeromock-view
+    - bower install:
+        pwd: aeromock-view
   override:
     - ./sbt test:compile
     - pip install fabric
