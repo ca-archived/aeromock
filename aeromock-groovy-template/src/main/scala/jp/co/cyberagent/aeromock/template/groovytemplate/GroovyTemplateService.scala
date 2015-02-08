@@ -1,14 +1,12 @@
 package jp.co.cyberagent.aeromock.template.groovytemplate
 
-import java.io.{IOException, Writer}
-import java.nio.file.Paths
+import java.io.IOException
 
-import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import jp.co.cyberagent.aeromock.data.InstanceProjection
 import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
+import jp.co.cyberagent.aeromock.template.TemplateService
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
 import org.codehaus.groovy.control.CompilationFailedException
 import scaldi.Injector
@@ -41,22 +39,6 @@ class GroovyTemplateService(config: GroovyTemplateConfig)(implicit val inj: Inje
 
     val proxyMap = projection.toInstanceJava().asInstanceOf[java.util.Map[_, _]]
     template.make(proxyMap).toString
-  }
-
-  /**
-   * @inheritdoc
-   */
-  override def templateAssertProcess(templatePath: String): Either[TemplateAssertResult, (Any, Writer) => Unit] = {
-    val startTimeMills = System.currentTimeMillis()
-    try {
-      Right((param: Any, writer: Writer) => {
-        engine.createTemplate(Paths.get(templatePath).toFile).make(param.asInstanceOf[java.util.Map[_, _]])
-        println()
-      })
-    } catch {
-      case e: IOException => Left(TemplateAssertError(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-      case e: CompilationFailedException => Left(TemplateAssertFailure(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-    }
   }
 
   /**

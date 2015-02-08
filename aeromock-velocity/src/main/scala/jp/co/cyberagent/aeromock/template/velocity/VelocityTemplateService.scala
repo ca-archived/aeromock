@@ -1,13 +1,11 @@
 package jp.co.cyberagent.aeromock.template.velocity
 
-import java.io.{StringWriter, Writer}
+import java.io.StringWriter
 
-import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.ParsedRequest
 import jp.co.cyberagent.aeromock.data.InstanceProjection
-import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
+import jp.co.cyberagent.aeromock.template.TemplateService
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.Velocity
@@ -44,19 +42,6 @@ class VelocityTemplateService(implicit val inj: Injector) extends TemplateServic
     val writer = new StringWriter
     template.merge(context, writer)
     writer.toString
-  }
-
-  override def templateAssertProcess(templatePath: String): Either[TemplateAssertResult, (Any, Writer) => Unit] = {
-    val startTimeMills = System.currentTimeMillis()
-    try {
-      Right((param: Any, writer: Writer) => {
-        Velocity.getTemplate(templatePath).merge(new VelocityContext(param.asInstanceOf[java.util.Map[_, _]]), writer)
-      })
-    } catch {
-      case e: ParseErrorException => Left(TemplateAssertFailure(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-      case e: Exception => Left(TemplateAssertError(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-    }
-
   }
 
   /**

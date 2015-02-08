@@ -1,14 +1,12 @@
 package jp.co.cyberagent.aeromock.template.jade4j
 
-import java.io.{FileNotFoundException, StringWriter, Writer}
+import java.io.{FileNotFoundException, StringWriter}
 
 import de.neuland.jade4j.exceptions.JadeParserException
-import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.{ParsedRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data.InstanceProjection
-import jp.co.cyberagent.aeromock.helper._
-import jp.co.cyberagent.aeromock.template.{TemplateAssertError, TemplateAssertFailure, TemplateAssertResult, TemplateService}
+import jp.co.cyberagent.aeromock.template.TemplateService
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
 import scaldi.Injector
 
@@ -49,20 +47,6 @@ class Jade4jTemplateService(config: Jade4jConfig)(implicit val inj: Injector) ex
     out.toString
   }
 
-  /**
-   * @inheritdoc
-   */
-  override def templateAssertProcess(templatePath: String): Either[TemplateAssertResult, (Any, Writer) => Unit] = {
-    val startTimeMills = System.currentTimeMillis()
-    try {
-      Right((param: Any, writer: Writer) => {
-        configuration.renderTemplate(configuration.getTemplate(templatePath), param.asInstanceOf[java.util.Map[String, AnyRef]], writer)
-      })
-    } catch {
-      case e: JadeParserException => Left(TemplateAssertFailure(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-      case e: Exception => Left(TemplateAssertError(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-    }
-  }
 
   /**
    * @inheritdoc
