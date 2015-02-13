@@ -1,0 +1,13 @@
+{
+  "name": "aeromock-report",
+  "description": "Awesome stuff, the modular and interoperable way",
+  "version": "0.0.0",
+  "dependencies": {
+    "platform": "Polymer/platform#~0.3.3",
+    "polymer": "Polymer/polymer#~0.3.3",
+    "materialize": "~0.95.2"
+  },
+  "devDependencies": {
+    "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.zip"
+  }
+}
