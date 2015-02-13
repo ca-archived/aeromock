@@ -20,13 +20,10 @@ import scala.reflect.io.Directory
 class ViewCheckJob(override val command: JobOperation)(implicit inj: Injector) extends CliJob {
 
   val project = inject[Project]
-  val service = inject[Option[TemplateService]] match {
-    case Some(service) => service
-    case None => throw new AeromockBadUsingException("TemplateService is disabled. Please Check template.serviceClass. ")
-  }
 
+  // templateとデータのセット
   val template = project._template
-  val dataRoot = project._data.root
+  val dataRoot = project._data
   val reportRoot = project._test.reportRoot
 
   // prepare directory
@@ -39,6 +36,12 @@ class ViewCheckJob(override val command: JobOperation)(implicit inj: Injector) e
    * @inheritdoc
    */
   override def execute(): Int = {
+    // TODO project.yamlを見て、リクエストを生成
+      // TODO template
+      // TODO ajax
+      // TODO protobuf, messagepack
+    // TODO テスト設定
+      // TODO useragent
     0
   }
 
