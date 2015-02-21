@@ -9,7 +9,7 @@ import jp.co.cyberagent.aeromock.cli.Job
 object CliJobs {
 
   val jobs = Seq(
-    classOf[ViewCheckJob]
+    classOf[ValidationJob]
   )
 
   lazy val availableJobs = {

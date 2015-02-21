@@ -3,7 +3,7 @@ package jp.co.cyberagent.aeromock.cli
 import java.nio.file.Path
 
 import jp.co.cyberagent.aeromock.AeromockTestModule
-import jp.co.cyberagent.aeromock.cli.job.ViewCheckJob
+import jp.co.cyberagent.aeromock.cli.job.ValidationJob
 import jp.co.cyberagent.aeromock.cli.option.CliCommand
 import jp.co.cyberagent.aeromock.config.definition.ProjectDef
 import jp.co.cyberagent.aeromock.test.SpecSupport
@@ -24,6 +24,6 @@ class CliJobSelectorSpec extends Specification with Tables with SpecSupport {
     val command = CliCommand(Array("test"))
 
     val selector = inject[CliJobSelector]
-    selector.select(command).getClass must_== classOf[ViewCheckJob]
+    selector.select(command).getClass must_== classOf[ValidationJob]
   }
 }

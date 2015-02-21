@@ -4,7 +4,6 @@ import java.nio.file.Path
 
 import jp.co.cyberagent.aeromock.config
 import jp.co.cyberagent.aeromock.config._
-import jp.co.cyberagent.aeromock.template.TemplateContexts._
 import jp.co.cyberagent.aeromock.template.TemplateService
 import org.apache.commons.lang3.StringUtils
 import scaldi.{Injectable, Injector}
@@ -177,13 +176,16 @@ class TemplateDef extends AnyRef with Injectable {
 
       }
       case Failure(value) => {
-        // navigatorがtemplate.rootの値に依存するので
         List[TemplateContext]().successNel[String]
       }
     }
 
-    (rootResult |@| serviceClassResult |@| contextsResult) {
-      Template(_, _, _).some
+    (rootResult |@| serviceClassResult |@| contextsResult) { (r, s, c) =>
+      if (c.isEmpty) {
+        Template(r, s, List(TemplateContext("localhost", inject[Int] (identified by 'listenPort), r))).some
+      } else {
+        Template(r, s, c).some
+      }
     }
   }
 
