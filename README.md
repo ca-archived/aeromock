@@ -33,6 +33,10 @@ Requirements
 * Git
 * Vagrant >= 1.5 (If using Vagrant Share)
 
+Docker Image
+===
+[Docker Hub](https://registry.hub.docker.com/u/stormcat24/aeromock/)
+
 
 Supported template engines (Currently)
 ===
