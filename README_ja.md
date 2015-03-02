@@ -33,6 +33,10 @@ AeromockはテンプレートファイルとデータファイルだけでHTML�
 * Java >= 1.7
 * Git
 * Vagrant >= 1.5 (Vagrant Shareを利用する場合)
+ 
+Dockerイメージ
+===
+[Docker Hub](https://registry.hub.docker.com/u/stormcat24/aeromock/)
 
 サポートしているテンプレートエンジン
 ===
