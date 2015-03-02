@@ -6,6 +6,7 @@ import io.netty.handler.codec.http.HttpMethod
 import jp.co.cyberagent.aeromock.config.Project
 import jp.co.cyberagent.aeromock.core.http.Endpoint
 import jp.co.cyberagent.aeromock.helper._
+import jp.co.cyberagent.aeromock.server.DataFile
 import scaldi.{Injectable, Injector}
 
 object DataFileService extends AnyRef with Injectable {
@@ -45,5 +46,3 @@ object DataFileService extends AnyRef with Injectable {
   }
 
 }
-
-case class DataFile(id: Option[String], path: Path, method: HttpMethod = HttpMethod.GET)
