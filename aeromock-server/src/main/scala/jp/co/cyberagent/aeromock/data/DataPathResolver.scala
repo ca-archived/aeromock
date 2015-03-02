@@ -31,7 +31,7 @@ object DataPathResolver {
     }
   }
 
-  private def getCandidates(rootDir: Path, parsedRequest: ParsedRequest, naming: Naming): Seq[Path] = {
+  def getCandidates(rootDir: Path, parsedRequest: ParsedRequest, naming: Naming): Seq[Path] = {
     val url = parsedRequest.url
     val dataId = parsedRequest.queryParameters.get(naming.dataidQuery)
 
