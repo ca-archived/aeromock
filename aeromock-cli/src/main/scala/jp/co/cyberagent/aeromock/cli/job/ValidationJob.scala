@@ -38,14 +38,16 @@ class ValidationJob(override val command: JobOperation)(implicit inj: Injector) 
    */
   override def execute(): Int = {
 
-    (project.template, project.data) match {
-      case (Success(Some(template)), Success(Some(data))) => // OK
+    var result = true
+
+    (project.template, project.data, project.naming, project.test) match {
+      case (Success(Some(template)), Success(Some(data)), Success(naming), Success(test)) => // OK
         // templateとdataを操作してリクエストをつくる
-        new TemplateValidator().validate(template, data)
+        result &= new TemplateValidator().validate(template, data, naming, test).passed
           // テンプレをループ
             // 紐づくデータを探す。あればリクエスト、なければ警告
-      case (Success(_), Success(_)) => // nothing to do
-      case (_, _) => // TODO error
+      case (Success(_), Success(_), Success(_), Success(_)) => // nothing to do
+      case (_, _, _, _) => // TODO error
     }
 
     project.ajax match {
@@ -66,9 +68,7 @@ class ValidationJob(override val command: JobOperation)(implicit inj: Injector) 
       case (_, _) => // TODO error
     }
 
-    // TODO テスト設定
-    // TODO useragent
-    0
+    if (result) 0 else 1
   }
 
 }
