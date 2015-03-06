@@ -46,7 +46,7 @@ dependencies:
   override:
     #- ./sbt test:compile
     #- pip install fabric
-    - docker run -d -p 3183:3183 -v $HOME/tutorial/freemarker:/project stormcat24/aeromock
+    - docker run -d -p 3183:3183 -v $HOME/aeromock/tutorial/freemarker:/project stormcat24/aeromock
     - sleep 10
 
 
