@@ -47,7 +47,6 @@ dependencies:
     #- ./sbt test:compile
     #- pip install fabric
     - docker run -d -p 3183:3183 -v $HOME/tutorial/freemarker:/project stormcat24/aeromock
-    - docker save stormcat24/aeromock > ~/docker/aeromock.tar
 
 
 test:
