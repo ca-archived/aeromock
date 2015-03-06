@@ -15,6 +15,8 @@ machine:
     - echo 'signing.keyId=CC041648' > ~/.gradle/gradle.properties
   environment:
     SBT_OPTS: -Xmx2G -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=2G -Xss2M
+  services:
+    - docker
 
 dependencies:
   cache_directories:
@@ -31,56 +33,65 @@ dependencies:
     - ~/aeromock/aeromock-velocity/target/resolution-cache
     - ~/aeromock/aeromock-groovy-template/target/resolution-cache
     - ~/aeromock/aeromock-thymeleaf/target/resolution-cache
-  pre:
-    - npm install -g grunt-cli bower
-    - ./gradlew install -x signArchives:
-        pwd: aeromock-dsl
-    - npm install:
-        pwd: aeromock-view
-    - bower install:
-        pwd: aeromock-view
-    - grunt build:
-        pwd: aeromock-view
+  #pre:
+    #- npm install -g grunt-cli bower
+    #- ./gradlew install -x signArchives:
+        #pwd: aeromock-dsl
+    #- npm install:
+        #pwd: aeromock-view
+    #- bower install:
+        #pwd: aeromock-view
+    #- grunt build:
+        #pwd: aeromock-view
   override:
-    - ./sbt test:compile
-    - pip install fabric
+    #- ./sbt test:compile
+    #- pip install fabric
+    - docker run -d -p 3183:3183 -v $HOME/tutorial/freemarker:/project stormcat24/aeromock
+    - docker save stormcat24/aeromock > ~/docker/aeromock.tar
+
 
 test:
   override:
-    - ./sbt test
+    - curl http://localhost:3183/test
+    - casperjs capture.js
+
   post:
-    - >
-      if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
-        echo "start to measure coverage report."
-        ./sbt scoverage:test
-        ./sbt coveralls
-      fi
-    - cp -R aeromock-server/target/test-reports/* $CIRCLE_ARTIFACTS
-    - cp -R aeromock-freemarker/target/test-reports/* $CIRCLE_ARTIFACTS
-    - cp -R aeromock-handlebars-java/target/test-reports/* $CIRCLE_ARTIFACTS
-    - cp -R aeromock-jade4j/target/test-reports/* $CIRCLE_ARTIFACTS
-    - cp -R aeromock-velocity/target/test-reports/* $CIRCLE_ARTIFACTS
-    - cp -R aeromock-groovy-template/target/test-reports/* $CIRCLE_ARTIFACTS
-    - cp -R aeromock-thymeleaf/target/test-reports/* $CIRCLE_ARTIFACTS
+    - cp -R target/*.png $CIRCLE_ARTIFACTS
+
+    #- ./sbt test
+  #post:
+    #- >
+      #if [ -n "${RUN_NIGHTLY_BUILD}" ]; then
+        #echo "start to measure coverage report."
+        #./sbt scoverage:test
+        #./sbt coveralls
+      #fi
+    #- cp -R aeromock-server/target/test-reports/* $CIRCLE_ARTIFACTS
+    #- cp -R aeromock-freemarker/target/test-reports/* $CIRCLE_ARTIFACTS
+    #- cp -R aeromock-handlebars-java/target/test-reports/* $CIRCLE_ARTIFACTS
+    #- cp -R aeromock-jade4j/target/test-reports/* $CIRCLE_ARTIFACTS
+    #- cp -R aeromock-velocity/target/test-reports/* $CIRCLE_ARTIFACTS
+    #- cp -R aeromock-groovy-template/target/test-reports/* $CIRCLE_ARTIFACTS
+    #- cp -R aeromock-thymeleaf/target/test-reports/* $CIRCLE_ARTIFACTS
 
 
-notify:
-  webhooks:
-    - url: https://webhooks.gitter.im/e/73037938e5ad665bdbd5
+#notify:
+  #webhooks:
+    #- url: https://webhooks.gitter.im/e/73037938e5ad665bdbd5
 
-deployment:
-  snapshot:
-    branch: /^feature\/.+$/
-    owner: CyberAgent
-    commands:
-      - ./aeromock-dsl/gradlew -p aeromock-dsl uploadArchives
-      - ./sbt publishSigned
-  next:
-    branch: /^next\/.+$/
-    owner: CyberAgent
-    commands:
-      - echo "current branch is $CIRCLE_BRANCH."
-      - git checkout master
-      - git merge origin/master
-      - fab release:next_version=`echo $CIRCLE_BRANCH | sed -e 's/^next\/\(.*\)$/\1/'`
-      - exit $?
+#deployment:
+  #snapshot:
+    #branch: /^feature\/.+$/
+    #owner: CyberAgent
+    #commands:
+      #- ./aeromock-dsl/gradlew -p aeromock-dsl uploadArchives
+      #- ./sbt publishSigned
+  #next:
+    #branch: /^next\/.+$/
+    #owner: CyberAgent
+    #commands:
+      #- echo "current branch is $CIRCLE_BRANCH."
+      #- git checkout master
+      #- git merge origin/master
+      #- fab release:next_version=`echo $CIRCLE_BRANCH | sed -e 's/^next\/\(.*\)$/\1/'`
+      #- exit $?
