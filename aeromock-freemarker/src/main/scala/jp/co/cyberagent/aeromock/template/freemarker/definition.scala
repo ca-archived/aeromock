@@ -42,17 +42,15 @@ class FreemarkerConfig(
 object FreemarkerConfig {
   def apply(bean: FreemarkerConfigDetailDef): FreemarkerConfig = {
 
-    val objectWrapper = Option(bean.objectWrapper) match {
-      case Some("BEANS_WRAPPER") => ObjectWrapper.BEANS_WRAPPER
-      case Some("STRUTS2_BEANS_WRAPPER") => new Struts2BeanWrapper(true)
-      case Some("SIMPLE_WRAPPER") => ObjectWrapper.SIMPLE_WRAPPER
-      case _ => ObjectWrapper.DEFAULT_WRAPPER
-    }
+    val objectWrapper = Option(bean.objectWrapper).map {
+      case "BEANS_WRAPPER" => ObjectWrapper.BEANS_WRAPPER
+      case "STRUTS2_BEANS_WRAPPER" => new Struts2BeanWrapper(true)
+      case "SIMPLE_WRAPPER" => ObjectWrapper.SIMPLE_WRAPPER
+    }.getOrElse(ObjectWrapper.DEFAULT_WRAPPER)
 
-    val arithmeticEngine = Option(bean.arithmeticEngine) match {
-      case Some("BIGDECIMAL_ENGINE") => ArithmeticEngine.BIGDECIMAL_ENGINE.some
-      case Some("CONSERVATIVE_ENGINE") => ArithmeticEngine.CONSERVATIVE_ENGINE.some
-      case _ => none
+    val arithmeticEngine = Option(bean.arithmeticEngine).map {
+      case "BIGDECIMAL_ENGINE" => ArithmeticEngine.BIGDECIMAL_ENGINE
+      case "CONSERVATIVE_ENGINE" => ArithmeticEngine.CONSERVATIVE_ENGINE
     }
 
     new FreemarkerConfig(
