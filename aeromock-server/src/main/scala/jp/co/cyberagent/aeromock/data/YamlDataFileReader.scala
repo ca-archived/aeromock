@@ -6,7 +6,8 @@ import jp.co.cyberagent.aeromock.helper.DeepTraversal._
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.util.ResourceUtil
 import jp.co.cyberagent.aeromock.{AeromockConfigurationException, AeromockInvalidDataFileException, AeromockResourceNotFoundException}
-import org.yaml.snakeyaml.Yaml
+import org.joda.time.DateTime
+import org.yaml.snakeyaml.{DumperOptions, Yaml}
 import org.yaml.snakeyaml.constructor.Constructor
 import org.yaml.snakeyaml.representer.Representer
 
@@ -20,18 +21,13 @@ class YamlDataFileReader extends DataFileReader {
         readFunc(is => {
           trye(new Yaml().load(is)) match {
             case Left(e) => throw new AeromockInvalidDataFileException(file, e)
-            case Right(yaml) => {
-              val result = yaml match {
+            case Right(yaml) =>
+              yaml match {
                 case null => Map.empty
-                case map: java.util.Map[_, _] => {
-                  val aaa = asScalaMap(map){a => a}
-                  aaa
-                }
+                case map: java.util.Map[_, _] => asScalaMap(map){a => a}
                 case collection: java.util.Collection[_] => asScalaIterable(collection) {a => a}
                 case _ => throw new AeromockInvalidDataFileException(file)
               }
-              result
-            }
           }
         })
       }
