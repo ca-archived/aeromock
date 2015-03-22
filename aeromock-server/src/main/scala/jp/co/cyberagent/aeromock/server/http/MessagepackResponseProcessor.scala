@@ -13,7 +13,7 @@ import scaldi.Injector
  * [[jp.co.cyberagent.aeromock.server.http.HttpRequestProcessor]] for messagepack.
  * @author stormcat24
  */
-class MessagepackResponseWriter (implicit inj: Injector) extends HttpRequestProcessor
+class MessagepackResponseProcessor (implicit inj: Injector) extends HttpRequestProcessor
   with HttpResponseWriter with ResponseDataSupport {
 
   val project = inject[Project]
