@@ -3,8 +3,8 @@ package jp.co.cyberagent.aeromock.cli.validation
 import java.io.{FileOutputStream, OutputStreamWriter}
 import java.nio.file.{Files, Path}
 
-import dispatch.Defaults._
-import dispatch._
+import scalaj.http._
+
 import jp.co.cyberagent.aeromock.config.{Data, Naming, Template, Test}
 import jp.co.cyberagent.aeromock.core.http.Endpoint
 import jp.co.cyberagent.aeromock.data.DataFileService
@@ -13,10 +13,6 @@ import jp.co.cyberagent.aeromock.server.DataFile
 import jp.co.cyberagent.aeromock.template.TemplateService
 import org.slf4j.LoggerFactory
 import scaldi.{Injectable, Injector}
-
-import scala.concurrent.Await
-import scala.concurrent.duration.Duration
-import scalaz._
 
 /**
  *
@@ -55,29 +51,22 @@ class TemplateValidator(implicit inj: Injector) extends AnyRef with Injectable {
           val tests = candidates.zipWithIndex.map { case (dataFile, index) =>
             val connector = if (index < candidates.size - 1) "├" else "└"
             val request = createUrl(requestRoot, uri, dataFile)
-            val future = Http(request OK as.String)
-            val testResult = \/.fromTryCatchNonFatal(Await.result(future, Duration.Inf)) match {
-              case -\/(e) => {
-                val cause = e.getCause.asInstanceOf[StatusCode]
-                (false, cause.code)
-              }
-              case \/-(result) => (true, 200)
-            }
+            val response = request.asString
 
-            if (testResult._1) {
+            val result = if (response.code < 300) {
               numSuccess += 1
+              (s"[${green("SUCCESS")}]", true)
             } else {
               numFailed += 1
+              (s"[${red("FAILED")}]", false)
             }
 
-            val marker = if (testResult._1) s"[${green("SUCCESS")}]" else s"[${red("FAILED")}]"
-
-            println(s"        $connector $marker data_path = ${dataFile.path}")
+            println(s"        $connector ${result._1} data_path = ${dataFile.path}")
             Map(
-              "request_url" -> request.toRequest.getUrl,
+              "request_url" -> request.url,
               "data_file" -> dataFile.path.toString,
-              "status" -> testResult._2,
-              "result" -> testResult._1
+              "status" -> response.code,
+              "result" -> result._2
             )
           }
 
@@ -106,11 +95,12 @@ class TemplateValidator(implicit inj: Injector) extends AnyRef with Injectable {
     TestSummary(numTemplate, numSuccess, numFailed, numSkip)
   }
 
-  private def createUrl(urlRoot:String, requestUri: Path, dataFile: DataFile): Req = {
-    url(dataFile match {
-      case DataFile(Some(id), path, method) => s"${urlRoot}${requestUri}?_dataid=${id}"
-      case DataFile(None, path, method) => s"${urlRoot}${requestUri}"
-    }).setHeader("User-Agent", "Aeromock Test Job")
+  private def createUrl(urlRoot:String, requestUri: Path, dataFile: DataFile): HttpRequest = {
+
+    (dataFile match {
+      case DataFile(Some(id), path, method) => Http(s"${urlRoot}${requestUri}").param("_dataid", id)
+      case DataFile(None, path, method) => Http(s"${urlRoot}${requestUri}")
+    }).header("User-Agent", "Aeromock Test Job")
   }
 
   private def writeJson(testResult: Map[String, Any], reportRoot: Path, templateUri: Path): Unit = {

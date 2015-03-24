@@ -3,5 +3,5 @@ name := "aeromock-cli"
 description := "Aeromock Command line interface module."
 
 libraryDependencies ++= Seq(
-  "net.databinder.dispatch" %% "dispatch-core" % "0.11.2"
+  "org.scalaj" %% "scalaj-http" % "1.1.4"
 )
