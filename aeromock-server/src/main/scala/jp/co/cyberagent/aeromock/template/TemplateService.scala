@@ -41,7 +41,7 @@ trait TemplateService extends AnyRef with ResponseDataSupport with Injectable {
       RenderResult(new Yaml(dumperOptions).dumpAsMap(proxyMap), response._2, true)
     } else {
       renderProcess(request.parsedRequest) match {
-        case -\/(e) => throw new AeromockRenderException(request.parsedRequest.url, e.getCause)
+        case -\/(e) => throw new AeromockRenderException(request.parsedRequest.url, e)
         case \/-(result) => result
       }
     }
