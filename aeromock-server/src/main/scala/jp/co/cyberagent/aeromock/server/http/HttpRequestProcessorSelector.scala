@@ -3,6 +3,7 @@ package jp.co.cyberagent.aeromock.server.http
 import io.netty.handler.codec.http.FullHttpRequest
 import jp.co.cyberagent.aeromock.AeromockConfigurationException
 import jp.co.cyberagent.aeromock.config.Project
+import jp.co.cyberagent.aeromock.data.DataPathResolver
 import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template.TemplateService
 import scaldi.{Injectable, Injector}
@@ -33,6 +34,7 @@ object HttpRequestProcessorSelector extends AnyRef with Injectable {
         //      なければAJAXをチェック
 
         val project = inject[Project]
+        val naming = project._naming
 
         val staticInfo = project.static match {
           case Success(Some(value)) => if ((value.root / url).exists()) inject[UserStaticFileHttpRequestProcessor].some else None
@@ -53,7 +55,9 @@ object HttpRequestProcessorSelector extends AnyRef with Injectable {
         }
 
         val messagepackInfo = project.messagepack match {
-          case Success(Some(value)) => if (value.root.exists) inject[MessagepackResponseWriter].some else None
+          case Success(Some(value)) =>
+            // TODO refactor
+            DataPathResolver.resolve(value.root, request.toAeromockRequest(Map.empty), naming).map(_ => inject[MessagepackResponseProcessor])
           case Failure(errors) => throw new AeromockConfigurationException(project.projectConfig, errors)
           case _ => None
         }

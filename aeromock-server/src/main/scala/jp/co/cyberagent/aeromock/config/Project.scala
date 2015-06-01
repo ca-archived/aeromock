@@ -103,6 +103,10 @@ case class Project(
     }
   }
 
+  def hasError(): Unit = {
+
+  }
+
   def templateScript: Path = root / "template.script"
   def dataScript: Path = root / "data.groovy"
   def ajaxScript: Path = root / "ajax.groovy"

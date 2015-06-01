@@ -12,11 +12,11 @@ import scala.util.Try
 object AeromockBuild extends Build {
 
   lazy val scalazVersion = "7.1.0"
-  lazy val nettyVersion = "4.0.24.Final"
+  lazy val nettyVersion = "4.0.28.Final"
   lazy val scaldiVersion = "0.4"
 
   lazy val baseSettings = super.settings ++ Seq(
-    scalaVersion := "2.11.2",
+    scalaVersion := "2.11.6",
     organization := "jp.co.cyberagent.aeromock",
     version := Version.aeromock,
     pgpPassphrase := Some(Try(sys.env("PGP_PASSPHRASE")).getOrElse("").toCharArray),
@@ -70,7 +70,7 @@ object AeromockBuild extends Build {
 
     libraryDependencies ++= Seq(
       "org.scalaz" %% "scalaz-core" % scalazVersion,
-      "org.scala-lang" % "scala-reflect" % "2.11.2",
+      "org.scala-lang" % "scala-reflect" % "2.11.6",
       "com.typesafe.scala-logging" %% "scala-logging-slf4j" % "2.1.2",
       "org.scaldi" %% "scaldi" % scaldiVersion,
       "ch.qos.logback" % "logback-classic" % "1.1.2",

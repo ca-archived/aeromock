@@ -1,15 +1,13 @@
 package jp.co.cyberagent.aeromock.template.handlebars
 
-import java.io.{FileNotFoundException, StringWriter, Writer}
+import java.io.{FileNotFoundException, StringWriter}
 
-import jp.co.cyberagent.aeromock.config.Project
+import com.github.jknack.handlebars.HandlebarsException
 import jp.co.cyberagent.aeromock.core.annotation.TemplateIdentifier
 import jp.co.cyberagent.aeromock.core.http.{AeromockHttpRequest, VariableManager}
 import jp.co.cyberagent.aeromock.data.InstanceProjection
-import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.template._
 import jp.co.cyberagent.aeromock.{AeromockTemplateNotFoundException, AeromockTemplateParseException}
-import com.github.jknack.handlebars.HandlebarsException
 import scaldi.Injector
 
 import scala.language.dynamics
@@ -41,26 +39,6 @@ class HandlebarsTemplateService(config: HandlebarsConfig)(implicit val inj: Inje
     val out = new StringWriter
     template.apply(proxyMap, out)
     out.toString()
-  }
-
-  /**
-   * @inheritdoc
-   */
-  override def templateAssertProcess(templatePath: String): Either[TemplateAssertResult, (Any, Writer) => Unit] = {
-    // Handlebars#compileはテンプレートを探すのにsuffixを考慮してしまうため
-    val formattedPath = getFormattedPath(templatePath)
-    val startTimeMills = System.currentTimeMillis()
-
-    try {
-      Right((param: Any, writer: Writer) => handlebars.compile(formattedPath).apply(param, writer))
-    } catch {
-      case e: HandlebarsException => Left(TemplateAssertFailure(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-      case e: Exception => Left(TemplateAssertError(getDifferenceSecondsFromNow(startTimeMills), e.getMessage))
-    }
-  }
-
-  private def getFormattedPath(templatePath: String): String = {
-    if (templatePath.endsWith(extension)) templatePath.replaceFirst(extension + "$", "") else templatePath
   }
 
   def extension: String = config.suffix | ".hbs"

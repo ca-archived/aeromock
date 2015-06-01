@@ -7,6 +7,9 @@ import jp.co.cyberagent.aeromock.helper._
 import jp.co.cyberagent.aeromock.{AeromockBadUsingException, AeromockSystemException}
 import scaldi.{Injectable, Injector}
 
+import scalaz._
+import Scalaz._
+
 /**
  * object to select executed [[jp.co.cyberagent.aeromock.cli.CliJob]].
  * @author stormcat24
